@@ -1,4 +1,6 @@
 import { useState } from 'react'
+import HomePage from './components/Pages/homePage'
+import QuizPage from './components/Pages/quizPage'
 import './App.css'
 
 function App() {
@@ -7,7 +9,10 @@ function App() {
   return (
     <>
       {}
-      <div> <p> Testing if this works!!!</p></div>
+      <div> 
+        <HomePage />
+        <button onClick={() => {}}>Go to Quiz Page</button>
+      </div>
     </>
   )
 }

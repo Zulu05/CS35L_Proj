@@ -1,20 +1,24 @@
-import { useState } from 'react'
-import HomePage from './components/Pages/homePage'
-import QuizPage from './components/Pages/quizPage'
-import './App.css'
+import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
+import HomePage from './components/Pages/homePage';
+import QuizPage from './components/Pages/quizPage';
+import './App.css';
 
 function App() {
-  const [count, setCount] = useState(0)
-
   return (
-    <>
-      {}
-      <div> 
-        <HomePage />
-        <button onClick={() => { window.location.href = "https://"; }}>Go to Quiz Page</button>
+    <Router>
+      <div>
+        <nav>
+          <Link to="/">Home</Link> |{' '}
+          <Link to="/quiz">Quiz</Link>
+        </nav>
+
+        <Routes>
+          <Route path="/" element={<HomePage />} />
+          <Route path="/quiz" element={<QuizPage />} />
+        </Routes>
       </div>
-    </>
-  )
+    </Router>
+  );
 }
 
-export default App
+export default App;

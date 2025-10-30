@@ -41,3 +41,7 @@ user = {
         collaborative_competitive: 10,
     }
 }
+
+function calculate_match(user_data: stats, club_data: stats): number{
+    //I have to like, actually implement this...
+}

@@ -7,3 +7,5 @@ Playwright
 
 futureImplementations.txt has elements that we will probabbly be using but haven't been implemented into the interface yet. 
 
+https://www.mongodb.com/resources/products/compatibilities/using-typescript-with-mongodb-tutorial
+

@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './quizPage.css';
+import React from 'react';
 
 function QuizPage() {
   const navigate = useNavigate();

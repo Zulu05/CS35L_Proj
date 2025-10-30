@@ -13,7 +13,7 @@ function HomePage() {
 
       <h2>What do we do?</h2>
       <p>This is a quiz app that lets you take a quiz to match you with a club at UCLA. To see more information about clubs on campus, click the button below</p>
-      <button onClick={() => navigate('/clubinfo')}>
+      <button onClick={() => navigate('/clubInfo')}>
         Club Information
       </button>
       <h3>Credits: us heheheh</h3>

@@ -11,7 +11,7 @@ function App() {
       {}
       <div> 
         <HomePage />
-        <button onClick={() => {}}>Go to Quiz Page</button>
+        <button onClick={() => { window.location.href = "https://"; }}>Go to Quiz Page</button>
       </div>
     </>
   )

@@ -1,0 +1,43 @@
+Things-I-probabbly-should-implement-at-some-point-but-am-not-sure-when-or-where-or-how:
+
+let clubCategories; string[];
+let clubStats; numebr[];
+let quizTaken; boolean = false;
+let users; user[];
+
+if //user created
+    users.push(user);
+
+let user:{
+    name: string,
+    username: string,
+    password: string,
+    user_id: number,
+    statistics: stats,
+}
+
+let stats:{
+    silly-serious: number,
+    casual-professional: number,
+    littleWork-aLotOfWork: numeber,
+    loweTimeCommitment-highTimeCommitment: number,
+    creative-technical: number,
+    collaborative_competitive: number,
+
+}
+instance example:
+
+user = {
+    name: Georgia Martha Eick,
+    username: geick,
+    password: wouldntYouLikeToKnowWeatherBoi (find out how to make this secret again)
+    user_id: 001
+    statistics: {
+        silly-serious: 0,
+        casual-professional: 50,
+        littleWork-aLotOfWork: 99,
+        loweTimeCommitment-highTimeCommitment: 99,
+        creative-technical: 40,
+        collaborative_competitive: 10,
+    }
+}

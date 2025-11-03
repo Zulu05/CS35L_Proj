@@ -1,1 +1,3 @@
-hehehehe
+I'm using this to set up the database:
+https://www.mongodb.com/resources/products/compatibilities/using-typescript-with-mongodb-tutorial
+

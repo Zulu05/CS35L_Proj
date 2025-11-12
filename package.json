@@ -6,7 +6,8 @@
     "dev": "vite",
     "build": "vite build",
     "lint": "eslint .",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "start": "node -r ts-node/register src/index.ts"
   },
   "dependencies": {
     "dotenv": "^17.2.3",
@@ -27,6 +28,20 @@
     "eslint-plugin-react-hooks": "^5.2.0",
     "eslint-plugin-react-refresh": "^0.4.22",
     "globals": "^16.4.0",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.9.3",
     "vite": "^7.1.12"
-  }
+  },
+  "description": "Programm currently implements VERY basic Typecript Application. App.tsx returns homePage and button to quizPage (which doesn't work yet).",
+  "main": "eslint.config.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Zulu05/CS35L_Proj.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Zulu05/CS35L_Proj/issues"
+  },
+  "homepage": "https://github.com/Zulu05/CS35L_Proj#readme"
 }

@@ -84,7 +84,6 @@ function App() {
   }, []);
 
   const handleAddUser = async (e: React.FormEvent) => {
-    e.preventDefault();
     setUsersError('');
 
     try {
@@ -107,7 +106,6 @@ function App() {
   };
 
   const handleAddClub = async (e: React.FormEvent) => {
-    e.preventDefault();
     setClubsError('');
 
     try {

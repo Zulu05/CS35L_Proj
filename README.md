@@ -10,3 +10,5 @@ futureImplementations.txt has elements that we will probabbly be using but haven
 current stack: MERN 
 
 (Let's use assignment 5's README as a template)
+
+https://www.sohamkamani.com/typescript/rest-http-api-call/

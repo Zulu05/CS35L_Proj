@@ -5,25 +5,47 @@ import ClubInfoPage from './components/Pages/clubInfoPage';
 import './App.css';
 import React, { useEffect, useState } from 'react';
 
+//USER
 interface User {
   _id: string;
   username: string;
   email: string;
 }
 
+interface NewUserInput {
+  username: string;
+  email: string;
+}
+
+//CLUB
 interface Club {
   _id: string;
   username: string;
   email: string;
 }
 
+interface NewClubInput {
+  username: string;
+  email: string;
+}
+
 function App() {
   //backend stuff <3 <3 <3
+
+  //USER STATES
   const [users, setUsers] = useState<User[]>([]);
+  const [newUser, setNewUser] = useState<NewUserInput>({ username: '', email: '' });
+
+  //CLUB STATES
+
   const [clubs, setClubs] = useState<Club[]>([]);
+  const [newClub, setNewClub] = useState<NewClubInput>({ username: '', email: '' });
+
+  //ERRORS
   const [usersError, setUsersError] = useState('');
   const [clubsError, setClubsError] = useState('');
 
+  //USERS FETCH
   useEffect(() => {
     fetch('/users')
       .then((response) => response.json())
@@ -42,6 +64,7 @@ function App() {
       });
   }, []);
 
+  //CLUBS FETCH
   useEffect(() => {
     fetch('/clubs')
       .then((response) => response.json())
@@ -59,6 +82,52 @@ function App() {
         setClubsError('Error fetching clubs');
       });
   }, []);
+
+  const handleAddUser = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setUsersError('');
+
+    try {
+      const res = await fetch('/users', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(newUser),
+      });
+
+      if (!res.ok) throw new Error('Failed to create user');
+
+      const created: User = await res.json();
+
+      setUsers((prev) => [...prev, created]);
+      setNewUser({ username: '', email: '' });
+    } catch (err) {
+      console.error(err);
+      setUsersError('Error adding user');
+    }
+  };
+
+  const handleAddClub = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setClubsError('');
+
+    try {
+      const res = await fetch('/clubs', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(newClub),
+      });
+
+      if (!res.ok) throw new Error('Failed to create club');
+
+      const created: Club = await res.json();
+
+      setClubs((prev) => [...prev, created]);
+      setNewClub({ username: '', email: '' });
+    } catch (err) {
+      console.error(err);
+      setClubsError('Error adding club');
+    }
+  };
 
   //frontend stuff <3 <3 <3
   return (
@@ -101,7 +170,59 @@ function App() {
         ) : (
           !clubsError && <p>Loading clubs...</p>
         )}
+      </div>
 
+      <div style={{ marginTop: '40px', textAlign: 'center' }}>
+      {/* ADD USER FORM */}
+      <h3>Add New User</h3>
+      <form onSubmit={handleAddUser} style={{ marginBottom: '20px' }}>
+        <input
+        type="text"
+        placeholder="Username"
+        value={newUser.username}
+        onChange={(e) =>
+          setNewUser((prev) => ({ ...prev, username: e.target.value }))
+        }
+        />
+        <input
+          type="email"
+          placeholder="Email"
+          value={newUser.email}
+          onChange={(e) =>
+            setNewUser((prev) => ({ ...prev, email: e.target.value }))
+          }
+          style={{ marginLeft: '8px' }}
+        />
+        <button type="submit" style={{ marginLeft: '8px' }}>
+          Add User
+        </button>
+      </form>
+
+
+      {/* ADD CLUB FORM */}
+      <h3>Add New Club</h3>
+      <form onSubmit={handleAddClub} style={{ marginBottom: '20px' }}>
+        <input
+          type="text"
+          placeholder="Club name"
+          value={newClub.username}
+          onChange={(e) =>
+            setNewClub((prev) => ({ ...prev, username: e.target.value }))
+          }
+        />
+        <input
+          type="email"
+          placeholder="Club email"
+          value={newClub.email}
+          onChange={(e) =>
+            setNewClub((prev) => ({ ...prev, email: e.target.value }))
+          }
+          style={{ marginLeft: '8px' }}
+        />
+        <button type="submit" style={{ marginLeft: '8px' }}>
+          Add Club
+        </button>
+      </form>
       </div>
     </Router>
   );

@@ -11,9 +11,18 @@ interface User {
   email: string;
 }
 
+interface Club {
+  _id: string;
+  username: string;
+  email: string;
+}
+
 function App() {
+  //backend stuff <3 <3 <3
   const [users, setUsers] = useState<User[]>([]);
-  const [error, setError] = useState<string>('');
+  const [clubs, setClubs] = useState<Club[]>([]);
+  const [usersError, setUsersError] = useState('');
+  const [clubsError, setClubsError] = useState('');
 
   useEffect(() => {
     fetch('/users')
@@ -24,15 +33,34 @@ function App() {
         } else if (data && Array.isArray(data.users)) {
           setUsers(data.users);
         } else {
-          setError('No users found');
+          setUsersError('No users found');
         }
       })
       .catch((error) => {
         console.error('Error fetching data:', error);
-        setError('Error fetching users');
+        setUsersError('Error fetching users');
       });
   }, []);
 
+  useEffect(() => {
+    fetch('/clubs')
+      .then((response) => response.json())
+      .then((data) => {
+        if (Array.isArray(data)) {
+          setClubs(data);
+        } else if (data && Array.isArray(data.clubs)) {
+          setClubs(data.clubs);
+        } else {
+          setClubsError('No clubs found');
+        }
+      })
+      .catch((error) => {
+        console.error('Error fetching data:', error);
+        setClubsError('Error fetching clubs');
+      });
+  }, []);
+
+  //frontend stuff <3 <3 <3
   return (
     <Router>
       <Routes>
@@ -43,9 +71,11 @@ function App() {
 
       {/* Show backend data */}
       <div style={{ marginTop: '40px', textAlign: 'center' }}>
+
+        {/* USERS */}
         <h3>Backend Message (All Users)</h3>
-        {error && <p style={{ color: 'red' }}>{error}</p>}
-        {!error && users.length > 0 ? (
+        {usersError && <p style={{ color: 'red' }}>{usersError}</p>}
+        {!usersError && users.length > 0 ? (
           <ul style={{ listStyle: 'none', padding: 0 }}>
             {users.map((user) => (
               <li key={user._id}>
@@ -54,8 +84,24 @@ function App() {
             ))}
           </ul>
         ) : (
-          !error && <p>Loading users...</p>
+          !usersError && <p>Loading users...</p>
         )}
+
+        {/* CLUBS */}
+        <h3>Backend Message (All Clubs)</h3>
+        {clubsError && <p style={{ color: 'red' }}>{clubsError}</p>}
+        {!clubsError && clubs.length > 0 ? (
+          <ul style={{ listStyle: 'none', padding: 0 }}>
+            {clubs.map((club) => (
+              <li key={club._id}>
+                <strong>{club.username}</strong> — {club.email}
+              </li>
+            ))}
+          </ul>
+        ) : (
+          !clubsError && <p>Loading clubs...</p>
+        )}
+
       </div>
     </Router>
   );

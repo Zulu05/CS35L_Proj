@@ -105,7 +105,6 @@ function App() {
   const handleAddUser = async (e: React.FormEvent) => {
     setUsersError('');
 
-
     if (!validateUsername(newUser.username)) {
       setUsersError('Invalid Username. Usernames must be at least 3 alphabetic or numerical characters long.')
       return;
@@ -137,6 +136,16 @@ function App() {
 
   const handleAddClub = async (e: React.FormEvent) => {
     setClubsError('');
+
+    if (!validateUsername(newClub.username)) {
+      setUsersError('Invalid Username. Usernames must be at least 3 alphabetic or numerical characters long.')
+      return;
+    }
+
+    if (!validateEmail(newClub.email)) {
+      setUsersError('Invalid Email.')
+      return;
+    }
 
     try {
       const res = await fetch('/clubs', {

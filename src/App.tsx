@@ -83,8 +83,38 @@ function App() {
       });
   }, []);
 
+  // returns a bool if input matches regex
+  function validateUsername(username: string): boolean {
+    const usernameRegex = new RegExp('[a-zA-Z0-9]{3,}')
+
+    return usernameRegex.test(username);
+  }
+    function validateEmail(email: string): boolean {
+    const emailRegex = new RegExp('[a-zA-Z0-9]+([a-zA-Z0-9.-]*[a-zA-Z0-9])?@[a-zA-Z0-9]+([a-zA-Z0-9.-]*[a-zA-Z0-9])?\.[a-zA-Z]{2,}')
+
+    return emailRegex.test(email);
+  }
+  
+  function validatePassword(password: string): boolean {
+    // Password: at least 8 chars, at least one digit, at least one letter (upper and lowercase), one special character (@$!%*?&)
+    const passwordRegex = new RegExp('(?=[a-zA-Z0-9@$!%*?&]*\d+)(?=[a-zA-Z0-9@$!%*?&]*[a-z]+)(?=[a-zA-Z0-9@$!%*?&]*[A-Z]+)(?=[a-zA-Z0-9@$!%*?&]*[@$!%*?&]+)[a-zA-Z0-9@$!%*?&]{8,}')
+
+    return passwordRegex.test(password);
+  }
+
   const handleAddUser = async (e: React.FormEvent) => {
     setUsersError('');
+
+
+    if (!validateUsername(newUser.username)) {
+      setUsersError('Invalid Username. Usernames must be at least 3 alphabetic or numerical characters long.')
+      return;
+    }
+
+    if (!validateEmail(newUser.email)) {
+      setUsersError('Invalid Email.')
+      return;
+    }
 
     try {
       const res = await fetch('/users', {

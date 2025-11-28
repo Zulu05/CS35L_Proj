@@ -15,14 +15,14 @@ export default function LoginPage() {
 
       // returns a bool if input matches regex
   function validateUsername(username: string): boolean {
-    const usernameRegex = new RegExp('^[a-zA-Z0-9]{3,}$')
+    const usernameRegex = /^[a-zA-Z0-9]{3,}$/
 
     return usernameRegex.test(username);
   }
 
   function validatePassword(password: string): boolean {
     // Password: at least 8 chars, at least one digit, at least one letter (upper and lowercase), one special character (@$!%*?&)
-    const passwordRegex = new RegExp('(?=[a-zA-Z0-9@$!%*?&]*\d+)(?=[a-zA-Z0-9@$!%*?&]*[a-z]+)(?=[a-zA-Z0-9@$!%*?&]*[A-Z]+)(?=[a-zA-Z0-9@$!%*?&]*[@$!%*?&]+)[a-zA-Z0-9@$!%*?&]{8,}')
+    const passwordRegex = /^(?=[a-zA-Z0-9@$!%*?&]*\d+)(?=[a-zA-Z0-9@$!%*?&]*[a-z]+)(?=[a-zA-Z0-9@$!%*?&]*[A-Z]+)(?=[a-zA-Z0-9@$!%*?&]*[@$!%*?&]+)[a-zA-Z0-9@$!%*?&]{8,}$/
 
     return passwordRegex.test(password);
   }

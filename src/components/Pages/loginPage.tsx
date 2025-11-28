@@ -28,7 +28,7 @@ export default function LoginPage() {
   }
 
     if (!username.trim() || !validateUsername(username)) {
-      setError('Please enter a valid username');
+      setError('Please enter a valid username, at least 3 alphanumeric characters');
       return;
     }
     // Basic password validation for creation: at least 8 chars

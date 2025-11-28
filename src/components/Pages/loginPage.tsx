@@ -68,7 +68,7 @@ export default function LoginPage() {
         if (user.password) {
           // validate password match
           if (user.password !== password) {
-            throw new Error('Invalid password');
+            throw new Error('Invalid password, password does not match existing user');
           }
         } else {
           // set password on existing user via PUT (updates only provided fields)

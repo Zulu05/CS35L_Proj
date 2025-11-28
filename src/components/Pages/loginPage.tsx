@@ -13,13 +13,27 @@ export default function LoginPage() {
     e.preventDefault();
     setError(null);
 
-    if (!username.trim()) {
-      setError('Please enter a username');
+      // returns a bool if input matches regex
+  function validateUsername(username: string): boolean {
+    const usernameRegex = new RegExp('[a-zA-Z0-9]{3,}')
+
+    return usernameRegex.test(username);
+  }
+
+  function validatePassword(password: string): boolean {
+    // Password: at least 8 chars, at least one digit, at least one letter (upper and lowercase), one special character (@$!%*?&)
+    const passwordRegex = new RegExp('(?=[a-zA-Z0-9@$!%*?&]*\d+)(?=[a-zA-Z0-9@$!%*?&]*[a-z]+)(?=[a-zA-Z0-9@$!%*?&]*[A-Z]+)(?=[a-zA-Z0-9@$!%*?&]*[@$!%*?&]+)[a-zA-Z0-9@$!%*?&]{8,}')
+
+    return passwordRegex.test(password);
+  }
+
+    if (!username.trim() || !validateUsername(username)) {
+      setError('Please enter a valid username');
       return;
     }
     // Basic password validation for creation: at least 8 chars
-    if (!password || password.length < 8) {
-      setError('Password must be at least 8 characters');
+    if (!password || !validatePassword(password)) {
+      setError('Password must be at least 8 characters with at least one digit, one upper and lower case letter, and one special character (@$!%*?&)');
       return;
     }
 

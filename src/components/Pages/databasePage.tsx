@@ -27,46 +27,46 @@ const DataBasePage: React.FC = () => {
   const [clubsLoading, setClubsLoading] = useState<boolean>(true);
 
   // Fetch Users
-  useEffect(() => {
-    fetch("/users")
-      .then(async (res) => {
-        const data = await res.json();
-        console.log("DEBUG: /users fetch response:", data);
-        if (Array.isArray(data)) {
-          setUsers(data);
-        } else if (data && Array.isArray(data.users)) {
-          setUsers(data.users);
-        } else {
-          setUsersError("No users found");
-        }
-      })
-      .catch((err) => {
-        console.error("Error fetching users:", err);
-        setUsersError("Error fetching users");
-      })
-      .finally(() => setUsersLoading(false));
-  }, []);
+  // useEffect(() => {
+  //   fetch("/users")
+  //     .then(async (res) => {
+  //       const data = await res.json();
+  //       console.log("DEBUG: /users fetch response:", data);
+  //       if (Array.isArray(data)) {
+  //         setUsers(data);
+  //       } else if (data && Array.isArray(data.users)) {
+  //         setUsers(data.users);
+  //       } else {
+  //         setUsersError("No users found");
+  //       }
+  //     })
+  //     .catch((err) => {
+  //       console.error("Error fetching users:", err);
+  //       setUsersError("Error fetching users");
+  //     })
+  //     .finally(() => setUsersLoading(false));
+  // }, []);
 
   // Fetch Clubs
-  useEffect(() => {
-    fetch("/clubs")
-      .then(async (res) => {
-        const data = await res.json();
-        console.log("DEBUG: /clubs fetch response:", data);
-        if (Array.isArray(data)) {
-          setClubs(data);
-        } else if (data && Array.isArray(data.clubs)) {
-          setClubs(data.clubs);
-        } else {
-          setClubsError("No clubs found");
-        }
-      })
-      .catch((err) => {
-        console.error("Error fetching clubs:", err);
-        setClubsError("Error fetching clubs");
-      })
-      .finally(() => setClubsLoading(false));
-  }, []);
+  // useEffect(() => {
+  //   fetch("/clubs")
+  //     .then(async (res) => {
+  //       const data = await res.json();
+  //       console.log("DEBUG: /clubs fetch response:", data);
+  //       if (Array.isArray(data)) {
+  //         setClubs(data);
+  //       } else if (data && Array.isArray(data.clubs)) {
+  //         setClubs(data.clubs);
+  //       } else {
+  //         setClubsError("No clubs found");
+  //       }
+  //     })
+  //     .catch((err) => {
+  //       console.error("Error fetching clubs:", err);
+  //       setClubsError("Error fetching clubs");
+  //     })
+  //     .finally(() => setClubsLoading(false));
+  // }, []);
 
   return (    
     <>

@@ -1,52 +1,60 @@
-import React from "react";
+import React, { useEffect, useState } from 'react';
+import { fetchClubs } from "../../services/club.service"
 import { useNavigate } from 'react-router-dom';
+import Club from "../../models/clubs";
 
-interface Club {
-  id: number;
-  name: string;
-  description: string;
-  meetingTime: string;
-  location: string;
-  contactEmail: string;
-  website?: string;
-}
+// interface Club {
+//   id: number;
+//   name: string;
+//   description: string;
+//   meetingTime: string;
+//   location: string;
+//   contactEmail: string;
+//   website?: string;
+// }
 
-const clubs: Club[] = [
-  {
-    id: 1,
-    name: "Programming Club",
-    description:
-      "A community for students interested in coding, algorithms, and open-source projects.",
-    meetingTime: "Thursdays, 6 PM",
-    location: "Engineering IV, Room 102",
-    contactEmail: "programming@school.edu",
-    website: "https://programmingclub.com",
-  },
-  {
-    id: 2,
-    name: "Robotics Club",
-    description:
-      "Build robots, compete in challenges, and learn hardware and software integration.",
-    meetingTime: "Tuesdays, 7 PM",
-    location: "Tech Hall, Room 210",
-    contactEmail: "robotics@school.edu",
-    website: "https://roboticsclub.com",
-  },
-  {
-    id: 3,
-    name: "Design Club",
-    description:
-      "Explore creativity through UI/UX, product design, and digital art workshops.",
-    meetingTime: "Wednesdays, 5 PM",
-    location: "Arts Building, Room 12",
-    contactEmail: "design@school.edu",
-    website: "https://designclub.com",
-  },
-];
+
+
+// const clubs: Club[] = [
+//   {
+//     id: 1,
+//     name: "Programming Club",
+//     description:
+//       "A community for students interested in coding, algorithms, and open-source projects.",
+//     meetingTime: "Thursdays, 6 PM",
+//     location: "Engineering IV, Room 102",
+//     contactEmail: "programming@school.edu",
+//     website: "https://programmingclub.com",
+//   },
+//   {
+//     id: 2,
+//     name: "Robotics Club",
+//     description:
+//       "Build robots, compete in challenges, and learn hardware and software integration.",
+//     meetingTime: "Tuesdays, 7 PM",
+//     location: "Tech Hall, Room 210",
+//     contactEmail: "robotics@school.edu",
+//     website: "https://roboticsclub.com",
+//   },
+//   {
+//     id: 3,
+//     name: "Design Club",
+//     description:
+//       "Explore creativity through UI/UX, product design, and digital art workshops.",
+//     meetingTime: "Wednesdays, 5 PM",
+//     location: "Arts Building, Room 12",
+//     contactEmail: "design@school.edu",
+//     website: "https://designclub.com",
+//   },
+// ];
+
 
 const ClubDirectory: React.FC = () => {
   const navigate = useNavigate();
-
+  const [clubs, setClubs] = useState<Club[]>([]);
+  useEffect(() => {
+  fetchClubs().then(setClubs);
+  }, []);
   return (
     <div className="min-h-screen bg-gray-100 py-10 px-6">
       <div className="max-w-5xl mx-auto text-center mb-10">
@@ -59,14 +67,14 @@ const ClubDirectory: React.FC = () => {
       <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
         {clubs.map((club) => (
           <div
-            key={club.id}
+            key={club.id?.toString()}
             className="bg-white rounded-xl shadow-md p-6 text-left hover:shadow-lg transition"
           >
             <h2 className="text-xl font-semibold text-gray-800 mb-2">
-              {club.name}
+              {club.clubname}
             </h2>
-            <p className="text-gray-600 mb-4">{club.description}</p>
-
+            {/* <p className="text-gray-600 mb-4">{club.description}</p> */}
+{/* 
             <div className="text-sm text-gray-700 space-y-1 mb-4">
               <p>
                 <strong>Meeting:</strong> {club.meetingTime}
@@ -74,16 +82,16 @@ const ClubDirectory: React.FC = () => {
               <p>
                 <strong>Location:</strong> {club.location}
               </p>
-            </div>
+            </div> */}
 
             <div className="flex flex-wrap gap-3">
               <a
-                href={`mailto:${club.contactEmail}`}
+                href={`mailto:${club.email}`}
                 className="bg-blue-600 text-white px-4 py-2 rounded-md text-sm hover:bg-blue-700 transition"
               >
                 Contact
               </a>
-              {club.website && (
+              {/* {club.website && (
                 <a
                   href={club.website}
                   target="_blank"
@@ -92,7 +100,7 @@ const ClubDirectory: React.FC = () => {
                 >
                   Website
                 </a>
-              )}
+              )} */}
             </div>
           </div>
         ))}

@@ -81,6 +81,72 @@ usersRouter.put("/:id", async (req: Request, res: Response) => {
     }
 });
 
+//PATCH (Add answers to user) 
+
+usersRouter.patch("/:id/quiz", async (req: Request, res: Response) => {
+  const userId = req?.params?.id;
+  const { answers } = req.body;
+
+  if (!userId) {
+    return res.status(400).send("Missing user id");
+  }
+
+  if (!answers || typeof answers !== "object" || Array.isArray(answers)) {
+    return res.status(400).send("`answers` must be an object mapping question->number");
+  }
+
+  // Validate values are numbers in [0,100]
+  for (const [question, value] of Object.entries(answers)) {
+    if (typeof value !== "number" || Number.isNaN(value) || value < 0 || value > 100) {
+      return res.status(400).send(`Invalid answer for "${question}": must be a number between 0 and 100`);
+    }
+  }
+
+  const quizResponse = {
+    submissionDate: new Date(),
+    version: 1,
+    answers: answers as { [key: string]: number },
+    clubMatches: [] as string[]
+  };
+
+  try {
+    if (!collections.users) {
+      return res.status(500).send("Database not initialized");
+    }
+
+    // Validate userId is a valid ObjectId
+    let objectId: ObjectId;
+    try {
+      objectId = new ObjectId(userId);
+    } catch (err) {
+      console.error(`Invalid ObjectId format: ${userId}`);
+      return res.status(400).send(`Invalid user id format: ${userId}`);
+    }
+
+    // Replace the last quiz response 
+    const result = await collections.users.updateOne(
+      { _id: objectId },
+      { 
+        $set: { quizResponses: [quizResponse] }
+      } as any
+    );
+
+    console.log(`Update result:`, result);
+
+    if (result.matchedCount > 0) {
+      return res.status(200).json({
+        message: `Quiz submitted successfully for user ${userId}`
+      });
+    } else {
+      return res.status(404).send(`User with id ${userId} not found`);
+    }
+  } catch (error: unknown) {
+    const msg = error instanceof Error ? error.message : String(error);
+    console.error("Error submitting quiz:", msg);
+    return res.status(400).send(msg);
+  }
+});
+
 // DELETE
 
 usersRouter.delete("/:id", async (req: Request, res: Response) => {

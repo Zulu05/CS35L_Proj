@@ -16,11 +16,53 @@ function QuizPage() {
   // Initialize array of answers with same size as questions
   const [answers, setAnswers] = useState(Array(questions.length).fill(50)); // default = 50
   const [display, setDisplay] = useState(0);
+  const [submitting, setSubmitting] = useState(false);
+  const [submitError, setSubmitError] = useState<string | null>(null);
   // : number gets rid of a warning and ensures it index must be a number
   const handleSliderChange = (index: number, value: number) => {
     const newAnswers = [...answers];
     newAnswers[index] = value;
     setAnswers(newAnswers);
+  };
+
+  const handleSubmit = async () => {
+    setSubmitError(null);
+    const userId = localStorage.getItem('userId');
+
+    if (!userId) {
+      setSubmitError('No user id found. Please log in again.');
+      return;
+    }
+
+    // Build answers dictionary from array and question texts
+    const answersDict: { [key: string]: number } = {};
+    questions.forEach((q, i) => {
+      answersDict[q.text] = answers[i];
+    });
+
+    try {
+      setSubmitting(true);
+      const resp = await fetch(`/users/${userId}/quiz`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ answers: answersDict }),
+      });
+
+      if (!resp.ok) {
+        const text = await resp.text();
+        throw new Error(text || `HTTP ${resp.status}`);
+      }
+
+      // Success — show results view
+      setDisplay(1);
+      setAnswers(Array(questions.length).fill(50));
+    } catch (err) {
+      const msg = err instanceof Error ? err.message : String(err);
+      console.error('Failed to submit quiz:', msg);
+      setSubmitError(`Failed to submit: ${msg}`);
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   return (
@@ -45,9 +87,18 @@ function QuizPage() {
               </div>
             </div>
           ))}
-          <button className="submit-button" onClick={() => setDisplay(1)}>
-            Submit
+          <button
+            className="submit-button"
+            onClick={handleSubmit}
+            disabled={submitting}
+          >
+            {submitting ? 'Submitting...' : 'Submit'}
           </button>
+          {submitError && (
+            <div style={{ marginTop: 12, color: 'crimson' }}>
+              {submitError}
+            </div>
+          )}
           <button className="back-button" onClick={() => navigate('/')}>
             Back to Home
           </button>

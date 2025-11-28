@@ -161,13 +161,26 @@ function HomePage() {
     }
   };
   
-
+  //If user logged in go to quiz, else go to login
   return (
     <div className="page">
       <h1>Welcome to the Quiz App</h1>
-      <button onClick={() => navigate('/quiz')}>
+      <button onClick={() => {
+        const userId = localStorage.getItem("userId");
+        navigate(userId ? '/quiz' : '/login');
+      }}
+      >
         Start Quiz
       </button>
+      
+      {localStorage.getItem("userId") && (
+        <button onClick={() => {
+          localStorage.removeItem("userId");
+          navigate('/');
+        }} style={{ marginLeft: 8 }}>
+          Logout
+        </button>
+      )}
 
       <h2>What do we do?</h2>
       <p>This is a quiz app that lets you take a quiz to match you with a club at UCLA. To see more information about clubs on campus, click the button below</p>

@@ -125,7 +125,7 @@ const DataBasePage: React.FC = () => {
           <section>
               <h2>User Results</h2>
               {userResultsError && <p style={{ color: "red" }}>{userResultsError}</p>}
-              {userResultsLoading && !userResultsError && <p>Loading users...</p>}
+              {userResultsLoading && !userResultsError && <p>Loading user results...</p>}
               {!userResultsLoading && userResults.length > 0 && (
                   <ul style={{ listStyle: "none", padding: 0 }}>
                       {userResults.map((user) => (

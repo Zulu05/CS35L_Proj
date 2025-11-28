@@ -165,6 +165,7 @@ function HomePage() {
   return (
     <div className="page">
       <h1>Welcome to the Quiz App</h1>
+
       <button onClick={() => {
         const userId = localStorage.getItem("userId");
         navigate(userId ? '/quiz' : '/login');
@@ -181,6 +182,14 @@ function HomePage() {
           Logout
         </button>
       )}
+
+      <button onClick={() => {
+        const userId = localStorage.getItem("userId");
+        navigate(userId ? '/profile' : '/login');
+      }}
+      >
+        Profile
+      </button>
 
       <h2>What do we do?</h2>
       <p>This is a quiz app that lets you take a quiz to match you with a club at UCLA. To see more information about clubs on campus, click the button below</p>

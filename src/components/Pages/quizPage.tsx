@@ -55,6 +55,7 @@ function QuizPage() {
 
       // Success — show results view
       setDisplay(1);
+      setAnswers(Array(questions.length).fill(50));
     } catch (err) {
       const msg = err instanceof Error ? err.message : String(err);
       console.error('Failed to submit quiz:', msg);

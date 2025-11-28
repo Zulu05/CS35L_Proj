@@ -123,14 +123,11 @@ usersRouter.patch("/:id/quiz", async (req: Request, res: Response) => {
       return res.status(400).send(`Invalid user id format: ${userId}`);
     }
 
-    console.log(`Attempting to update user with id: ${userId}, ObjectId: ${objectId.toString()}`);
-
-    // Replace the last quiz response (pop and push), or create if none exist
+    // Replace the last quiz response 
     const result = await collections.users.updateOne(
       { _id: objectId },
       { 
-        $pop: { quizResponses: 1 },  // Remove last element
-        $push: { quizResponses: quizResponse }  // Add new one
+        $set: { quizResponses: [quizResponse] }
       } as any
     );
 

@@ -10,12 +10,16 @@ interface User {
 
 // USER RESULTS
 interface UserResults {
-  _id: string;
-  social: number;
-  academic: number;
-  leadership: number;
-  creativity: number;
+  userId: string,
+  scores: {
+    social: number;
+    academic: number;
+    leadership: number;
+    creativity: number;
+  };
+  id?: string; // or ObjectId
 }
+
 
 // CLUB
 interface Club {
@@ -63,23 +67,18 @@ const DataBasePage: React.FC = () => {
     useEffect(() => {
       fetch("/users/results")
         .then(async (res) => {
-          const data = await res.json();
-          console.log("DEBUG: /users/results fetch response:", data);
-          if (Array.isArray(data)) {
-            setUserResults(data);
-          } else if (data && Array.isArray(data.users)) {
-            setUserResults(data.userResults);
-          } else {
-            setUserResultsError("No user results found");
-          }
+          if (!res.ok) throw new Error(`HTTP ${res.status}`);
+          const data: UserResults[] = await res.json();
+          setUserResults(data);
         })
         .catch((err) => {
           console.error("Error fetching user results:", err);
-          setUserResultsError("Error fetching user results");
+          setUserResultsError("Failed to load user results.");
         })
         .finally(() => setUserResultsLoading(false));
     }, []);
-
+    
+    
   // Fetch Clubs
   useEffect(() => {
     fetch("/clubs")
@@ -130,8 +129,8 @@ const DataBasePage: React.FC = () => {
               {!userResultsLoading && userResults.length > 0 && (
                   <ul style={{ listStyle: "none", padding: 0 }}>
                       {userResults.map((user) => (
-                          <li key={user._id}>
-                              <strong>{user._id}</strong> — {user.social} — {user.academic} — {user.leadership} — {user.creativity}
+                          <li key={user.userId}>
+                              <strong>{user.userId}</strong> — {user.scores.social} — {user.scores.academic} — {user.scores.leadership} — {user.scores.creativity}
                           </li>
                       ))}
                   </ul>

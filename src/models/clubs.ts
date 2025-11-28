@@ -1,3 +1,11 @@
+/**
+ * Core Club entity for metadata (name, contact, description, etc.)
+ * 
+ * Analytic scoring attributes live in `ClubResults` to avoid mixing
+ * identity data with numerical vectors used by the recommendation system.
+ */
+
+
 // External dependencies
 import { ObjectId } from "mongodb";
 

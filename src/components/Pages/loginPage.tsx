@@ -17,6 +17,11 @@ export default function LoginPage() {
       setError('Please enter a username');
       return;
     }
+    // Basic password validation for creation: at least 8 chars
+    if (!password || password.length < 8) {
+      setError('Password must be at least 8 characters');
+      return;
+    }
 
     setLoading(true);
     try {
@@ -25,15 +30,14 @@ export default function LoginPage() {
       if (!listResp.ok) throw new Error(`Failed to fetch users: ${listResp.status}`);
       const users = await listResp.json();
 
-      // backend returns documents with `_id` from Mongo; check for either
       let user = users.find((u: any) => u.username === username);
 
       if (!user) {
-        // Create a new user (backend `POST /users` expects a User object)
+        // Create a new user with password
         const createResp = await fetch('/users', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ username, email: `${username}@example.com` }),
+          body: JSON.stringify({ username, email: `${username}@example.com`, password }),
         });
 
         if (!createResp.ok) {
@@ -41,10 +45,38 @@ export default function LoginPage() {
           throw new Error(text || `Failed to create user: ${createResp.status}`);
         }
 
-        // Re-fetch users list to find the created user (backend POST returns only a text message)
+        // Re-fetch to get the created user document
         const reList = await fetch('/users');
         const reUsers = await reList.json();
         user = reUsers.find((u: any) => u.username === username);
+      } else {
+        // User exists — check password if set, otherwise set it
+        if (user.password) {
+          // validate password match
+          if (user.password !== password) {
+            throw new Error('Invalid password');
+          }
+        } else {
+          // set password on existing user via PUT (updates only provided fields)
+          const id = user._id ?? user.id ?? userIdFrom(user);
+          if (!id) throw new Error('User has no id to set password on');
+
+          const updateResp = await fetch(`/users/${id}`, {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ password }),
+          });
+
+          if (!updateResp.ok) {
+            const text = await updateResp.text();
+            throw new Error(text || `Failed to set password: ${updateResp.status}`);
+          }
+
+          // re-fetch user
+          const reList = await fetch('/users');
+          const reUsers = await reList.json();
+          user = reUsers.find((u: any) => u.username === username);
+        }
       }
 
       if (!user) {
@@ -56,7 +88,7 @@ export default function LoginPage() {
       if (!id) throw new Error('User has no id');
       localStorage.setItem('userId', String(id));
 
-      // Navigate to quiz page (adjust route if different)
+      // Navigate to quiz page
       navigate('/quiz');
     } catch (err: unknown) {
       const msg = err instanceof Error ? err.message : String(err);

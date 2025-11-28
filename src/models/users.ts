@@ -6,11 +6,19 @@ export default class User {
     constructor(
     public username: string,
     public email: string, 
-    //private password: string,
+    private password: string,
     public id?: ObjectId) {}
 
-    // Method to check password
-    //public checkPassword(password: string): boolean {
-        //return this.password === password;
-    //}
+    // Quiz responses stored on the user document
+    public quizResponses?: Array<{
+      submissionDate: Date;
+      version: number;
+      answers: { [key: string]: number };
+      clubMatches: string[];
+    }> = [];
+
+    // Method to check password (plaintext comparison for now)
+    public checkPassword(password: string): boolean {
+        return this.password === password;
+    }
 }

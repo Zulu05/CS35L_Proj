@@ -172,6 +172,15 @@ function HomePage() {
       >
         Start Quiz
       </button>
+      
+      {localStorage.getItem("userId") && (
+        <button onClick={() => {
+          localStorage.removeItem("userId");
+          navigate('/');
+        }} style={{ marginLeft: 8 }}>
+          Logout
+        </button>
+      )}
 
       <h2>What do we do?</h2>
       <p>This is a quiz app that lets you take a quiz to match you with a club at UCLA. To see more information about clubs on campus, click the button below</p>

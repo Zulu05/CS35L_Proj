@@ -15,7 +15,7 @@ export default function LoginPage() {
 
       // returns a bool if input matches regex
   function validateUsername(username: string): boolean {
-    const usernameRegex = new RegExp('[a-zA-Z0-9]{3,}')
+    const usernameRegex = new RegExp('^[a-zA-Z0-9]{3,}$')
 
     return usernameRegex.test(username);
   }

@@ -8,6 +8,15 @@ interface User {
   email: string;
 }
 
+// USER RESULTS
+interface UserResults {
+  _id: string;
+  social: number;
+  academic: number;
+  leadership: number;
+  creativity: number;
+}
+
 // CLUB
 interface Club {
   _id: string;
@@ -20,10 +29,13 @@ const DataBasePage: React.FC = () => {
 
   // States
   const [users, setUsers] = useState<User[]>([]);
+  const [userResults, setUserResults] = useState<UserResults[]>([]);
   const [clubs, setClubs] = useState<Club[]>([]);
   const [usersError, setUsersError] = useState<string>("");
+  const [userResultsError, setUserResultsError] = useState<string>("");
   const [clubsError, setClubsError] = useState<string>("");
   const [usersLoading, setUsersLoading] = useState<boolean>(true);
+  const [userResultsLoading, setUserResultsLoading] = useState<boolean>(true);
   const [clubsLoading, setClubsLoading] = useState<boolean>(true);
 
   // Fetch Users
@@ -46,6 +58,27 @@ const DataBasePage: React.FC = () => {
       })
       .finally(() => setUsersLoading(false));
   }, []);
+
+    // Fetch User Results
+    useEffect(() => {
+      fetch("/users/results")
+        .then(async (res) => {
+          const data = await res.json();
+          console.log("DEBUG: /users/results fetch response:", data);
+          if (Array.isArray(data)) {
+            setUserResults(data);
+          } else if (data && Array.isArray(data.users)) {
+            setUserResults(data.userResults);
+          } else {
+            setUserResultsError("No user results found");
+          }
+        })
+        .catch((err) => {
+          console.error("Error fetching user results:", err);
+          setUserResultsError("Error fetching user results");
+        })
+        .finally(() => setUserResultsLoading(false));
+    }, []);
 
   // Fetch Clubs
   useEffect(() => {
@@ -83,6 +116,22 @@ const DataBasePage: React.FC = () => {
                       {users.map((user) => (
                           <li key={user._id}>
                               <strong>{user.username}</strong> — {user.email}
+                          </li>
+                      ))}
+                  </ul>
+              )}
+          </section>
+
+          {/* USER RESULTS */}
+          <section>
+              <h2>User Results</h2>
+              {userResultsError && <p style={{ color: "red" }}>{userResultsError}</p>}
+              {userResultsLoading && !userResultsError && <p>Loading users...</p>}
+              {!userResultsLoading && userResults.length > 0 && (
+                  <ul style={{ listStyle: "none", padding: 0 }}>
+                      {userResults.map((user) => (
+                          <li key={user._id}>
+                              <strong>{user._id}</strong> — {user.social} — {user.academic} — {user.leadership} — {user.creativity}
                           </li>
                       ))}
                   </ul>

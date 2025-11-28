@@ -8,9 +8,10 @@ function QuizPage() {
 
   // Question List
   const questions = [
-    { text: 'How do you like CS35L?' },
-    { text: 'How confident do you feel about the midterm?' },
-    { text: 'How excited are you to code a brand new app?' },
+    { text: 'Social' },
+    { text: 'Academic' },
+    { text: 'Leadership' },
+    { text: 'Creativity' },
   ];
 
   // Initialize array of answers with same size as questions
@@ -26,45 +27,33 @@ function QuizPage() {
   };
 
   const handleSubmit = async () => {
-    setSubmitError(null);
     const userId = localStorage.getItem('userId');
-
-    if (!userId) {
-      setSubmitError('No user id found. Please log in again.');
-      return;
-    }
-
-    // Build answers dictionary from array and question texts
-    const answersDict: { [key: string]: number } = {};
-    questions.forEach((q, i) => {
-      answersDict[q.text] = answers[i];
-    });
-
+    if (!userId) return setSubmitError('No user id found. Please log in again.');
+  
+    const scores = {
+      social: answers[0],
+      academic: answers[1],
+      leadership: answers[2],
+      creativity: answers[3],
+    };
+  
     try {
       setSubmitting(true);
-      const resp = await fetch(`/users/${userId}/quiz`, {
-        method: 'PATCH',
+  
+      const resp = await fetch(`/users/results/${userId}`, {
+        method: 'PUT', // update or create
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ answers: answersDict }),
+        body: JSON.stringify(scores),
       });
-
+  
       if (!resp.ok) {
         const text = await resp.text();
         throw new Error(text || `HTTP ${resp.status}`);
       }
-
-      // Success — show results view
-      setDisplay(1);
-      // setAnswers(Array(questions.length).fill(50));
-      {answers.map((val, i) => (
-        <li key={i}>
-          <strong>{questions[i].text}</strong> → {val}
-        </li>
-      ))}
-      
+  
+      setDisplay(1); // show results
     } catch (err) {
       const msg = err instanceof Error ? err.message : String(err);
-      console.error('Failed to submit quiz:', msg);
       setSubmitError(`Failed to submit: ${msg}`);
     } finally {
       setSubmitting(false);

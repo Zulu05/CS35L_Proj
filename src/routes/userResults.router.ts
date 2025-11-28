@@ -52,34 +52,34 @@ userResultsRouter.post("/", async (req: Request, res: Response) => {
 });
 
 // PUT
-userResultsRouter.put("/:id", async (req: Request, res: Response) => {
-    const id = req?.params?.id;
-
-    try {
-        const updatedUserResult: UserResult = req.body as UserResult;
-
-        if (!collections.userResults) {
-            res.status(500).send("Database not initialized");
-            return;
-        }
-
-        const query = { _id: new ObjectId(id) };
-
-        const result = await collections.userResults.updateOne(query, { $set: updatedUserResult });
-
-        if (result && result.matchedCount) {
-            res.status(200).send(`Successfully updated user result with id ${id}`);
-        } else if (result && !result.matchedCount) {
-            res.status(404).send(`User result with id ${id} does not exist`);
-        } else {
-            res.status(500).send(`Failed to update user result with id ${id}`);
-        }
-    } catch (error: unknown) {
-        const msg = error instanceof Error ? error.message : String(error);
-        console.error(msg);
-        res.status(400).send(msg);
+userResultsRouter.put("/:userId", async (req: Request, res: Response) => {
+    const userId = req.params.userId;
+    const { social, academic, leadership, creativity } = req.body;
+  
+    if (!collections.userResults) {
+      return res.status(500).send("Database not initialized");
     }
-});
+  
+    try {
+      const result = await collections.userResults.updateOne(
+        { userId: new ObjectId(userId) }, // match by userId
+        {
+          $set: {
+            userId: new ObjectId(userId), // ensures field exists
+            social,
+            academic,
+            leadership,
+            creativity,
+          },
+        },
+        { upsert: true } // create if doesn't exist
+      );
+  
+      res.status(200).json({ success: true });
+    } catch (err) {
+      res.status(500).json({ error: (err as Error).message });
+    }
+  });
 
 // DELETE
 

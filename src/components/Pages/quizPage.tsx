@@ -55,7 +55,13 @@ function QuizPage() {
 
       // Success — show results view
       setDisplay(1);
-      setAnswers(Array(questions.length).fill(50));
+      // setAnswers(Array(questions.length).fill(50));
+      {answers.map((val, i) => (
+        <li key={i}>
+          <strong>{questions[i].text}</strong> → {val}
+        </li>
+      ))}
+      
     } catch (err) {
       const msg = err instanceof Error ? err.message : String(err);
       console.error('Failed to submit quiz:', msg);

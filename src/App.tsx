@@ -1,6 +1,7 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import HomePage from './components/Pages/homePage';
 import QuizPage from './components/Pages/quizPage';
+import LoginPage from './components/Pages/loginPage';
 import ClubInfoPage from './components/Pages/clubInfoPage';
 import DataBasePage from './components/Pages/databasePage';
 import './App.css';
@@ -16,6 +17,7 @@ function App() {
       <Routes>
         <Route path="/" element={<HomePage />} />
         <Route path="/quiz" element={<QuizPage />} />
+        <Route path="/login" element={<LoginPage />} />
         <Route path="/clubInfo" element={<ClubInfoPage />} />
         <Route path="/dataBase" element={<DataBasePage />} />
       </Routes>

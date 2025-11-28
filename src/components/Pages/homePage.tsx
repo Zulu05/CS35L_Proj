@@ -161,11 +161,15 @@ function HomePage() {
     }
   };
   
-
+  //If user logged in go to quiz, else go to login
   return (
     <div className="page">
       <h1>Welcome to the Quiz App</h1>
-      <button onClick={() => navigate('/quiz')}>
+      <button onClick={() => {
+        const userId = localStorage.getItem("userId");
+        navigate(userId ? '/quiz' : '/login');
+      }}
+      >
         Start Quiz
       </button>
 

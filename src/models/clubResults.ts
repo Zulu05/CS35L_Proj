@@ -24,12 +24,6 @@ import { ObjectId } from "mongodb";
 export default class UserResults {
   constructor(
     public userId: ObjectId,
-    public scores: {
-      social: number;
-      academic: number;
-      leadership: number;
-      creativity: number;
-    },
     public id?: ObjectId
   ) {}
 }

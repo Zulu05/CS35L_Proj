@@ -26,12 +26,13 @@ function QuizPage() {
     newAnswers[index] = value;
     setAnswers(newAnswers);
   };
-
+  
   const handleSubmit = async () => {
     const userId = localStorage.getItem('userId');
     if (!userId) return setSubmitError('No user id found. Please log in again.');
   
-    const scores = {
+    // Build answers object that matches backend expectation
+    const answersObj = {
       social: answers[0],
       academic: answers[1],
       leadership: answers[2],
@@ -41,20 +42,11 @@ function QuizPage() {
     try {
       setSubmitting(true);
   
-      let resp = await fetch(`/users/results/${userId}`, {
-        method: 'PUT',
+      const resp = await fetch(`/users/${userId}/quiz`, {
+        method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(scores),
+        body: JSON.stringify({ answers: answersObj }),  // <-- FIXED
       });
-  
-      if (resp.status === 404) {
-        // If not found, fallback to POST (create)
-        resp = await fetch(`/users/results`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ userId, scores }),
-        });
-      }
   
       if (!resp.ok) {
         const text = await resp.text();
@@ -62,13 +54,14 @@ function QuizPage() {
       }
   
       setDisplay(1); // show results
+      
     } catch (err) {
       const msg = err instanceof Error ? err.message : String(err);
       setSubmitError(`Failed to submit: ${msg}`);
     } finally {
       setSubmitting(false);
     }
-  };
+  };  
 
   return (
     <div className="quiz-page">

@@ -13,7 +13,12 @@ export default class User {
     public quizResponses?: Array<{
       submissionDate: Date;
       version: number;
-      answers: { [key: string]: number };
+      scores: {
+        social: number;
+        academic: number;
+        leadership: number;
+        creativity: number;
+      },
       clubMatches: string[];
     }> = [];
 

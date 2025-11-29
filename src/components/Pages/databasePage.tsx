@@ -11,13 +11,10 @@ const DataBasePage: React.FC = () => {
 
   // States
   const [users, setUsers] = useState<User[]>([]);
-  //const [userResults, setUserResults] = useState<UserResults[]>([]);
   const [clubs, setClubs] = useState<Club[]>([]);
   const [usersError, setUsersError] = useState<string>("");
-  const [userResultsError, setUserResultsError] = useState<string>("");
   const [clubsError, setClubsError] = useState<string>("");
   const [usersLoading, setUsersLoading] = useState<boolean>(true);
-  const [userResultsLoading, setUserResultsLoading] = useState<boolean>(true);
   const [clubsLoading, setClubsLoading] = useState<boolean>(true);
 
   //getting users

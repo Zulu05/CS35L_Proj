@@ -1,3 +1,4 @@
+import { userInfo } from "os";
 import Club from "../models/clubs";
 
 export async function fetchClubs(){
@@ -22,5 +23,21 @@ export async function fetchClubs(){
     {
         console.log("error fetching clubs: ", err);
         return [];
+    }
+}
+
+export async function createClub(club: {username: string, email: string}) {
+    try {
+      const res = await fetch('/clubs', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(club),
+      });
+      if (!res.ok) throw new Error('Failed to create club');
+      const data = await res.json();
+      return new Club(data.username, data.email, data._id || data.id);
+    } catch (err) {
+      console.error(err);
+      console.log('Error adding club');
     }
 }

@@ -1,11 +1,16 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import Club from "../../models/clubs";
+import User from "../../models/users";
+import { fetchClubs, createClub } from "../../services/club.service"
+import { fetchUsers } from "../../services/user.service"
+import { setUncaughtExceptionCaptureCallback } from 'process';
 
-interface User {
-  _id: string;
-  username: string;
-  email: string;
-}
+// interface User {
+//   _id: string;
+//   username: string;
+//   email: string;
+// }
 
 interface NewUserInput {
   username: string;
@@ -13,11 +18,11 @@ interface NewUserInput {
 }
 
 //CLUB
-interface Club {
-  _id: string;
-  username: string;
-  email: string;
-}
+// interface Club {
+//   _id: string;
+//   username: string;
+//   email: string;
+// }
 
 interface NewClubInput {
   username: string;
@@ -42,40 +47,13 @@ function HomePage() {
 
   //USERS FETCH
   useEffect(() => {
-    fetch('/users')
-      .then((response) => response.json())
-      .then((data) => {
-        if (Array.isArray(data)) {
-          setUsers(data);
-        } else if (data && Array.isArray(data.users)) {
-          setUsers(data.users);
-        } else {
-          setUsersError('No users found');
-        }
-      })
-      .catch((error) => {
-        console.error('Error fetching data:', error);
-        setUsersError('Error fetching users');
-      });
+  fetchUsers().then(setUsers);
   }, []);
+
 
   //CLUBS FETCH
   useEffect(() => {
-    fetch('/clubs')
-      .then((response) => response.json())
-      .then((data) => {
-        if (Array.isArray(data)) {
-          setClubs(data);
-        } else if (data && Array.isArray(data.clubs)) {
-          setClubs(data.clubs);
-        } else {
-          setClubsError('No clubs found');
-        }
-      })
-      .catch((error) => {
-        console.error('Error fetching data:', error);
-        setClubsError('Error fetching clubs');
-      });
+  fetchClubs().then(setClubs);
   }, []);
 
   // returns a bool if input matches regex
@@ -110,23 +88,6 @@ function HomePage() {
       return;
     }
 
-    try {
-      const res = await fetch('/users', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(newUser),
-      });
-
-      if (!res.ok) throw new Error('Failed to create user');
-
-      const created: User = await res.json();
-
-      setUsers((prev) => [...prev, created]);
-      setNewUser({ username: '', email: '' });
-    } catch (err) {
-      console.error(err);
-      setUsersError('Error adding user');
-    }
   };
 
   const handleAddClub = async (e: React.FormEvent) => {
@@ -141,24 +102,24 @@ function HomePage() {
       setUsersError('Invalid Email.')
       return;
     }
+    createClub(newClub);
+    // try {
+    //   const res = await fetch('/clubs', {
+    //     method: 'POST',
+    //     headers: { 'Content-Type': 'application/json' },
+    //     body: JSON.stringify(newClub),
+    //   });
 
-    try {
-      const res = await fetch('/clubs', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(newClub),
-      });
+    //   if (!res.ok) throw new Error('Failed to create club');
 
-      if (!res.ok) throw new Error('Failed to create club');
+    //   const created: Club = await res.json();
 
-      const created: Club = await res.json();
-
-      setClubs((prev) => [...prev, created]);
-      setNewClub({ username: '', email: '' });
-    } catch (err) {
-      console.error(err);
-      setClubsError('Error adding club');
-    }
+    //   setClubs((prev) => [...prev, created]);
+    //   setNewClub({ clubname: '', email: '' });
+    // } catch (err) {
+    //   console.error(err);
+    //   setClubsError('Error adding club');
+    // }
   };
   
   //If user logged in go to quiz, else go to login

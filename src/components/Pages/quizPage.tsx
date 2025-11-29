@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './quizPage.css';
 import React from 'react';
+import{addResult} from "../../services/user.service"
 
 function QuizPage() {
   const navigate = useNavigate();
@@ -28,6 +29,7 @@ function QuizPage() {
   const handleSubmit = async () => {
     setSubmitError(null);
     const userId = localStorage.getItem('userId');
+    console.log(userId)
 
     if (!userId) {
       setSubmitError('No user id found. Please log in again.');
@@ -39,28 +41,16 @@ function QuizPage() {
     questions.forEach((q, i) => {
       answersDict[q.text] = answers[i];
     });
-
-    try {
+    try{
       setSubmitting(true);
-      const resp = await fetch(`/users/${userId}/quiz`, {
-        method: 'PATCH',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ answers: answersDict }),
-      });
-
-      if (!resp.ok) {
-        const text = await resp.text();
-        throw new Error(text || `HTTP ${resp.status}`);
-      }
-
-      // Success — show results view
+      await addResult(userId, answersDict)
       setDisplay(1);
       setAnswers(Array(questions.length).fill(50));
     } catch (err) {
       const msg = err instanceof Error ? err.message : String(err);
-      console.error('Failed to submit quiz:', msg);
-      setSubmitError(`Failed to submit: ${msg}`);
-    } finally {
+      setSubmitError('Failed to submit quiz: ${msg}');
+    } finally
+    {
       setSubmitting(false);
     }
   };

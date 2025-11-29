@@ -8,6 +8,7 @@ import {validatePassword, validateUsername} from "../../services/regex.service"
 export default function LoginPage() {
   const navigate = useNavigate();
   const [username, setUsername] = useState('');
+  const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -34,7 +35,7 @@ export default function LoginPage() {
 
       if (!user) {
         // Create a new user with password
-        const addedUser = await createUser({username, email: "${username}@example.com", password});
+        const addedUser = await createUser({username, email, password});
         console.log(addedUser);
         // Re-fetch to get the created user document
         const reUsers = await fetchUsers();
@@ -98,6 +99,17 @@ export default function LoginPage() {
             <input
               value={username}
               onChange={(e) => setUsername(e.target.value)}
+              style={{ display: 'block', width: '100%', padding: 8, marginTop: 4 }}
+              disabled={loading}
+            />
+          </label>
+        </div>
+        <div style={{ marginBottom: 8 }}>
+          <label>
+            Email
+            <input
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
               style={{ display: 'block', width: '100%', padding: 8, marginTop: 4 }}
               disabled={loading}
             />

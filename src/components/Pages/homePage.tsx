@@ -1,20 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-
-interface User {
-  _id: string;
-  username: string;
-  email: string;
-}
+import Club from "../../models/clubs";
+import User from "../../models/users";
+import { fetchClubs, createClub } from "../../services/club.service"
+import { fetchUsers, createUser } from "../../services/user.service"
+import { setUncaughtExceptionCaptureCallback } from 'process';
+import {validateEmail, validateUsername} from "../../services/regex.service"
 
 interface NewUserInput {
-  username: string;
-  email: string;
-}
-
-//CLUB
-interface Club {
-  _id: string;
   username: string;
   email: string;
 }
@@ -40,56 +33,6 @@ function HomePage() {
   const [usersError, setUsersError] = useState('');
   const [clubsError, setClubsError] = useState('');
 
-  //USERS FETCH
-  useEffect(() => {
-    fetch('/users')
-      .then((response) => response.json())
-      .then((data) => {
-        if (Array.isArray(data)) {
-          setUsers(data);
-        } else if (data && Array.isArray(data.users)) {
-          setUsers(data.users);
-        } else {
-          setUsersError('No users found');
-        }
-      })
-      .catch((error) => {
-        console.error('Error fetching data:', error);
-        setUsersError('Error fetching users');
-      });
-  }, []);
-
-  //CLUBS FETCH
-  useEffect(() => {
-    fetch('/clubs')
-      .then((response) => response.json())
-      .then((data) => {
-        if (Array.isArray(data)) {
-          setClubs(data);
-        } else if (data && Array.isArray(data.clubs)) {
-          setClubs(data.clubs);
-        } else {
-          setClubsError('No clubs found');
-        }
-      })
-      .catch((error) => {
-        console.error('Error fetching data:', error);
-        setClubsError('Error fetching clubs');
-      });
-  }, []);
-
-  // returns a bool if input matches regex
-  function validateUsername(username: string): boolean {
-    const usernameRegex = new RegExp('[a-zA-Z0-9]{3,}')
-
-    return usernameRegex.test(username);
-  }
-    function validateEmail(email: string): boolean {
-    const emailRegex = new RegExp('[a-zA-Z0-9]+([a-zA-Z0-9.-]*[a-zA-Z0-9])?@[a-zA-Z0-9]+([a-zA-Z0-9.-]*[a-zA-Z0-9])?\.[a-zA-Z]{2,}')
-
-    return emailRegex.test(email);
-  }
-  
   function validatePassword(password: string): boolean {
     // Password: at least 8 chars, at least one digit, at least one letter (upper and lowercase), one special character (@$!%*?&)
     const passwordRegex = new RegExp('(?=[a-zA-Z0-9@$!%*?&]*\d+)(?=[a-zA-Z0-9@$!%*?&]*[a-z]+)(?=[a-zA-Z0-9@$!%*?&]*[A-Z]+)(?=[a-zA-Z0-9@$!%*?&]*[@$!%*?&]+)[a-zA-Z0-9@$!%*?&]{8,}')
@@ -109,24 +52,8 @@ function HomePage() {
       setUsersError('Invalid Email.')
       return;
     }
-
-    try {
-      const res = await fetch('/users', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(newUser),
-      });
-
-      if (!res.ok) throw new Error('Failed to create user');
-
-      const created: User = await res.json();
-
-      setUsers((prev) => [...prev, created]);
-      setNewUser({ username: '', email: '' });
-    } catch (err) {
-      console.error(err);
-      setUsersError('Error adding user');
-    }
+    const addedUser = await createUser(newUser);
+    console.log(addedUser);
   };
 
   const handleAddClub = async (e: React.FormEvent) => {
@@ -141,24 +68,8 @@ function HomePage() {
       setUsersError('Invalid Email.')
       return;
     }
-
-    try {
-      const res = await fetch('/clubs', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(newClub),
-      });
-
-      if (!res.ok) throw new Error('Failed to create club');
-
-      const created: Club = await res.json();
-
-      setClubs((prev) => [...prev, created]);
-      setNewClub({ username: '', email: '' });
-    } catch (err) {
-      console.error(err);
-      setClubsError('Error adding club');
-    }
+    const addedClub = await createClub(newClub);
+    console.log(addedClub);
   };
   
   //If user logged in go to quiz, else go to login

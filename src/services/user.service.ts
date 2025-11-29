@@ -1,29 +1,29 @@
 import { syncBuiltinESMExports } from "module";
 import User from "../models/users";
 
-export async function fetchUsers(){
-    // Fetch Users
-    try{
-        const res = await fetch("/users");
-        const data = await res.json();
-        let rawUserData: any[] = [];
-        if (Array.isArray(data)){
-            // console.log(data);
-            rawUserData = data;
-        }
-        else if (data && Array.isArray(data.users)) {
-            // console.log(data.users);
-            rawUserData = data.users;
-        }
-        else{
-            return [];
-        }
-        return rawUserData.map(  (u) => new User(u.username, u.email, u.password, u._id || u.id));
-    } catch (err)
-    {
-        console.log("error fetching users: ", err);
-        return [];
+export async function fetchUsers() {
+  try {
+    const res = await fetch("/users");
+    const data = await res.json();
+
+    let rawUserData: any[] = [];
+    if (Array.isArray(data)) {
+      rawUserData = data;
+    } else if (data && Array.isArray(data.users)) {
+      rawUserData = data.users;
+    } else {
+      return [];
     }
+
+    return rawUserData.map((u) => {
+      const user = new User(u.username, u.email, u.password, u._id || u.id);
+      user.quizResponses = u.quizResponses ?? []; // assign quizResponses here
+      return user;
+    });
+  } catch (err) {
+    console.log("error fetching users: ", err);
+    return [];
+  }
 }
 
 export async function createUser(user: {username: string, email: string, password?: string }) {

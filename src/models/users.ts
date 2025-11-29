@@ -13,7 +13,7 @@ export default class User {
     public quizResponses?: Array<{
       submissionDate: Date;
       version: number;
-      scores: {
+      answers: {
         social: number;
         academic: number;
         leadership: number;

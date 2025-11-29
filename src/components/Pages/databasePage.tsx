@@ -56,35 +56,45 @@ const DataBasePage: React.FC = () => {
           <h1>Library</h1>
           {/* USERS */}
           <section>
-              <h2>Users</h2>
-              {usersError && <p style={{ color: "red" }}>{usersError}</p>}
-              {usersLoading && !usersError && <p>Loading users...</p>}
-              {!usersLoading && users.length > 0 && (
-                  <ul style={{ listStyle: "none", padding: 0 }}>
-                      {users.map((user) => (
-                          <li key={user.id?.toString()}>
-                              <strong>{user.username}</strong> — {user.email}
-                          </li>
-                      ))}
-                  </ul>
-              )}
-          </section>
+            <h2>Users</h2>
+            {usersError && <p style={{ color: "red" }}>{usersError}</p>}
+            {usersLoading && !usersError && <p>Loading users...</p>}
+            {!usersLoading && users.length > 0 && (
+              <ul style={{ listStyle: "none", padding: 0 }}>
+                {/* USER RESULTS */}
 
-          {/* USER RESULTS */}
-          {/* <section>
-              <h2>User Results</h2>
-              {userResultsError && <p style={{ color: "red" }}>{userResultsError}</p>}
-              {userResultsLoading && !userResultsError && <p>Loading user results...</p>}
-              {!userResultsLoading && userResults.length > 0 && (
-                  <ul style={{ listStyle: "none", padding: 0 }}>
-                      {userResults.map((user) => (
-                          <li key={user.userId}>
-                              <strong>{user.userId}</strong> — {user.scores.social} — {user.scores.academic} — {user.scores.leadership} — {user.scores.creativity}
-                          </li>
-                      ))}
-                  </ul>
-              )}
-          </section> */}
+                {users.map((user) => {
+  const lastQuiz = user.quizResponses?.[user.quizResponses.length - 1]; // grab latest quiz
+  return (
+    <li key={user.id?.toString()}>
+      <strong>{user.username}</strong> — {user.email}
+
+      {/* USER RESULTS */}
+      {lastQuiz ? (
+          <div style={{ marginTop: "8px", marginLeft: "20px" }}>
+            <em>Last Quiz Results:</em>
+            <ul style={{ listStyle: "none", padding: 0, margin: 0 }}>
+              <li>Social: {lastQuiz.answers.social}</li>
+              <li>Academic: {lastQuiz.answers.academic}</li>
+              <li>Leadership: {lastQuiz.answers.leadership}</li>
+              <li>Creativity: {lastQuiz.answers.creativity}</li>
+            </ul>
+
+            <div style={{ marginTop: "5px", fontSize: "0.9rem" }}>
+              <strong>Matches:</strong> {lastQuiz.clubMatches.join(", ") || "None"}
+            </div>
+          </div>
+        ) : (
+          <p style={{ marginLeft: "20px", fontSize: "0.9rem" }}>
+            No quiz submitted.
+          </p>
+        )}
+      </li>
+    );
+    })}
+    </ul>
+    )}
+    </section>
 
           {/* CLUBS */}
           <section style={{ marginTop: "40px" }}>

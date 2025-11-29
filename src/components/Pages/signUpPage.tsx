@@ -46,22 +46,8 @@ export default function SignUpPage() {
         const reUsers = await fetchUsers();
         user = reUsers.find((u: any) => u.username === username);
       } else {
-        // User exists — check password if set, otherwise set it
-        if (user.hasPassword()) {
-          // validate password match
-          if (!user.checkPassword(password)) {
-            throw new Error('Invalid password, password does not match existing user');
-          }
-        } else {
-          // set password on existing user via PUT (updates only provided fields)
-          const id = user.id ?? user.id ?? userIdFrom(user);
-          if (!id) throw new Error('User has no id to set password on');
-          const changedUser = await addPassword(id, password);
-          console.log(changedUser);
-          // re-fetch user
-          const reUsers = await fetchUsers();
-          user = reUsers.find((u: any) => u.username === username);
-        }
+        // User exists
+                throw new Error('User already exists, try logining in instead');
       }
 
       if (!user) {

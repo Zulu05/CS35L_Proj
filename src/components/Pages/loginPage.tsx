@@ -34,12 +34,7 @@ export default function LoginPage() {
       let user = users.find((u: any) => u.username === username);
 
       if (!user) {
-        // Create a new user with password
-        const addedUser = await createUser({username, email, password});
-        console.log(addedUser);
-        // Re-fetch to get the created user document
-        const reUsers = await fetchUsers();
-        user = reUsers.find((u: any) => u.username === username);
+        throw new Error('User does not exist, try signing up first');
       } else {
         // User exists — check password if set, otherwise set it
         if (user.hasPassword()) {

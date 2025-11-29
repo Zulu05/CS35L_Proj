@@ -5,6 +5,7 @@ import User from "../../models/users";
 import { fetchClubs, createClub } from "../../services/club.service"
 import { fetchUsers, createUser } from "../../services/user.service"
 import { setUncaughtExceptionCaptureCallback } from 'process';
+import {validateEmail, validateUsername} from "../../services/regex.service"
 
 interface NewUserInput {
   username: string;
@@ -32,28 +33,28 @@ function HomePage() {
   const [usersError, setUsersError] = useState('');
   const [clubsError, setClubsError] = useState('');
 
-  //USERS FETCH
-  useEffect(() => {
-  fetchUsers().then(setUsers);
-  }, []);
+  // //USERS FETCH
+  // useEffect(() => {
+  // fetchUsers().then(setUsers);
+  // }, []);
 
 
-  //CLUBS FETCH
-  useEffect(() => {
-  fetchClubs().then(setClubs);
-  }, []);
+  // //CLUBS FETCH
+  // useEffect(() => {
+  // fetchClubs().then(setClubs);
+  // }, []);
 
-  // returns a bool if input matches regex
-  function validateUsername(username: string): boolean {
-    const usernameRegex = new RegExp('[a-zA-Z0-9]{3,}')
+  // // returns a bool if input matches regex
+  // function validateUsername(username: string): boolean {
+  //   const usernameRegex = new RegExp('[a-zA-Z0-9]{3,}')
 
-    return usernameRegex.test(username);
-  }
-    function validateEmail(email: string): boolean {
-    const emailRegex = new RegExp('[a-zA-Z0-9]+([a-zA-Z0-9.-]*[a-zA-Z0-9])?@[a-zA-Z0-9]+([a-zA-Z0-9.-]*[a-zA-Z0-9])?\.[a-zA-Z]{2,}')
+  //   return usernameRegex.test(username);
+  // }
+  //   function validateEmail(email: string): boolean {
+  //   const emailRegex = new RegExp('[a-zA-Z0-9]+([a-zA-Z0-9.-]*[a-zA-Z0-9])?@[a-zA-Z0-9]+([a-zA-Z0-9.-]*[a-zA-Z0-9])?\.[a-zA-Z]{2,}')
 
-    return emailRegex.test(email);
-  }
+  //   return emailRegex.test(email);
+  // }
   
   function validatePassword(password: string): boolean {
     // Password: at least 8 chars, at least one digit, at least one letter (upper and lowercase), one special character (@$!%*?&)
@@ -74,7 +75,8 @@ function HomePage() {
       setUsersError('Invalid Email.')
       return;
     }
-    createUser(newUser);
+    const addedUser = await createUser(newUser);
+    console.log(addedUser);
   };
 
   const handleAddClub = async (e: React.FormEvent) => {
@@ -89,7 +91,8 @@ function HomePage() {
       setUsersError('Invalid Email.')
       return;
     }
-    createClub(newClub);
+    const addedClub = await createClub(newClub);
+    console.log(addedClub);
   };
   
   //If user logged in go to quiz, else go to login

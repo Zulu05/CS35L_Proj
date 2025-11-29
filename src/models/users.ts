@@ -18,6 +18,10 @@ export default class User {
     }> = [];
 
     // Method to check password (plaintext comparison for now)
+    public hasPassword(): boolean {
+      return !!this.password
+    }
+
     public checkPassword(password: string): boolean {
         return this.password === password;
     }

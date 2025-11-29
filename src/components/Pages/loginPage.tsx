@@ -1,6 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './quizPage.css';
+import User from "../../models/users";
+import { fetchUsers, addPassword, createUser } from "../../services/user.service"
+import {validatePassword, validateUsername} from "../../services/regex.service"
 
 export default function LoginPage() {
   const navigate = useNavigate();
@@ -13,19 +16,19 @@ export default function LoginPage() {
     e.preventDefault();
     setError(null);
 
-      // returns a bool if input matches regex
-  function validateUsername(username: string): boolean {
-    const usernameRegex = /^[a-zA-Z0-9]{3,}$/
+  //     // returns a bool if input matches regex
+  // function validateUsername(username: string): boolean {
+  //   const usernameRegex = /^[a-zA-Z0-9]{3,}$/
 
-    return usernameRegex.test(username);
-  }
+  //   return usernameRegex.test(username);
+  // }
 
-  function validatePassword(password: string): boolean {
-    // Password: at least 8 chars, at least one digit, at least one letter (upper and lowercase), one special character (@$!%*?&)
-    const passwordRegex = /^(?=[a-zA-Z0-9@$!%*?&]*\d+)(?=[a-zA-Z0-9@$!%*?&]*[a-z]+)(?=[a-zA-Z0-9@$!%*?&]*[A-Z]+)(?=[a-zA-Z0-9@$!%*?&]*[@$!%*?&]+)[a-zA-Z0-9@$!%*?&]{8,}$/
+  // function validatePassword(password: string): boolean {
+  //   // Password: at least 8 chars, at least one digit, at least one letter (upper and lowercase), one special character (@$!%*?&)
+  //   const passwordRegex = /^(?=[a-zA-Z0-9@$!%*?&]*\d+)(?=[a-zA-Z0-9@$!%*?&]*[a-z]+)(?=[a-zA-Z0-9@$!%*?&]*[A-Z]+)(?=[a-zA-Z0-9@$!%*?&]*[@$!%*?&]+)[a-zA-Z0-9@$!%*?&]{8,}$/
 
-    return passwordRegex.test(password);
-  }
+  //   return passwordRegex.test(password);
+  // }
 
     if (!username.trim() || !validateUsername(username)) {
       setError('Please enter a valid username');
@@ -39,56 +42,62 @@ export default function LoginPage() {
 
     setLoading(true);
     try {
+      const users = await fetchUsers();
       // Try to find an existing user by username
-      const listResp = await fetch('/users');
-      if (!listResp.ok) throw new Error(`Failed to fetch users: ${listResp.status}`);
-      const users = await listResp.json();
+      // const listResp = await fetch('/users');
+      // if (!listResp.ok) throw new Error(`Failed to fetch users: ${listResp.status}`);
+      // const users = await listResp.json();
 
       let user = users.find((u: any) => u.username === username);
 
       if (!user) {
         // Create a new user with password
-        const createResp = await fetch('/users', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ username, email: `${username}@example.com`, password }),
-        });
+        // const createResp = await fetch('/users', {
+        //   method: 'POST',
+        //   headers: { 'Content-Type': 'application/json' },
+        //   body: JSON.stringify({ username, email: `${username}@example.com`, password }),
+        // });
 
-        if (!createResp.ok) {
-          const text = await createResp.text();
-          throw new Error(text || `Failed to create user: ${createResp.status}`);
-        }
-
+        // if (!createResp.ok) {
+        //   const text = await createResp.text();
+        //   throw new Error(text || `Failed to create user: ${createResp.status}`);
+        // }
+        const addedUser = await createUser({username, email: "${username}@example.com", password});
+        console.log(addedUser);
         // Re-fetch to get the created user document
-        const reList = await fetch('/users');
-        const reUsers = await reList.json();
+        // const reList = await fetch('/users');
+        // const reUsers = await reList.json();
+        const reUsers = await fetchUsers();
         user = reUsers.find((u: any) => u.username === username);
       } else {
         // User exists — check password if set, otherwise set it
-        if (user.password) {
+        if (user.hasPassword()) {
           // validate password match
-          if (user.password !== password) {
+          if (!user.checkPassword(password)) {
             throw new Error('Invalid password, password does not match existing user');
           }
         } else {
           // set password on existing user via PUT (updates only provided fields)
-          const id = user._id ?? user.id ?? userIdFrom(user);
+          const id = user.id ?? user.id ?? userIdFrom(user);
           if (!id) throw new Error('User has no id to set password on');
+          
 
-          const updateResp = await fetch(`/users/${id}`, {
-            method: 'PUT',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ password }),
-          });
+          // const updateResp = await fetch(`/users/${id}`, {
+          //   method: 'PUT',
+          //   headers: { 'Content-Type': 'application/json' },
+          //   body: JSON.stringify({ password }),
+          // });
 
-          if (!updateResp.ok) {
-            const text = await updateResp.text();
-            throw new Error(text || `Failed to set password: ${updateResp.status}`);
-          }
-
+          // if (!updateResp.ok) {
+          //   const text = await updateResp.text();
+          //   throw new Error(text || `Failed to set password: ${updateResp.status}`);
+          // }
+          const changedUser = await addPassword(id, password);
+          console.log(changedUser);
           // re-fetch user
-          const reList = await fetch('/users');
-          const reUsers = await reList.json();
+          // const reList = await fetch('/users');
+          // const reUsers = await reList.json();
+          const reUsers = await fetchUsers();
           user = reUsers.find((u: any) => u.username === username);
         }
       }
@@ -98,9 +107,10 @@ export default function LoginPage() {
       }
 
       // Save user id in localStorage for later quiz submission
-      const id = user._id ?? user.id ?? userIdFrom(user);
+      const id = user.id ?? user.id ?? userIdFrom(user);
       if (!id) throw new Error('User has no id');
       localStorage.setItem('userId', String(id));
+      console.log(id);
 
       // Navigate to quiz page
       navigate('/quiz');

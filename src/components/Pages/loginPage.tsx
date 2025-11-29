@@ -114,7 +114,7 @@ export default function LoginPage() {
 
         <div style={{ display: 'flex', gap: 8 }}>
           <button type="submit" disabled={loading}>
-            {loading ? 'Signing in...' : 'Sign in / Create account'}
+            {loading ? 'Signing in...' : 'Sign in'}
           </button>
           <button type="button" onClick={() => navigate('/')} disabled={loading}>
             Cancel

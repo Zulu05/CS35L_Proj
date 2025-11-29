@@ -1,12 +1,12 @@
 // returns a bool if input matches regex
 export function validateUsername(username: string): boolean {
-const usernameRegex = new RegExp('[a-zA-Z0-9]{3,}')
+const usernameRegex = /^[a-zA-Z0-9]{3,}$/
 
 return usernameRegex.test(username);
 }
 
 export function validateEmail(email: string): boolean {
-const emailRegex = new RegExp('[a-zA-Z0-9]+([a-zA-Z0-9.-]*[a-zA-Z0-9])?@[a-zA-Z0-9]+([a-zA-Z0-9.-]*[a-zA-Z0-9])?\.[a-zA-Z]{2,}')
+const emailRegex = /^[a-zA-Z0-9]+([a-zA-Z0-9.-]*[a-zA-Z0-9])?@[a-zA-Z0-9]+([a-zA-Z0-9.-]*[a-zA-Z0-9])?\.[a-zA-Z]{2,}$/
 
 return emailRegex.test(email);
 }

@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import './quizPage.css';
 import User from "../../models/users";
 import { fetchUsers, addPassword, createUser } from "../../services/user.service"
-import {validatePassword, validateUsername} from "../../services/regex.service"
+import {validatePassword, validateUsername, validateEmail} from "../../services/regex.service"
 
 export default function LoginPage() {
   const navigate = useNavigate();
@@ -24,6 +24,11 @@ export default function LoginPage() {
     // Basic password validation for creation: at least 8 chars
     if (!password || !validatePassword(password)) {
       setError('Password must be at least 8 characters with at least one digit, one upper and lower case letter, and one special character (@$!%*?&)');
+      return;
+    }
+    // Validate email presence and format
+    if (!email.trim() || !validateEmail(email)) {
+      setError('Please enter a valid email address');
       return;
     }
 
@@ -108,7 +113,7 @@ export default function LoginPage() {
           <label>
             Email
             <input
-              value={email}
+              value={email} 
               onChange={(e) => setEmail(e.target.value)}
               style={{ display: 'block', width: '100%', padding: 8, marginTop: 4 }}
               disabled={loading}

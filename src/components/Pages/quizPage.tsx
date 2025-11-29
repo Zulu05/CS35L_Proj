@@ -9,9 +9,10 @@ function QuizPage() {
 
   // Question List
   const questions = [
-    { text: 'How do you like CS35L?' },
-    { text: 'How confident do you feel about the midterm?' },
-    { text: 'How excited are you to code a brand new app?' },
+    { text: 'Social' },
+    { text: 'Academic' },
+    { text: 'Leadership' },
+    { text: 'Creativity' },
   ];
 
   // Initialize array of answers with same size as questions
@@ -27,30 +28,44 @@ function QuizPage() {
   };
 
   const handleSubmit = async () => {
-    setSubmitError(null);
     const userId = localStorage.getItem('userId');
-    console.log(userId)
-
-    if (!userId) {
-      setSubmitError('No user id found. Please log in again.');
-      return;
-    }
-
-    // Build answers dictionary from array and question texts
-    const answersDict: { [key: string]: number } = {};
-    questions.forEach((q, i) => {
-      answersDict[q.text] = answers[i];
-    });
-    try{
+    if (!userId) return setSubmitError('No user id found. Please log in again.');
+  
+    const scores = {
+      social: answers[0],
+      academic: answers[1],
+      leadership: answers[2],
+      creativity: answers[3],
+    };
+  
+    try {
       setSubmitting(true);
-      await addResult(userId, answersDict)
-      setDisplay(1);
-      setAnswers(Array(questions.length).fill(50));
+  
+      let resp = await fetch(`/users/results/${userId}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(scores),
+      });
+  
+      if (resp.status === 404) {
+        // If not found, fallback to POST (create)
+        resp = await fetch(`/users/results`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ userId, scores }),
+        });
+      }
+  
+      if (!resp.ok) {
+        const text = await resp.text();
+        throw new Error(text || `HTTP ${resp.status}`);
+      }
+  
+      setDisplay(1); // show results
     } catch (err) {
       const msg = err instanceof Error ? err.message : String(err);
-      setSubmitError('Failed to submit quiz: ${msg}');
-    } finally
-    {
+      setSubmitError(`Failed to submit: ${msg}`);
+    } finally {
       setSubmitting(false);
     }
   };

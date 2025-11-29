@@ -14,5 +14,11 @@ export default class club {
     constructor(
     public clubname: string,
     public email: string, 
+    public scores: {
+        social: number;
+        academic: number;
+        leadership: number;
+        creativity: number;
+    },
     public id?: ObjectId) {}
 }

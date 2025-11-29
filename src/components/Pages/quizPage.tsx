@@ -9,9 +9,10 @@ function QuizPage() {
 
   // Question List
   const questions = [
-    { text: 'How do you like CS35L?' },
-    { text: 'How confident do you feel about the midterm?' },
-    { text: 'How excited are you to code a brand new app?' },
+    { text: 'Social' },
+    { text: 'Academic' },
+    { text: 'Leadership' },
+    { text: 'Creativity' },
   ];
 
   // Initialize array of answers with same size as questions
@@ -25,35 +26,42 @@ function QuizPage() {
     newAnswers[index] = value;
     setAnswers(newAnswers);
   };
-
+  
   const handleSubmit = async () => {
-    setSubmitError(null);
     const userId = localStorage.getItem('userId');
-    console.log(userId)
-
-    if (!userId) {
-      setSubmitError('No user id found. Please log in again.');
-      return;
-    }
-
-    // Build answers dictionary from array and question texts
-    const answersDict: { [key: string]: number } = {};
-    questions.forEach((q, i) => {
-      answersDict[q.text] = answers[i];
-    });
-    try{
+    if (!userId) return setSubmitError('No user id found. Please log in again.');
+  
+    // Build answers object that matches backend expectation
+    const answersObj = {
+      social: answers[0],
+      academic: answers[1],
+      leadership: answers[2],
+      creativity: answers[3],
+    };
+  
+    try {
       setSubmitting(true);
-      await addResult(userId, answersDict)
-      setDisplay(1);
-      setAnswers(Array(questions.length).fill(50));
+  
+      const resp = await fetch(`/users/${userId}/quiz`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ answers: answersObj }),  // <-- FIXED
+      });
+  
+      if (!resp.ok) {
+        const text = await resp.text();
+        throw new Error(text || `HTTP ${resp.status}`);
+      }
+  
+      setDisplay(1); // show results
+      
     } catch (err) {
       const msg = err instanceof Error ? err.message : String(err);
-      setSubmitError('Failed to submit quiz: ${msg}');
-    } finally
-    {
+      setSubmitError(`Failed to submit: ${msg}`);
+    } finally {
       setSubmitting(false);
     }
-  };
+  };  
 
   return (
     <div className="quiz-page">

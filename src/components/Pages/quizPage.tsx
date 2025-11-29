@@ -40,11 +40,20 @@ function QuizPage() {
     try {
       setSubmitting(true);
   
-      const resp = await fetch(`/users/results/${userId}`, {
-        method: 'PUT', // update or create
+      let resp = await fetch(`/users/results/${userId}`, {
+        method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(scores),
       });
+  
+      if (resp.status === 404) {
+        // If not found, fallback to POST (create)
+        resp = await fetch(`/users/results`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ userId, scores }),
+        });
+      }
   
       if (!resp.ok) {
         const text = await resp.text();

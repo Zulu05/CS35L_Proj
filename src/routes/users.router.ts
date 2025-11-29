@@ -85,18 +85,18 @@ usersRouter.put("/:id", async (req: Request, res: Response) => {
 
 usersRouter.patch("/:id/quiz", async (req: Request, res: Response) => {
     const userId = req.params.id;
-    const { scores } = req.body;
+    const { answers } = req.body;
   
     if (!userId) {
       return res.status(400).send("Missing user id");
     }
   
-    if (!scores || typeof scores !== "object" || Array.isArray(scores)) {
-      return res.status(400).send("`scores` must be an object mapping name -> number");
+    if (!answers || typeof answers !== "object" || Array.isArray(answers)) {
+      return res.status(400).send("`answers` must be an object mapping name -> number");
     }
   
-    // Validate all score values
-    for (const [key, value] of Object.entries(scores)) {
+    // Validate all answer values
+    for (const [key, value] of Object.entries(answers)) {
       if (typeof value !== "number" || Number.isNaN(value) || value < 0 || value > 100) {
         return res
           .status(400)
@@ -122,7 +122,7 @@ usersRouter.patch("/:id/quiz", async (req: Request, res: Response) => {
         { _id: objectId },
         {
           $set: {
-            scores,
+            answers,
             updatedAt: new Date(),
           },
         }
@@ -134,7 +134,7 @@ usersRouter.patch("/:id/quiz", async (req: Request, res: Response) => {
   
       return res.status(200).json({
         message: "Scores updated successfully",
-        scores,
+        answers,
       });
     } catch (error: any) {
       console.error("Error updating scores:", error?.message);

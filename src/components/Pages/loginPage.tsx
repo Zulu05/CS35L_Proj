@@ -26,11 +26,6 @@ export default function LoginPage() {
       setError('Password must be at least 8 characters with at least one digit, one upper and lower case letter, and one special character (@$!%*?&)');
       return;
     }
-    // Validate email presence and format
-    if (!email.trim() || !validateEmail(email)) {
-      setError('Please enter a valid email address');
-      return;
-    }
 
     setLoading(true);
     try {

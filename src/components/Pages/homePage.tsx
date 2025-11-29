@@ -33,29 +33,6 @@ function HomePage() {
   const [usersError, setUsersError] = useState('');
   const [clubsError, setClubsError] = useState('');
 
-  // //USERS FETCH
-  // useEffect(() => {
-  // fetchUsers().then(setUsers);
-  // }, []);
-
-
-  // //CLUBS FETCH
-  // useEffect(() => {
-  // fetchClubs().then(setClubs);
-  // }, []);
-
-  // // returns a bool if input matches regex
-  // function validateUsername(username: string): boolean {
-  //   const usernameRegex = new RegExp('[a-zA-Z0-9]{3,}')
-
-  //   return usernameRegex.test(username);
-  // }
-  //   function validateEmail(email: string): boolean {
-  //   const emailRegex = new RegExp('[a-zA-Z0-9]+([a-zA-Z0-9.-]*[a-zA-Z0-9])?@[a-zA-Z0-9]+([a-zA-Z0-9.-]*[a-zA-Z0-9])?\.[a-zA-Z]{2,}')
-
-  //   return emailRegex.test(email);
-  // }
-  
   function validatePassword(password: string): boolean {
     // Password: at least 8 chars, at least one digit, at least one letter (upper and lowercase), one special character (@$!%*?&)
     const passwordRegex = new RegExp('(?=[a-zA-Z0-9@$!%*?&]*\d+)(?=[a-zA-Z0-9@$!%*?&]*[a-z]+)(?=[a-zA-Z0-9@$!%*?&]*[A-Z]+)(?=[a-zA-Z0-9@$!%*?&]*[@$!%*?&]+)[a-zA-Z0-9@$!%*?&]{8,}')

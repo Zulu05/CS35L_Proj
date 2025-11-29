@@ -53,30 +53,6 @@ function QuizPage() {
     {
       setSubmitting(false);
     }
-
-    // try {
-    //   setSubmitting(true);
-    //   const resp = await fetch(`/users/${userId}/quiz`, {
-    //     method: 'PATCH',
-    //     headers: { 'Content-Type': 'application/json' },
-    //     body: JSON.stringify({ answers: answersDict }),
-    //   });
-
-    //   if (!resp.ok) {
-    //     const text = await resp.text();
-    //     throw new Error(text || `HTTP ${resp.status}`);
-    //   }
-
-    //   // Success — show results view
-    //   setDisplay(1);
-    //   setAnswers(Array(questions.length).fill(50));
-    // } catch (err) {
-    //   const msg = err instanceof Error ? err.message : String(err);
-    //   console.error('Failed to submit quiz:', msg);
-    //   setSubmitError(`Failed to submit: ${msg}`);
-    // } finally {
-    //   setSubmitting(false);
-    // }
   };
 
   return (

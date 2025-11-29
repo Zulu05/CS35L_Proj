@@ -5,7 +5,7 @@ import User from "../../models/users";
 import { fetchUsers, addPassword, createUser } from "../../services/user.service"
 import {validatePassword, validateUsername, validateEmail} from "../../services/regex.service"
 
-export default function LoginPage() {
+export default function SignUpPage() {
   const navigate = useNavigate();
   const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
@@ -24,6 +24,11 @@ export default function LoginPage() {
     // Basic password validation for creation: at least 8 chars
     if (!password || !validatePassword(password)) {
       setError('Password must be at least 8 characters with at least one digit, one upper and lower case letter, and one special character (@$!%*?&)');
+      return;
+    }
+    // Validate email presence and format
+    if (!email.trim() || !validateEmail(email)) {
+      setError('Please enter a valid email address');
       return;
     }
 
@@ -91,7 +96,7 @@ export default function LoginPage() {
 
   return (
     <div className="quiz-page">
-      <h1>Login</h1>
+      <h1>Sign Up</h1>
       <form onSubmit={handleSubmit} style={{ maxWidth: 420 }}>
         <div style={{ marginBottom: 8 }}>
           <label>
@@ -99,6 +104,17 @@ export default function LoginPage() {
             <input
               value={username}
               onChange={(e) => setUsername(e.target.value)}
+              style={{ display: 'block', width: '100%', padding: 8, marginTop: 4 }}
+              disabled={loading}
+            />
+          </label>
+        </div>
+        <div style={{ marginBottom: 8 }}>
+          <label>
+            Email
+            <input
+              value={email} 
+              onChange={(e) => setEmail(e.target.value)}
               style={{ display: 'block', width: '100%', padding: 8, marginTop: 4 }}
               disabled={loading}
             />
@@ -125,23 +141,6 @@ export default function LoginPage() {
             Cancel
           </button>
         </div>
-
-      <button
-        type="button"
-        onClick={() => navigate('/signUp')}
-        disabled={loading}
-        style={{
-          marginLeft: 8,
-          background: 'none',
-          border: 'none',
-          color: 'blue',
-          textDecoration: 'underline',
-          cursor: 'pointer',
-          padding: 10
-        }}
-      >
-        No account? Sign Up Here
-      </button>
 
         {error && (
           <div style={{ marginTop: 12, color: 'crimson' }}>

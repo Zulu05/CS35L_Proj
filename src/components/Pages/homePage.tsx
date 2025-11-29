@@ -3,26 +3,13 @@ import { useNavigate } from 'react-router-dom';
 import Club from "../../models/clubs";
 import User from "../../models/users";
 import { fetchClubs, createClub } from "../../services/club.service"
-import { fetchUsers } from "../../services/user.service"
+import { fetchUsers, createUser } from "../../services/user.service"
 import { setUncaughtExceptionCaptureCallback } from 'process';
-
-// interface User {
-//   _id: string;
-//   username: string;
-//   email: string;
-// }
 
 interface NewUserInput {
   username: string;
   email: string;
 }
-
-//CLUB
-// interface Club {
-//   _id: string;
-//   username: string;
-//   email: string;
-// }
 
 interface NewClubInput {
   username: string;
@@ -87,7 +74,7 @@ function HomePage() {
       setUsersError('Invalid Email.')
       return;
     }
-
+    createUser(newUser);
   };
 
   const handleAddClub = async (e: React.FormEvent) => {
@@ -103,23 +90,6 @@ function HomePage() {
       return;
     }
     createClub(newClub);
-    // try {
-    //   const res = await fetch('/clubs', {
-    //     method: 'POST',
-    //     headers: { 'Content-Type': 'application/json' },
-    //     body: JSON.stringify(newClub),
-    //   });
-
-    //   if (!res.ok) throw new Error('Failed to create club');
-
-    //   const created: Club = await res.json();
-
-    //   setClubs((prev) => [...prev, created]);
-    //   setNewClub({ clubname: '', email: '' });
-    // } catch (err) {
-    //   console.error(err);
-    //   setClubsError('Error adding club');
-    // }
   };
   
   //If user logged in go to quiz, else go to login

@@ -25,25 +25,21 @@ export async function fetchUsers(){
     }
 }
 
-// export async function addUser(){
-//     try {
-//       const res = await fetch('/users', {
-//         method: 'POST',
-//         headers: { 'Content-Type': 'application/json' },
-//         body: JSON.stringify(newUser),
-//       });
-
-//       if (!res.ok) throw new Error('Failed to create user');
-
-//       const created: User = await res.json();
-
-//       setUsers((prev) => [...prev, created]);
-//       setNewUser({ username: '', email: '' });
-//     } catch (err) {
-//       console.error(err);
-//       setUsersError('Error adding user');
-//     }
-// }
+export async function createUser(user: {username: string, email: string}) {
+    try {
+      const res = await fetch('/users', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(user),
+      });
+      if (!res.ok) throw new Error('Failed to create club');
+      const data = await res.json();
+      return new User(data.username, data.email, data._id || data.id);
+    } catch (err) {
+      console.error(err);
+      console.log('Error adding user');
+    }
+}
 
 //need to update
 export async function addPassowrd(id: string, password: string){

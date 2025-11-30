@@ -83,37 +83,63 @@ usersRouter.put("/:id", async (req: Request, res: Response) => {
 
 //PATCH (Add answers to user) 
 usersRouter.patch("/:id/quiz", async (req: Request, res: Response) => {
-  const userId = req.params.id;
-  const { answers } = req.body;
-
-  if (!userId) {
-    return res.status(400).send("Missing user id");
-  }
-
-  if (!answers || typeof answers !== "object" || Array.isArray(answers)) {
-    return res.status(400).send("`answers` must be an object mapping name -> number");
-  }
-
-  // Validate all answer values
-  for (const [key, value] of Object.entries(answers)) {
-    if (typeof value !== "number" || Number.isNaN(value) || value < 0 || value > 100) {
-      return res
-        .status(400)
-        .send(`Invalid score for "${key}": must be a number between 0 and 100`);
+    const userId = req.params.id;
+    const { answers } = req.body;
+  
+    if (!userId) {
+      return res.status(400).send("Missing user id");
     }
-  }
-
-  try {
-    if (!collections.users) {
-      return res.status(500).send("Database not initialized");
+  
+    if (!answers || typeof answers !== "object" || Array.isArray(answers)) {
+      return res.status(400).send("`answers` must be an object mapping name -> number");
+    }
+  
+    // Validate all score values
+    for (const [key, value] of Object.entries(answers)) {
+      if (typeof value !== "number" || Number.isNaN(value) || value < 0 || value > 100) {
+        return res
+          .status(400)
+          .send(`Invalid score for "${key}": must be a number between 0 and 100`);
+      }
     }
 
     // Validate ObjectId format
     let objectId: ObjectId;
     try {
-      objectId = new ObjectId(userId);
-    } catch {
-      return res.status(400).send(`Invalid user id format: ${userId}`);
+      if (!collections.users) {
+        return res.status(500).send("Database not initialized");
+      }
+  
+      // Validate ObjectId format
+      let objectId: ObjectId;
+      try {
+        objectId = new ObjectId(userId);
+      } catch {
+        return res.status(400).send(`Invalid user id format: ${userId}`);
+      }
+  
+      // Update user with latest quiz answers
+      const result = await collections.users.updateOne(
+        { _id: objectId },
+        {
+          $set: {
+            answers,
+            updatedAt: new Date(),
+          },
+        }
+      );
+  
+      if (result.matchedCount === 0) {
+        return res.status(404).send(`User with id ${userId} not found`);
+      }
+  
+      return res.status(200).json({
+        message: "Scores updated successfully",
+        answers,
+      });
+    } catch (error: any) {
+      console.error("Error updating answers:", error?.message);
+      return res.status(500).send(error?.message || "Server error");
     }
 
     const quizResponse = {

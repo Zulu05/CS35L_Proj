@@ -172,3 +172,52 @@ usersRouter.delete("/:id", async (req: Request, res: Response) => {
         res.status(400).send(msg);
     }
 });
+
+// PATCH (Add latest matches to the most recent quiz)
+usersRouter.patch("/:id/quiz/latest-matches", async (req: Request, res: Response) => {
+  const userId = req.params.id;
+  const { clubMatches } = req.body;
+
+  if (!userId) {
+    return res.status(400).send("Missing user id");
+  }
+
+  if (!Array.isArray(clubMatches)) {
+    return res.status(400).send("`clubMatches` must be an array");
+  }
+
+  try {
+    if (!collections.users) {
+      return res.status(500).send("Database not initialized");
+    }
+
+    let objectId: ObjectId;
+    try {
+      objectId = new ObjectId(userId);
+    } catch {
+      return res.status(400).send(`Invalid user id format: ${userId}`);
+    }
+
+    const result = await collections.users.updateOne(
+      { _id: objectId },
+      {
+        $set: {
+          latestClubMatches: clubMatches,
+          updatedAt: new Date(),
+        },
+      } as any
+    );
+
+    if (result.matchedCount === 0) {
+      return res.status(404).send(`User with id ${userId} not found`);
+    }
+
+    return res.status(200).json({
+      message: "Latest matches saved successfully",
+      latestClubMatches: clubMatches,
+    });
+  } catch (error: any) {
+    console.error("Error saving latest matches:", error?.message);
+    return res.status(500).send(error?.message || "Server error");
+  }
+});

@@ -48,22 +48,30 @@ export async function getTopNRecommendations(
     scores?: Record<string, number>;
   }[]
 > {
-  if (!collections.userResults || !collections.clubResults) {
+  if (!collections.users || !collections.clubs) {
     throw new Error("Database collections not initialized");
   }
 
   // Fetch user result by userId
   const userObjectId = new ObjectId(userId);
-  const userDoc = await collections.userResults.findOne({ userId: userObjectId });
+  const userDoc = await collections.users.findOne({ _id: userObjectId });
 
   if (!userDoc) {
     throw new Error(`No user result found for userId ${userId}`);
   }
 
+  const quizResponses = Array.isArray(userDoc.quizResponses) ? userDoc.quizResponses : [];
+
+  if (quizResponses.length === 0) {
+    throw new Error(`No quiz responses found for userId ${userId}`);
+  }
+
+  const latestQuiz = quizResponses[quizResponses.length - 1];
+
   // Expect the scores stored as an object: { social:number, academic:number, leadership:number, creativity:number }
-  const userScoresObj = userDoc.scores;
+  const userScoresObj = latestQuiz.answers;
   if (!userScoresObj) {
-    throw new Error("User scores missing");
+    throw new Error("Latest quiz response is missing answers");
   }
 
   const userVector = [
@@ -74,7 +82,7 @@ export async function getTopNRecommendations(
   ];
 
   // Fetch all club result docs
-  const clubsCursor = collections.clubResults.find({});
+  const clubsCursor = collections.clubs.find({});
   const clubs = await clubsCursor.toArray();
 
   const scored = clubs.map((clubDoc: any) => {

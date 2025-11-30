@@ -95,3 +95,32 @@ export async function createClub(club: {
 
   return new Club(nameFromDb, emailFromDb, scoresFromDb, idFromDb);
 }
+
+export async function changeScores(clubId: string, scores: {
+  social: number;
+  academic: number;
+  leadership: number;
+  creativity: number; 
+}): Promise<Club> {
+  const res = await fetch(`/clubs/${clubId}`, {
+    method: 'PUT',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ scores }),
+  });
+
+  if (!res.ok) {
+    const text = await res.text().catch(() => '');
+    throw new Error(
+      `Failed to update club scores: ${res.status} ${res.statusText} ${text}`
+    );
+  }
+
+  const updatedData = await res.json();
+
+  const nameFromDb = updatedData.clubname ?? updatedData.username ?? '';
+  const emailFromDb = updatedData.email ?? '';
+  const scoresFromDb = updatedData.scores ?? scores;
+  const idFromDb = updatedData._id || updatedData.id || clubId;
+
+  return new Club(nameFromDb, emailFromDb, scoresFromDb, idFromDb);
+}

@@ -2,12 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "./profilePage.css";
 import { fetchUsers } from "../../services/user.service";
-
-interface User {
-  username: string;
-  email: string;
-  id?: string;
-}
+import User from "../../models/users";
 
 export default function ProfilePage() {
   const navigate = useNavigate();
@@ -31,11 +26,7 @@ export default function ProfilePage() {
           setError("User not found.");
           return;
         }
-        setUser({
-          username: data.username,
-          email: data.email,
-          id: (data as any).id ?? (data as any)._id,
-        });
+        setUser(data as User);
       } catch (err) {
         console.error(err);
         setError("Failed to load user profile.");
@@ -71,6 +62,9 @@ export default function ProfilePage() {
         </p>
         <p>
           <strong>Email:</strong> {user.email}
+        </p>
+        <p>
+          <strong>Top matches:</strong> {user.quizResponses?.[0]?.clubMatches?.join(", ") ?? "No matches yet."}
         </p>
       </div>
     </div>

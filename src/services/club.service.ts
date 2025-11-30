@@ -1,43 +1,97 @@
-import { userInfo } from "os";
-import Club from "../models/clubs";
+// src/services/club.service.ts
 
-export async function fetchClubs(){
-    // Fetch Users
-    try{
-        const res = await fetch("/clubs");
-        const data = await res.json();
-        let rawUserData: any[] = [];
-        if (Array.isArray(data)){
-            console.log(".isarray", data);
-            rawUserData = data;
-        }
-        else if (data && Array.isArray(data.clubs)) {
-            console.log(data.clubs);
-            rawUserData = data.clubs;
-        }
-        else{
-            return [];
-        }
-        return rawUserData.map(  (u) => new Club(u.username, u.email, u._id || u.id));
-    } catch (err)
-    {
-        console.log("error fetching clubs: ", err);
-        return [];
+import Club from '../models/clubs';
+
+export async function fetchClubs(): Promise<Club[]> {
+  try {
+    const res = await fetch('/clubs');
+    const data = await res.json();
+
+    let rawClubData: any[] = [];
+    if (Array.isArray(data)) {
+      rawClubData = data;
+    } else if (data && Array.isArray(data.clubs)) {
+      rawClubData = data.clubs;
+    } else {
+      return [];
     }
+
+    return rawClubData.map(
+      (c) =>
+        new Club(
+          c.clubname ?? '',
+          c.email ?? '',
+          c.scores ?? {
+            social: 0,
+            academic: 0,
+            leadership: 0,
+            creativity: 0,
+          },
+          c._id || c.id
+        )
+    );
+  } catch (err) {
+    console.error('Error fetching clubs:', err);
+    return [];
+  }
 }
 
-export async function createClub(club: {username: string, email: string}) {
-    try {
-      const res = await fetch('/clubs', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(club),
-      });
-      if (!res.ok) throw new Error('Failed to create club');
-      const data = await res.json();
-      return new Club(data.username, data.email, data._id || data.id);
-    } catch (err) {
-      console.error(err);
-      console.log('Error adding club');
-    }
+export async function createClub(club: {
+  clubname?: string;
+  username?: string;
+  email?: string;
+  scores?: {
+    social: number;
+    academic: number;
+    leadership: number;
+    creativity: number;
+  };
+}): Promise<Club> {
+  const finalName = club.clubname ?? club.username ?? '';
+  const email = club.email ?? '';
+
+  const scores =
+    club.scores ?? {
+      social: 50,
+      academic: 50,
+      leadership: 50,
+      creativity: 50,
+    };
+
+  const body = {
+    clubname: finalName,
+    username: finalName, 
+    email,
+    scores,
+  };
+
+  const res = await fetch('/clubs', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(body),
+  });
+
+  if (!res.ok) {
+    
+    const text = await res.text().catch(() => '');
+    throw new Error(
+      `Failed to create club: ${res.status} ${res.statusText} ${text}`
+    );
+  }
+
+  const contentType = res.headers.get('content-type') || '';
+  let created: any = {};
+  if (contentType.includes('application/json')) {
+    created = await res.json();
+  } else {
+    const text = await res.text().catch(() => '');
+    console.log('Non-JSON response from /clubs:', text);
+  }
+
+  const nameFromDb = created.clubname ?? created.username ?? finalName;
+  const emailFromDb = created.email ?? email;
+  const scoresFromDb = created.scores ?? scores;
+  const idFromDb = created._id || created.id;
+
+  return new Club(nameFromDb, emailFromDb, scoresFromDb, idFromDb);
 }

@@ -1,176 +1,277 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import Club from "../../models/clubs";
-import User from "../../models/users";
-import { fetchClubs, createClub } from "../../services/club.service"
-import { fetchUsers, createUser } from "../../services/user.service"
-import { setUncaughtExceptionCaptureCallback } from 'process';
-import {validateEmail, validateUsername} from "../../services/regex.service"
-
-interface NewUserInput {
-  username: string;
-  email: string;
-}
-
-interface NewClubInput {
-  username: string;
-  email: string;
-}
+import Club from '../../models/clubs';
+import User from '../../models/users';
+import { fetchClubs, createClub } from '../../services/club.service';
+import { fetchUsers, createUser } from '../../services/user.service';
+import {
+  validateEmail,
+  validateUsername,
+  validatePassword,
+} from '../../services/regex.service';
 
 function HomePage() {
   const navigate = useNavigate();
 
-  //USER STATES
-  const [users, setUsers] = useState<User[]>([]);
-  const [newUser, setNewUser] = useState<NewUserInput>({ username: '', email: '' });
-
-  //CLUB STATES
-
-  const [clubs, setClubs] = useState<Club[]>([]);
-  const [newClub, setNewClub] = useState<NewClubInput>({ username: '', email: '' });
-
-  //ERRORS
+  // ERROR & LOADING STATE
   const [usersError, setUsersError] = useState('');
   const [clubsError, setClubsError] = useState('');
+  const [usersLoading, setUsersLoading] = useState(false);
+  const [clubsLoading, setClubsLoading] = useState(false);
 
-  function validatePassword(password: string): boolean {
-    // Password: at least 8 chars, at least one digit, at least one letter (upper and lowercase), one special character (@$!%*?&)
-    const passwordRegex = new RegExp('(?=[a-zA-Z0-9@$!%*?&]*\d+)(?=[a-zA-Z0-9@$!%*?&]*[a-z]+)(?=[a-zA-Z0-9@$!%*?&]*[A-Z]+)(?=[a-zA-Z0-9@$!%*?&]*[@$!%*?&]+)[a-zA-Z0-9@$!%*?&]{8,}')
+  // FORM STATE FOR NEW USER
+  const [newUser, setNewUser] = useState({
+    username: '',
+    email: '',
+    password: '',
+  });
 
-    return passwordRegex.test(password);
-  }
+  // FORM STATE FOR NEW CLUB
+  const [newClub, setNewClub] = useState({
+    clubname: '',
+    email: '',
+  });
 
   const handleAddUser = async (e: React.FormEvent) => {
+    e.preventDefault();
     setUsersError('');
 
-    if (!validateUsername(newUser.username)) {
-      setUsersError('Invalid Username. Usernames must be at least 3 alphabetic or numerical characters long.')
+    // Allow empty values, but validate anything that *is* provided
+    if (newUser.username && !validateUsername(newUser.username)) {
+      setUsersError('Username must be at least 3 alphanumeric characters.');
       return;
     }
 
-    if (!validateEmail(newUser.email)) {
-      setUsersError('Invalid Email.')
+    if (newUser.email && !validateEmail(newUser.email)) {
+      setUsersError('Please enter a valid email address.');
       return;
     }
-    const addedUser = await createUser(newUser);
-    console.log(addedUser);
+
+    if (newUser.password && !validatePassword(newUser.password)) {
+      setUsersError(
+        'Password must be at least 8 characters and include a digit, an upper and lower case letter, and a special character.'
+      );
+      return;
+    }
+
+    setUsersLoading(true);
+    try {
+      // Only check duplicates if a username is actually provided
+      if (newUser.username.trim()) {
+        const users: User[] = await fetchUsers();
+        const existing = users.find((u) => u.username === newUser.username);
+        if (existing) {
+          setUsersError('User already exists, try logging in instead.');
+          return;
+        }
+      }
+
+      const payload = {
+        username: newUser.username || '',
+        email: newUser.email || '',
+        password: newUser.password || '',
+        // ensure field exists & is "empty" in DB
+        quizResponses: [] as any[],
+      };
+
+      const created = await createUser(payload);
+      console.log('Created user:', created);
+
+      // Clear form after success
+      setNewUser({ username: '', email: '', password: '' });
+    } catch (err: unknown) {
+      const msg = err instanceof Error ? err.message : String(err);
+      console.error('Add user error:', msg);
+      setUsersError(msg || 'Error adding user.');
+    } finally {
+      setUsersLoading(false);
+    }
   };
 
   const handleAddClub = async (e: React.FormEvent) => {
+    e.preventDefault();
     setClubsError('');
 
-    if (!validateUsername(newClub.username)) {
-      setUsersError('Invalid Username. Usernames must be at least 3 alphabetic or numerical characters long.')
+    // Allow empty, but validate anything that’s typed
+    if (newClub.clubname && !validateUsername(newClub.clubname)) {
+      setClubsError('Club name must be at least 3 alphanumeric characters.');
       return;
     }
 
-    if (!validateEmail(newClub.email)) {
-      setUsersError('Invalid Email.')
+    if (newClub.email && !validateEmail(newClub.email)) {
+      setClubsError('Please enter a valid club email.');
       return;
     }
-    const addedClub = await createClub(newClub);
-    console.log(addedClub);
+
+    setClubsLoading(true);
+    try {
+      if (newClub.clubname.trim()) {
+        const clubs: Club[] = await fetchClubs();
+        const existing = clubs.find((c) => c.clubname === newClub.clubname);
+        if (existing) {
+          setClubsError('Club already exists.');
+          return;
+        }
+      }
+
+      const payload = {
+        clubname: newClub.clubname || '',
+        email: newClub.email || '',
+        // ensure scores exists in DB even when "empty"
+        scores: {
+          social: 50,
+          academic: 50,
+          leadership: 50,
+          creativity: 50,
+        },
+      };
+
+      const created = await createClub(payload);
+      console.log('Created club:', created);
+
+      setNewClub({ clubname: '', email: '' });
+    } catch (err: unknown) {
+      const msg = err instanceof Error ? err.message : String(err);
+      console.error('Add club error:', msg);
+      setClubsError(msg || 'Error adding club.');
+    } finally {
+      setClubsLoading(false);
+    }
   };
-  
-  //If user logged in go to quiz, else go to login
+
+  const userId =
+    typeof window !== 'undefined' ? localStorage.getItem('userId') : null;
+
   return (
     <div className="page">
       <h1>Welcome to the Quiz App</h1>
 
-      <button onClick={() => {
-        const userId = localStorage.getItem("userId");
-        navigate(userId ? '/quiz' : '/login');
-      }}
+      <button
+        onClick={() => {
+          const id = localStorage.getItem('userId');
+          navigate(id ? '/quiz' : '/login');
+        }}
       >
         Start Quiz
       </button>
-      
-      {localStorage.getItem("userId") && (
-        <button onClick={() => {
-          localStorage.removeItem("userId");
-          navigate('/');
-        }} style={{ marginLeft: 8 }}>
-          Logout
-        </button>
+
+      {userId && (
+        <>
+          <button
+            onClick={() => {
+              localStorage.removeItem('userId');
+              navigate('/');
+            }}
+            style={{ marginLeft: 8 }}
+          >
+            Logout
+          </button>
+          <button
+            onClick={() => {
+              const id = localStorage.getItem('userId');
+              navigate(id ? '/profile' : '/login');
+            }}
+            style={{ marginLeft: 8 }}
+          >
+            Profile
+          </button>
+        </>
       )}
 
-    {localStorage.getItem("userId") && (
-      <button onClick={() => {
-        const userId = localStorage.getItem("userId");
-        navigate(userId ? '/profile' : '/login');
-      }}
-      >
-        Profile
-      </button>
-      )}
-
-      {!localStorage.getItem("userId") && (
-        <button onClick={() => {
-          navigate('/login');
-        }}
+      {!userId && (
+        <button
+          onClick={() => {
+            navigate('/login');
+          }}
+          style={{ marginLeft: 8 }}
         >
           Login
         </button>
       )}
 
       <h2>What do we do?</h2>
-      <p>This is a quiz app that lets you take a quiz to match you with a club at UCLA. To see more information about clubs on campus, click the button below</p>
-      <button onClick={() => navigate('/clubInfo')}>
-        Club Information
-      </button>
+      <p>
+        This is a quiz app that lets you take a quiz to match you with a club at
+        UCLA. To see more information about clubs on campus, click the button
+        below.
+      </p>
+      <button onClick={() => navigate('/clubInfo')}>Club Information</button>
       <h3>Credits: us heheheh</h3>
 
+      {/* Dev helper section: add users & clubs into DB */}
       <div style={{ marginTop: '40px', textAlign: 'center' }}>
-      {/* ADD USER FORM */}
-      <h3>Add New User</h3>
-      <form onSubmit={handleAddUser} style={{ marginBottom: '20px' }}>
-        <input
-        type="text"
-        placeholder="Username"
-        value={newUser.username}
-        onChange={(e) =>
-          setNewUser((prev) => ({ ...prev, username: e.target.value }))
-        }
-        />
-        <input
-          type="email"
-          placeholder="Email"
-          value={newUser.email}
-          onChange={(e) =>
-            setNewUser((prev) => ({ ...prev, email: e.target.value }))
-          }
-          style={{ marginLeft: '8px' }}
-        />
-        <button type="submit" style={{ marginLeft: '8px' }}>
-          Add User
-        </button>
-      </form>
+        <h2>Dev Tools: Add Users & Clubs</h2>
 
+        {/* ADD USER FORM */}
+        <h3>Add New User</h3>
+        <form onSubmit={handleAddUser} style={{ marginBottom: '20px' }}>
+          <input
+            type="text"
+            placeholder="Username (optional)"
+            value={newUser.username}
+            onChange={(e) =>
+              setNewUser((prev) => ({ ...prev, username: e.target.value }))
+            }
+          />
+          <input
+            type="email"
+            placeholder="Email (optional)"
+            value={newUser.email}
+            onChange={(e) =>
+              setNewUser((prev) => ({ ...prev, email: e.target.value }))
+            }
+            style={{ marginLeft: '8px' }}
+          />
+          <input
+            type="password"
+            placeholder="Password (optional)"
+            value={newUser.password}
+            onChange={(e) =>
+              setNewUser((prev) => ({ ...prev, password: e.target.value }))
+            }
+            style={{ marginLeft: '8px' }}
+          />
+          <button
+            type="submit"
+            style={{ marginLeft: '8px' }}
+            disabled={usersLoading}
+          >
+            {usersLoading ? 'Adding...' : 'Add User'}
+          </button>
+        </form>
+        {usersError && (
+          <div style={{ color: 'crimson', marginBottom: 24 }}>{usersError}</div>
+        )}
 
-      {/* ADD CLUB FORM */}
-      <h3>Add New Club</h3>
-      <form onSubmit={handleAddClub} style={{ marginBottom: '20px' }}>
-        <input
-          type="text"
-          placeholder="Club name"
-          value={newClub.username}
-          onChange={(e) =>
-            setNewClub((prev) => ({ ...prev, username: e.target.value }))
-          }
-        />
-        <input
-          type="email"
-          placeholder="Club email"
-          value={newClub.email}
-          onChange={(e) =>
-            setNewClub((prev) => ({ ...prev, email: e.target.value }))
-          }
-          style={{ marginLeft: '8px' }}
-        />
-        <button type="submit" style={{ marginLeft: '8px' }}>
-          Add Club
-        </button>
-      </form>
+        {/* ADD CLUB FORM */}
+        <h3>Add New Club</h3>
+        <form onSubmit={handleAddClub} style={{ marginBottom: '20px' }}>
+          <input
+            type="text"
+            placeholder="Club name (optional)"
+            value={newClub.clubname}
+            onChange={(e) =>
+              setNewClub((prev) => ({ ...prev, clubname: e.target.value }))
+            }
+          />
+          <input
+            type="email"
+            placeholder="Club email (optional)"
+            value={newClub.email}
+            onChange={(e) =>
+              setNewClub((prev) => ({ ...prev, email: e.target.value }))
+            }
+            style={{ marginLeft: '8px' }}
+          />
+          <button
+            type="submit"
+            style={{ marginLeft: '8px' }}
+            disabled={clubsLoading}
+          >
+            {clubsLoading ? 'Adding...' : 'Add Club'}
+          </button>
+        </form>
+        {clubsError && <div style={{ color: 'crimson' }}>{clubsError}</div>}
       </div>
     </div>
   );

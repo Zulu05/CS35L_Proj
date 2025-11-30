@@ -22,10 +22,10 @@ export async function fetchClubs(): Promise<Club[]> {
           c.clubname ?? '',
           c.email ?? '',
           c.scores ?? {
-            social: 0,
-            academic: 0,
-            leadership: 0,
-            creativity: 0,
+            social: 50,
+            academic: 50,
+            leadership: 50,
+            creativity: 50,
           },
           c._id || c.id
         )
@@ -79,13 +79,12 @@ export async function createClub(club: {
     );
   }
 
-  const contentType = res.headers.get('content-type') || '';
+  const raw = await res.text().catch(() => '');
   let created: any = {};
-  if (contentType.includes('application/json')) {
-    created = await res.json();
-  } else {
-    const text = await res.text().catch(() => '');
-    console.log('Non-JSON response from /clubs:', text);
+  try {
+    created = raw ? JSON.parse(raw) : {};
+  } catch {
+    console.log('Non-JSON response from /clubs:', raw);
   }
 
   const nameFromDb = created.clubname ?? created.username ?? finalName;
@@ -115,8 +114,14 @@ export async function changeScores(clubId: string, scores: {
     );
   }
 
-  const updatedData = await res.json();
-
+ const raw = await res.text().catch(() => '');
+  let updatedData: any = {};
+  try {
+    updatedData = raw ? JSON.parse(raw) : {};
+  } catch {
+    console.log('Non-JSON response from PUT /clubs/:id:', raw);
+  }
+  
   const nameFromDb = updatedData.clubname ?? updatedData.username ?? '';
   const emailFromDb = updatedData.email ?? '';
   const scoresFromDb = updatedData.scores ?? scores;

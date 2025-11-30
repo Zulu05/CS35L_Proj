@@ -5,7 +5,7 @@ import User from "../../models/users";
 import { fetchUsers, addPassword, createUser } from "../../services/user.service"
 import {validatePassword, validateUsername, validateEmail} from "../../services/regex.service"
 
-export default function LoginPage() {
+export default function SignUpPage() {
   const navigate = useNavigate();
   const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
@@ -18,12 +18,17 @@ export default function LoginPage() {
     setError(null);
 
     if (!username.trim() || !validateUsername(username)) {
-      setError('Please enter a valid username, at least 3 alphanumeric characters');
+      setError('Please enter a valid username');
       return;
     }
     // Basic password validation for creation: at least 8 chars
     if (!password || !validatePassword(password)) {
       setError('Password must be at least 8 characters with at least one digit, one upper and lower case letter, and one special character (@$!%*?&)');
+      return;
+    }
+    // Validate email presence and format
+    if (!email.trim() || !validateEmail(email)) {
+      setError('Please enter a valid email address');
       return;
     }
 
@@ -34,24 +39,15 @@ export default function LoginPage() {
       let user = users.find((u: any) => u.username === username);
 
       if (!user) {
-        throw new Error('User does not exist, try signing up first');
+        // Create a new user with password
+        const addedUser = await createUser({username, email, password});
+        console.log(addedUser);
+        // Re-fetch to get the created user document
+        const reUsers = await fetchUsers();
+        user = reUsers.find((u: any) => u.username === username);
       } else {
-        // User exists — check password if set, otherwise set it
-        if (user.hasPassword()) {
-          // validate password match
-          if (!user.checkPassword(password)) {
-            throw new Error('Invalid password, password does not match existing user');
-          }
-        } else {
-          // set password on existing user via PUT (updates only provided fields)
-          const id = user.id ?? user.id ?? userIdFrom(user);
-          if (!id) throw new Error('User has no id to set password on');
-          const changedUser = await addPassword(id, password);
-          console.log(changedUser);
-          // re-fetch user
-          const reUsers = await fetchUsers();
-          user = reUsers.find((u: any) => u.username === username);
-        }
+        // User exists
+                throw new Error('User already exists, try logining in instead');
       }
 
       if (!user) {
@@ -86,7 +82,7 @@ export default function LoginPage() {
 
   return (
     <div className="quiz-page">
-      <h1>Login</h1>
+      <h1>Sign Up</h1>
       <form onSubmit={handleSubmit} style={{ maxWidth: 420 }}>
         <div style={{ marginBottom: 8 }}>
           <label>
@@ -94,6 +90,17 @@ export default function LoginPage() {
             <input
               value={username}
               onChange={(e) => setUsername(e.target.value)}
+              style={{ display: 'block', width: '100%', padding: 8, marginTop: 4 }}
+              disabled={loading}
+            />
+          </label>
+        </div>
+        <div style={{ marginBottom: 8 }}>
+          <label>
+            Email
+            <input
+              value={email} 
+              onChange={(e) => setEmail(e.target.value)}
               style={{ display: 'block', width: '100%', padding: 8, marginTop: 4 }}
               disabled={loading}
             />
@@ -114,29 +121,12 @@ export default function LoginPage() {
 
         <div style={{ display: 'flex', gap: 8 }}>
           <button type="submit" disabled={loading}>
-            {loading ? 'Signing in...' : 'Sign in'}
+            {loading ? 'Signing in...' : 'Create account'}
           </button>
           <button type="button" onClick={() => navigate('/')} disabled={loading}>
             Cancel
           </button>
         </div>
-
-      <button
-        type="button"
-        onClick={() => navigate('/signUp')}
-        disabled={loading}
-        style={{
-          marginLeft: 8,
-          background: 'none',
-          border: 'none',
-          color: 'blue',
-          textDecoration: 'underline',
-          cursor: 'pointer',
-          padding: 10
-        }}
-      >
-        No account? Sign Up Here
-      </button>
 
         {error && (
           <div style={{ marginTop: 12, color: 'crimson' }}>

@@ -82,7 +82,6 @@ usersRouter.put("/:id", async (req: Request, res: Response) => {
 });
 
 //PATCH (Add answers to user) 
-
 usersRouter.patch("/:id/quiz", async (req: Request, res: Response) => {
     const userId = req.params.id;
     const { answers } = req.body;
@@ -103,7 +102,9 @@ usersRouter.patch("/:id/quiz", async (req: Request, res: Response) => {
           .send(`Invalid score for "${key}": must be a number between 0 and 100`);
       }
     }
-  
+
+    // Validate ObjectId format
+    let objectId: ObjectId;
     try {
       if (!collections.users) {
         return res.status(500).send("Database not initialized");
@@ -140,7 +141,35 @@ usersRouter.patch("/:id/quiz", async (req: Request, res: Response) => {
       console.error("Error updating answers:", error?.message);
       return res.status(500).send(error?.message || "Server error");
     }
-  });  
+
+    const quizResponse = {
+      submissionDate: new Date(),
+      version: 1,            
+      answers,               
+      clubMatches: [] as any[]  
+    };
+
+    const result = await collections.users.updateOne(
+      { _id: objectId },
+      {
+        $push: { quizResponses: quizResponse },
+        $set: { updatedAt: new Date() },  
+      } as any
+    );
+
+    if (result.matchedCount === 0) {
+      return res.status(404).send(`User with id ${userId} not found`);
+    }
+
+    return res.status(200).json({
+      message: "Quiz response saved successfully",
+      quizResponse,
+    });
+  } catch (error: any) {
+    console.error("Error updating scores:", error?.message);
+    return res.status(500).send(error?.message || "Server error");
+  }
+});
 
 // DELETE
 

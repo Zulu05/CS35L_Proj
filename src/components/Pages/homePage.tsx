@@ -76,6 +76,7 @@ function HomePage() {
   return (
     <div className="page">
       <h1>Welcome to the Quiz App</h1>
+
       <button onClick={() => {
         const userId = localStorage.getItem("userId");
         navigate(userId ? '/quiz' : '/login');
@@ -90,6 +91,25 @@ function HomePage() {
           navigate('/');
         }} style={{ marginLeft: 8 }}>
           Logout
+        </button>
+      )}
+
+    {localStorage.getItem("userId") && (
+      <button onClick={() => {
+        const userId = localStorage.getItem("userId");
+        navigate(userId ? '/profile' : '/login');
+      }}
+      >
+        Profile
+      </button>
+      )}
+
+      {!localStorage.getItem("userId") && (
+        <button onClick={() => {
+          navigate('/login');
+        }}
+        >
+          Login
         </button>
       )}
 

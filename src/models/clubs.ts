@@ -10,7 +10,7 @@
 import { ObjectId } from "mongodb";
 
 // Class Implementation
-export default class club {
+export default class Club {
     constructor(
     public clubname: string,
     public email: string, 

@@ -6,6 +6,8 @@ import SignUpPage from './components/Pages/signUpPage';
 import ClubInfoPage from './components/Pages/clubInfoPage';
 import DataBasePage from './components/Pages/databasePage';
 import ProfilePage from './components/Pages/profilePage';
+import AdminPage from './components/Pages/adminPage';
+
 
 import './App.css';
 import React, { useEffect, useState } from 'react';
@@ -25,6 +27,7 @@ function App() {
         <Route path="/clubInfo" element={<ClubInfoPage />} />
         <Route path="/dataBase" element={<DataBasePage />} />
         <Route path="/profile" element={<ProfilePage />} />
+        <Route path="/admin" element={<AdminPage />} />
       </Routes>
     </Router>
   );

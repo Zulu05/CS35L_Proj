@@ -2,6 +2,38 @@ import { ObjectId } from "mongodb";
 import { collections } from "./database.service";
 
 /**
+ * Distance-based similarity between two numeric arrays in [0,1].
+ * 1 = identical, 0 = as far apart as possible (0 vs maxScore in every dimension).
+ */
+export function computeDistanceSimilarity(
+  a: number[],
+  b: number[],
+  maxScore = 100
+): number {
+  if (!Array.isArray(a) || !Array.isArray(b) || a.length !== b.length) {
+    throw new Error("Vectors must be arrays of the same length");
+  }
+
+  const n = a.length;
+  if (n === 0) return 0;
+
+  let sumSq = 0;
+  for (let i = 0; i < n; i++) {
+    const diff = a[i] - b[i];
+    sumSq += diff * diff;
+  }
+
+  const distance = Math.sqrt(sumSq);
+  const maxDistance = Math.sqrt(n) * maxScore;
+
+  if (maxDistance === 0) return 0;
+
+  const similarity = 1 - distance / maxDistance;
+  // Clamp to [0,1] to be safe with floating point noise
+  return Math.max(0, Math.min(1, similarity));
+}
+
+/**
  * Compute Pearson correlation between two numeric arrays.
  * Arrays must be same length.
  * Returns value in [-1, 1]. If denominator is zero, returns 0.
@@ -44,7 +76,8 @@ export async function getTopNRecommendations(
   {
     clubId: string;
     clubname: string;
-    score: number;
+    similarity: number;
+    matchPercent: number;
     scores?: Record<string, number>;
   }[]
 > {
@@ -52,64 +85,66 @@ export async function getTopNRecommendations(
     throw new Error("Database collections not initialized");
   }
 
-  // Fetch user result by userId
   const userObjectId = new ObjectId(userId);
-  const userDoc = await collections.users.findOne({ _id: userObjectId });
+  const userDoc: any = await collections.users.findOne({ _id: userObjectId });
 
   if (!userDoc) {
-    throw new Error(`No user result found for userId ${userId}`);
+    throw new Error(`No user found for userId ${userId}`);
   }
 
-  const quizResponses = Array.isArray(userDoc.quizResponses) ? userDoc.quizResponses : [];
+  const quizResponses = Array.isArray(userDoc.quizResponses)
+    ? userDoc.quizResponses
+    : [];
 
   if (quizResponses.length === 0) {
     throw new Error(`No quiz responses found for userId ${userId}`);
   }
 
   const latestQuiz = quizResponses[quizResponses.length - 1];
-
-  // Expect the scores stored as an object: { social:number, academic:number, leadership:number, creativity:number }
   const userScoresObj = latestQuiz.answers;
   if (!userScoresObj) {
     throw new Error("Latest quiz response is missing answers");
   }
 
   const userVector = [
-    userScoresObj.social,
-    userScoresObj.academic,
-    userScoresObj.leadership,
-    userScoresObj.creativity,
+    userScoresObj.social ?? 0,
+    userScoresObj.academic ?? 0,
+    userScoresObj.leadership ?? 0,
+    userScoresObj.creativity ?? 0,
   ];
 
-  // Fetch all club result docs
+  console.log("userVector for recommendations:", userVector);
+
   const clubsCursor = collections.clubs.find({});
   const clubs = await clubsCursor.toArray();
 
   const scored = clubs.map((clubDoc: any) => {
-    const clubScoresObj = clubDoc.scores;
+    const clubScoresObj = clubDoc.scores || {};
     const clubVector = [
-      clubScoresObj?.social ?? 0,
-      clubScoresObj?.academic ?? 0,
-      clubScoresObj?.leadership ?? 0,
-      clubScoresObj?.creativity ?? 0,
+      clubScoresObj.social ?? 0,
+      clubScoresObj.academic ?? 0,
+      clubScoresObj.leadership ?? 0,
+      clubScoresObj.creativity ?? 0,
     ];
 
-    let score = 0;
-    try {
-      score = computePearsonCorrelation(userVector, clubVector);
-    } catch (err) {
-      score = 0;
-    }
+    const similarity = computeDistanceSimilarity(userVector, clubVector);
+    const matchPercent = Math.round(similarity * 100);
+
+    console.log(
+      `club ${clubDoc.clubname} | user=${JSON.stringify(
+        userVector
+      )} club=${JSON.stringify(clubVector)} similarity=${similarity} matchPercent=${matchPercent}`
+    );
 
     return {
       clubId: (clubDoc.clubId || clubDoc._id)?.toString(),
       clubname: clubDoc.clubname || clubDoc.name || "Unnamed Club",
-      score,
+      similarity,
+      matchPercent,
       scores: clubScoresObj,
     };
   });
 
-  // Sort descending by score and return topN
-  scored.sort((a, b) => b.score - a.score);
+  scored.sort((a, b) => b.similarity - a.similarity);
   return scored.slice(0, topN);
 }

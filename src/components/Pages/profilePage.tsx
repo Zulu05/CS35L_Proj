@@ -64,7 +64,7 @@ export default function ProfilePage() {
           <strong>Email:</strong> {user.email}
         </p>
         <p>
-          <strong>Top matches:</strong> {user.quizResponses?.[0]?.clubMatches?.join(", ") ?? "No matches yet."}
+          <strong>Top matches:</strong> {user.quizResponses?.[0]?.latestclubMatches?.join(", ") ?? "No matches yet."}
         </p>
       </div>
     </div>

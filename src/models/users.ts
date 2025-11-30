@@ -19,7 +19,7 @@ export default class User {
         leadership: number;
         creativity: number;
       },
-      clubMatches: string[];
+      latestclubMatches: string[];
     }> = [];
 
     // Method to check password (plaintext comparison for now)

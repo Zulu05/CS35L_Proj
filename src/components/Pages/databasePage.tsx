@@ -81,7 +81,7 @@ const DataBasePage: React.FC = () => {
             </ul>
 
             <div style={{ marginTop: "5px", fontSize: "0.9rem" }}>
-              <strong>Matches:</strong> {lastQuiz.clubMatches.join(", ") || "None"}
+              <strong>Matches:</strong> {lastQuiz.latestclubMatches.join(", ") || "None"}
             </div>
           </div>
         ) : (

@@ -38,19 +38,47 @@ function QuizPage() {
       leadership: answers[2],
       creativity: answers[3],
     };
+
+    setSubmitError(null);
+    setSubmitting(true);
   
     try {
-      setSubmitting(true);
-  
-      const resp = await fetch(`/users/${userId}/quiz`, {
+      // 1) Save quiz answers in the DB
+      const saveAnswersResp = await fetch(`/users/${userId}/quiz`, {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ answers: answersObj }),  // <-- FIXED
+        body: JSON.stringify({ answers: answersObj }), 
       });
-  
-      if (!resp.ok) {
-        const text = await resp.text();
-        throw new Error(text || `HTTP ${resp.status}`);
+
+      if (!saveAnswersResp.ok) {
+        const text = await saveAnswersResp.text();
+        throw new Error(text || `HTTP ${saveAnswersResp.status}`);
+      }
+
+      // 2) Fetch club recommendations based on quiz answers
+      const getRecommendationsResp = await fetch(`/recommendations/${userId}/top?limit=5`, {
+        method: 'GET',
+        headers: { 'Accept': 'application/json' },
+      });
+
+      if (!getRecommendationsResp.ok) {
+        const text = await getRecommendationsResp.text();
+        throw new Error(text || `Failed to fetch recommendations (HTTP ${getRecommendationsResp.status})`);
+      }
+
+      const recJson = await getRecommendationsResp.json();
+      const clubMatches = recJson.results;
+
+    // 3) Save those recommendations onto the latest quiz response
+      const saveRecResp = await fetch(`/users/${userId}/quiz/latest-matches`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ clubMatches }),
+      });
+
+      if (!saveRecResp.ok) {
+        const text = await saveRecResp.text();
+        throw new Error(text || `Failed to save recommendations (HTTP ${saveRecResp.status})`);
       }
   
       setDisplay(1); // show results
@@ -61,7 +89,7 @@ function QuizPage() {
     } finally {
       setSubmitting(false);
     }
-  };  
+  };
 
   return (
     <div className="quiz-page">

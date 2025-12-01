@@ -97,9 +97,10 @@ suceed is how visually appeling is your quiz page. Please create a simple and el
   transition: border-color 0.2s ease, box-shadow 0.2s ease;
 }
 
-.major-select option {
-  color: #333;        /* visible text color */
-  background: #fff;   /* white background */
+.major-select {
+  color: #111 !important;
+  background-color: #fff !important;
+  -webkit-text-fill-color: #111 !important;  /* <-- CRITICAL FOR CHROME */
 }
 
 .major-select:focus {

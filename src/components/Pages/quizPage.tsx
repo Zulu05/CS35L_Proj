@@ -14,6 +14,7 @@ function QuizPage() {
     { text: 'Academic' },
     { text: 'Leadership' },
     { text: 'Creativity' },
+    { text: 'Time Commitment'}
   ];
 
   // Initialize array of answers with same size as questions
@@ -38,6 +39,7 @@ function QuizPage() {
       academic: answers[1],
       leadership: answers[2],
       creativity: answers[3],
+      timeCommitment: answers[4],
     };
 
     setSubmitError(null);

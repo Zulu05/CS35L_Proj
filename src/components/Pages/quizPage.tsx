@@ -96,22 +96,33 @@ function QuizPage() {
         <>
           {traits.map((trait, index) => (
             <div key={trait.id} className="question-block">
-              <p className="question-text">
-                {trait.labelLeft} ↔ {trait.labelRight}
-              </p>
               <p className="question-subtext">{trait.questionText}</p>
-
               <div className="slider-container">
-                <input
-                  type="range"
-                  min="0"
-                  max="100"
-                  value={answers[index]}
-                  onChange={(e) =>
-                    handleSliderChange(index, Number(e.target.value))
-                  }
-                />
-                <span className="slider-value">{answers[index]}</span>
+                <div className="slider-header">
+                  <div className="label-left">
+                    <span className="label-text">{trait.labelLeft}</span>
+                    <span className="label-percent">({100-answers[index]}%)</span>
+                  </div>
+                  <div className="slider-track-wrapper">
+                  <input
+                    type="range"
+                    min="0"
+                    max="100"
+                    value={answers[index]}
+                    onChange={(e) =>
+                      handleSliderChange(index, Number(e.target.value))
+                    }
+                    className="slider"
+                    style={{
+                      background: `linear-gradient(90deg, #c8f5ce ${answers[index]}%, #e9e9e9 ${answers[index]}%)`,
+                    }}
+                  />
+                </div>
+                  <div className="label-right">
+                    <span className="label-percent">({answers[index]}%)</span>
+                    <span className="label-text">{trait.labelRight}</span>
+                  </div>
+                </div>
               </div>
             </div>
           ))}
@@ -132,7 +143,7 @@ function QuizPage() {
           <ol>
             {traits.map((trait, i) => (
               <li key={trait.id}>
-                <strong>{trait.labelLeft} ↔ {trait.labelRight}:</strong>{" "}
+                <strong>{trait.labelLeft} {trait.labelRight}:</strong>{" "}
                 {answers[i]}
               </li>
             ))}

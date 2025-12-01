@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import './quizPage.css';
+import './quizPageGPT.css';
 import React from 'react';
 import{addResult} from "../../services/user.service"
 import User from "../../models/users";

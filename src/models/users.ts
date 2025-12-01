@@ -1,33 +1,37 @@
 // External dependencies
 import { ObjectId } from "mongodb";
 
-// Class Implementation
 export default class User {
-    constructor(
+  constructor(
     public username: string,
-    public email: string, 
+    public email: string,
     private password: string,
-    public id?: ObjectId) {}
-    public latestClubMatches: string[] = [];
+    public id?: ObjectId
+  ) {}
 
-    // Quiz responses stored on the user document
-    public quizResponses?: Array<{
-      submissionDate: Date;
-      version: number;
-      answers: {
-        social: number;
-        academic: number;
-        leadership: number;
-        creativity: number;
-      }
-    }> = [];
+  public latestClubMatches: Array<{
+    clubId: string;
+    clubname: string;
+    similarity: number;
+    matchPercent: number;
+  }> = [];
 
-    // Method to check password (plaintext comparison for now)
-    public hasPassword(): boolean {
-      return !!this.password
+  public quizResponses?: Array<{
+    submissionDate: Date;
+    version: number;
+    answers: {
+      social: number;
+      academic: number;
+      leadership: number;
+      creativity: number;
     }
+  }> = [];
 
-    public checkPassword(password: string): boolean {
-        return this.password === password;
-    }
+  public hasPassword(): boolean {
+    return !!this.password;
+  }
+
+  public checkPassword(password: string): boolean {
+    return this.password === password;
+  }
 }

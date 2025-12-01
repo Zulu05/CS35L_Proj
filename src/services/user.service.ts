@@ -83,3 +83,43 @@ export async function addResult(userId: string, answersDict: { [key: string]: nu
       throw new Error(msg);
     }
 }
+
+export async function fetchSingleUser(userId: string): Promise<User | null> {
+  try {
+    const res = await fetch("/users");
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    const data = await res.json();
+
+    let rawUserData: any[] = [];
+    if (Array.isArray(data)) {
+      rawUserData = data;
+    } else if (data && Array.isArray(data.users)) {
+      rawUserData = data.users;
+    } else {
+      return null;
+    }
+
+    const targetId = userId.toString();
+
+    const match = rawUserData.find((u) => {
+      const rawId = (u._id ?? u.id)?.toString();
+      return rawId === targetId;
+    });
+
+    if (!match) return null;
+
+    const user = new User(
+      match.username,
+      match.email,
+      match.password,
+      (match._id ?? match.id)?.toString()
+    );
+    user.quizResponses = match.quizResponses ?? [];
+    user.latestClubMatches = match.latestClubMatches ?? [];
+
+    return user;
+  } catch (err) {
+    console.error("error fetching single user:", err);
+    return null;
+  }
+}

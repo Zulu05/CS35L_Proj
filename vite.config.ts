@@ -6,6 +6,7 @@ export default defineConfig({
   server: {
     proxy: {
       '/users': 'http://localhost:3000', 
+      '/traits': 'http://localhost:3000',
       '/clubs': 'http://localhost:3000', 
       '/recommendations': 'http://localhost:3000',
     },

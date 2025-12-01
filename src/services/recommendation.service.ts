@@ -63,11 +63,63 @@ export function computePearsonCorrelation(a: number[], b: number[]): number {
 }
 
 /**
- * Fetches the user's score vector (from collections.userResults) and
- * computes Pearson correlation against every club in collections.clubResults.
- * Returns top N clubs sorted by score descending.
+ * Normalize any score structure (object or array of trait objects)
+ * into a map { [traitId]: value }.
  *
- * userId param can be string or ObjectId-like.
+ * Supports:
+ * - { social: 50, academic: 60, ... }
+ * - [{ traitId: "social", value: 50 }, ...]
+ * - [{ id: "social", value: 50 }, ...]  // if your quiz uses 'id'
+ */
+function normalizeScoresToMap(raw: any): Record<string, number> {
+  const result: Record<string, number> = {};
+
+  if (Array.isArray(raw)) {
+    // New style: array of trait objects
+    for (const entry of raw) {
+      if (!entry) continue;
+      const id = entry.traitId ?? entry.id;
+      if (!id) continue;
+      const num = Number(entry.value ?? 0);
+      result[id] = isNaN(num) ? 0 : num;
+    }
+    return result;
+  }
+
+  if (raw && typeof raw === "object") {
+    // Old style: plain object with traits as keys
+    for (const key of Object.keys(raw)) {
+      const num = Number((raw as any)[key] ?? 0);
+      result[key] = isNaN(num) ? 0 : num;
+    }
+    return result;
+  }
+
+  // Nothing useful; return empty
+  return result;
+}
+
+/**
+ * Build aligned numeric vectors for user and club from score maps.
+ * Trait order is derived from the user's traits so adding/removing traits
+ * requires no code change – just change the quiz / club scores.
+ */
+function buildAlignedVectors(
+  userScoresMap: Record<string, number>,
+  clubScoresMap: Record<string, number>
+): { userVector: number[]; clubVector: number[]; traitIds: string[] } {
+  const traitIds = Object.keys(userScoresMap);
+
+  const userVector = traitIds.map((id) => userScoresMap[id] ?? 0);
+  const clubVector = traitIds.map((id) => clubScoresMap[id] ?? 0);
+
+  return { userVector, clubVector, traitIds };
+}
+
+/**
+ * Fetches the user's score map from quizResponses and
+ * computes similarity against every club in collections.clubs.
+ * Returns all clubs sorted by similarity descending.
  */
 export async function getAllRecommendations(userId: string): Promise<any[]> {
   if (!collections.users || !collections.clubs) {
@@ -90,31 +142,29 @@ export async function getAllRecommendations(userId: string): Promise<any[]> {
   }
 
   const latestQuiz = quizResponses[quizResponses.length - 1];
-  const userScoresObj = latestQuiz.answers;
-  if (!userScoresObj) {
+  const userScoresRaw = latestQuiz.answers;
+  if (!userScoresRaw) {
     throw new Error("Latest quiz response is missing answers");
   }
 
-  const userVector = [
-    userScoresObj.social ?? 0,
-    userScoresObj.academic ?? 0,
-    userScoresObj.leadership ?? 0,
-    userScoresObj.creativity ?? 0,
-  ];
-
-  console.log("userVector for recommendations:", userVector);
+  // Normalize user scores to a { traitId: value } map
+  const userScoresMap = normalizeScoresToMap(userScoresRaw);
+  const userTraitIds = Object.keys(userScoresMap);
+  if (userTraitIds.length === 0) {
+    throw new Error("User has no valid trait scores");
+  }
 
   const clubsCursor = collections.clubs.find({});
   const clubs = await clubsCursor.toArray();
 
   const scored = clubs.map((clubDoc: any) => {
-    const clubScoresObj = clubDoc.scores || {};
-    const clubVector = [
-      clubScoresObj.social ?? 0,
-      clubScoresObj.academic ?? 0,
-      clubScoresObj.leadership ?? 0,
-      clubScoresObj.creativity ?? 0,
-    ];
+    const clubScoresRaw = clubDoc.scores || {};
+    const clubScoresMap = normalizeScoresToMap(clubScoresRaw);
+
+    const { userVector, clubVector } = buildAlignedVectors(
+      userScoresMap,
+      clubScoresMap
+    );
 
     const similarity = computeDistanceSimilarity(userVector, clubVector);
     const matchPercent = Math.round(similarity * 100);
@@ -130,7 +180,8 @@ export async function getAllRecommendations(userId: string): Promise<any[]> {
       clubname: clubDoc.clubname || clubDoc.name || "Unnamed Club",
       similarity,
       matchPercent,
-      scores: clubScoresObj,
+      // keep original scores shape so existing frontends don't break:
+      scores: clubScoresRaw,
     };
   });
 

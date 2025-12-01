@@ -25,7 +25,7 @@ function App() {
         <Route path="/login" element={<LoginPage />} />
         <Route path="/signUp" element={<SignUpPage />} />
         <Route path="/clubInfo" element={<ClubInfoPage />} />
-        <Route path="/dataBase" element={<DataBasePage />} />
+        <Route path="/database" element={<DataBasePage />} />
         <Route path="/profile" element={<ProfilePage />} />
         <Route path="/admin" element={<AdminPage />} />
       </Routes>

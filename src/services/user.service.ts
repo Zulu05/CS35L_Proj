@@ -17,7 +17,8 @@ export async function fetchUsers() {
 
     return rawUserData.map((u) => {
       const user = new User(u.username, u.email, u.password, u._id || u.id);
-      user.quizResponses = u.quizResponses ?? []; // assign quizResponses here
+      user.quizResponses = u.quizResponses ?? []; 
+      user.latestClubMatches = u.latestClubMatches ?? [];
       return user;
     });
   } catch (err) {

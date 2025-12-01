@@ -25,7 +25,7 @@ const DataBasePage: React.FC = () => {
         setUsers(data);
       }
       catch (err){
-        setUsersError("error fetching users: ${err}");
+        setUsersError(`error fetching users: ${err}`);
       } finally{
         setUsersLoading(false);
       }
@@ -95,11 +95,13 @@ const DataBasePage: React.FC = () => {
                           }}
                         >
                           <strong>Matches:</strong>{" "}
-                          {lastQuiz.latestclubMatches &&
-                          lastQuiz.latestclubMatches.length > 0
-                            ? lastQuiz.latestclubMatches.join(", ")
+                          {user.latestClubMatches && user.latestClubMatches.length > 0
+                            ? user.latestClubMatches
+                                .map((m: any) => `${m.clubname} (${m.matchPercent}%)`)
+                                .join(", ")
                             : "None"}
                         </div>
+                        
                       </div>
                     ) : (
                       <p

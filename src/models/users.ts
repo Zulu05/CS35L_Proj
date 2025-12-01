@@ -8,6 +8,7 @@ export default class User {
     public email: string, 
     private password: string,
     public id?: ObjectId) {}
+    public latestClubMatches: string[] = [];
 
     // Quiz responses stored on the user document
     public quizResponses?: Array<{
@@ -18,8 +19,7 @@ export default class User {
         academic: number;
         leadership: number;
         creativity: number;
-      },
-      latestclubMatches: string[];
+      }
     }> = [];
 
     // Method to check password (plaintext comparison for now)

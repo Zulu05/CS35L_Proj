@@ -2,49 +2,24 @@
 
 import { Given, When, Then } from "@cucumber/cucumber";
 import { expect } from "@playwright/test";
+import { TRAITS } from "../models/traits";
+
 
 const BASE_URL = "http://localhost:5173";
  
-//  ? Given I am on the quiz page
-//        Undefined. Implement with the following snippet:
+
+// 1) Scenario: Submit quiz and see answers # src/features/f01.feature:10
+//    ? Given I am on the quiz page
        
-         Given('I am on the quiz page', async function () {
+        Given('I am on the quiz page', async function () {
            await this.page.goto(`${BASE_URL}/quiz`);
            await expect(this.page.getByRole("heading", { name: "Quiz" })).toBeVisible();
          });
        
-//    ? When I set the "Social" slider to 80
+//    ? When I set all traits sliders to a value
 //        Undefined. Implement with the following snippet:
        
-         When('I set the {string} slider to {int}', function (string, int) {
-         // When('I set the {string} slider to {float}', function (string, float) {
-           // Write code here that turns the phrase above into concrete actions
-           return 'pending';
-         });
-       
-//    ? And I set the "Academic" slider to 60
-//        Undefined. Implement with the following snippet:
-       
-         When('I set the {string} slider to {int}', function (string, int) {
-         // When('I set the {string} slider to {float}', function (string, float) {
-           // Write code here that turns the phrase above into concrete actions
-           return 'pending';
-         });
-       
-//    ? And I set the "Leadership" slider to 70
-//        Undefined. Implement with the following snippet:
-       
-         When('I set the {string} slider to {int}', function (string, int) {
-         // When('I set the {string} slider to {float}', function (string, float) {
-           // Write code here that turns the phrase above into concrete actions
-           return 'pending';
-         });
-       
-//    ? And I set the "Creativity" slider to 90
-//        Undefined. Implement with the following snippet:
-       
-         When('I set the {string} slider to {int}', function (string, int) {
-         // When('I set the {string} slider to {float}', function (string, float) {
+         When('I set all traits sliders to a value', function () {
            // Write code here that turns the phrase above into concrete actions
            return 'pending';
          });
@@ -61,6 +36,40 @@ const BASE_URL = "http://localhost:5173";
 //        Undefined. Implement with the following snippet:
        
          Then('I should see my quiz answers listed', function () {
+           // Write code here that turns the phrase above into concrete actions
+           return 'pending';
+         });
+
+// 2) Scenario: Submit quiz and trigger recommendations # src/features/f01.feature:15
+
+//    ? Given I am on the quiz page
+//        Undefined. Implement with the following snippet:
+       
+        Given('I am on the quiz page', async function () {
+           await this.page.goto(`${BASE_URL}/quiz`);
+           await expect(this.page.getByRole("heading", { name: "Quiz" })).toBeVisible();
+         });
+
+//    ? When I submit the default quiz values
+//        Undefined. Implement with the following snippet:
+       
+         When('I submit the default quiz values', function () {
+           // Write code here that turns the phrase above into concrete actions
+           return 'pending';
+         });
+       
+//    ? Then the quiz submission request should be sent to the backend
+//        Undefined. Implement with the following snippet:
+       
+         Then('the quiz submission request should be sent to the backend', function () {
+           // Write code here that turns the phrase above into concrete actions
+           return 'pending';
+         });
+       
+//    ? And a recommendations request should be sent for the same user
+//        Undefined. Implement with the following snippet:
+       
+         Then('a recommendations request should be sent for the same user', function () {
            // Write code here that turns the phrase above into concrete actions
            return 'pending';
          });

@@ -8,10 +8,7 @@ Feature: F01 - Quiz and recommendations
     Given I am on the quiz page
 
   Scenario: Submit quiz and see answers
-    When I set the "Social" slider to 80
-    And I set the "Academic" slider to 60
-    And I set the "Leadership" slider to 70
-    And I set the "Creativity" slider to 90
+    When I set all traits sliders to a value
     And I submit the quiz
     Then I should see my quiz answers listed
 

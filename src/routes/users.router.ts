@@ -103,8 +103,6 @@ usersRouter.patch("/:id/quiz", async (req: Request, res: Response) => {
   if (!answers || typeof answers !== "object" || Array.isArray(answers)) {
     return res.status(400).send("`answers` must be an object mapping name -> number");
   }
-  console.log("Received answers keys:", Object.keys(answers));
-  console.log("Raw answers object:", answers);
   // Validate answers
   for (const [key, value] of Object.entries(answers)) {
     if (key === "major_area"){

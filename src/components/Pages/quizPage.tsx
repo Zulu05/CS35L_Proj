@@ -44,6 +44,7 @@ function QuizPage() {
       leadership: answers[2],
       creativity: answers[3],
       timeCommitment: answers[4],
+      major_area: major,
     };
 
     setSubmitError(null);
@@ -160,6 +161,7 @@ function QuizPage() {
                 <strong>{questions[i].text}</strong> → {val}
               </li>
             ))}
+            <strong>Major Area</strong> → {major}
           </ol>
           <button className="back-button" onClick={() => setDisplay(0)}>
             Return to Quiz

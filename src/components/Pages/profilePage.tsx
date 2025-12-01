@@ -69,7 +69,7 @@ export default function ProfilePage() {
             <br />
             {user.latestClubMatches && user.latestClubMatches.length > 0 ? (
               <>
-              {user.latestClubMatches.map((m: any, idx: number) => (
+              {user.latestClubMatches.slice(0, 5).map((m: any, idx: number) => (
                 <span key={idx}>
                 {m.clubname} ({m.matchPercent}%)
                 <br />

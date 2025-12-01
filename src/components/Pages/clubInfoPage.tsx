@@ -1,111 +1,96 @@
-import React, { useEffect, useState } from 'react';
-import { fetchClubs } from "../../services/club.service"
-import { useNavigate } from 'react-router-dom';
+import React, { useEffect, useState } from "react";
+import { fetchClubs } from "../../services/club.service";
+import { fetchSingleUser } from "../../services/user.service";
+import { useNavigate } from "react-router-dom";
 import Club from "../../models/clubs";
-
-// interface Club {
-//   id: number;
-//   name: string;
-//   description: string;
-//   meetingTime: string;
-//   location: string;
-//   contactEmail: string;
-//   website?: string;
-// }
-
-
-
-// const clubs: Club[] = [
-//   {
-//     id: 1,
-//     name: "Programming Club",
-//     description:
-//       "A community for students interested in coding, algorithms, and open-source projects.",
-//     meetingTime: "Thursdays, 6 PM",
-//     location: "Engineering IV, Room 102",
-//     contactEmail: "programming@school.edu",
-//     website: "https://programmingclub.com",
-//   },
-//   {
-//     id: 2,
-//     name: "Robotics Club",
-//     description:
-//       "Build robots, compete in challenges, and learn hardware and software integration.",
-//     meetingTime: "Tuesdays, 7 PM",
-//     location: "Tech Hall, Room 210",
-//     contactEmail: "robotics@school.edu",
-//     website: "https://roboticsclub.com",
-//   },
-//   {
-//     id: 3,
-//     name: "Design Club",
-//     description:
-//       "Explore creativity through UI/UX, product design, and digital art workshops.",
-//     meetingTime: "Wednesdays, 5 PM",
-//     location: "Arts Building, Room 12",
-//     contactEmail: "design@school.edu",
-//     website: "https://designclub.com",
-//   },
-// ];
-
 
 const ClubDirectory: React.FC = () => {
   const navigate = useNavigate();
   const [clubs, setClubs] = useState<Club[]>([]);
+  const [matchMap, setMatchMap] = useState<Record<string, number>>({});
+
   useEffect(() => {
-  fetchClubs().then(setClubs);
+    const userId = localStorage.getItem("userId");
+
+    (async () => {
+      // 1) Load all clubs
+      const clubList = await fetchClubs();
+      setClubs(clubList);
+
+      // If not logged in, we can't show matches
+      if (!userId) return;
+
+      // 2) Load the current user (with latestClubMatches)
+      const user = await fetchSingleUser(userId);
+      if (!user || !user.latestClubMatches) return;
+
+      // 3) Build a map: clubId -> matchPercent
+      const map: Record<string, number> = {};
+      (user.latestClubMatches as any[]).forEach((m) => {
+        const cid =
+          m.clubId?.toString?.() ??
+          m.clubId ??
+          m.club?.id?.toString?.();
+        if (!cid) return;
+
+        const percent =
+          typeof m.matchPercent === "number"
+            ? m.matchPercent
+            : Math.round((m.similarity ?? 0) * 100);
+
+        map[cid] = percent;
+      });
+
+      setMatchMap(map);
+    })();
   }, []);
+
   return (
     <div className="min-h-screen bg-gray-100 py-10 px-6">
       <div className="max-w-5xl mx-auto text-center mb-10">
-        <h1 className="text-4xl font-bold text-gray-800 mb-3">Club Directory</h1>
+        <h1 className="text-4xl font-bold text-gray-800 mb-3">
+          Club Directory
+        </h1>
         <p className="text-gray-600">
           Discover clubs on campus and find one that matches your interests.
         </p>
       </div>
 
       <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-        {clubs.map((club) => (
-          <div
-            key={club.id?.toString()}
-            className="bg-white rounded-xl shadow-md p-6 text-left hover:shadow-lg transition"
-          >
-            <h2 className="text-xl font-semibold text-gray-800 mb-2">
-              {club.clubname}
-            </h2>
-            {/* <p className="text-gray-600 mb-4">{club.description}</p> */}
-{/* 
-            <div className="text-sm text-gray-700 space-y-1 mb-4">
-              <p>
-                <strong>Meeting:</strong> {club.meetingTime}
-              </p>
-              <p>
-                <strong>Location:</strong> {club.location}
-              </p>
-            </div> */}
+        {clubs.map((club) => {
+          const clubId = club.id?.toString();
+          const matchPercent =
+            clubId && clubId in matchMap ? matchMap[clubId] : null;
 
-            <div className="flex flex-wrap gap-3">
-              <a
-                href={`mailto:${club.email}`}
-                className="bg-blue-600 text-white px-4 py-2 rounded-md text-sm hover:bg-blue-700 transition"
-              >
-                Contact
-              </a>
-              {/* {club.website && (
+          return (
+            <div
+              key={clubId}
+              className="bg-white rounded-xl shadow-md p-6 text-left hover:shadow-lg transition"
+            >
+              <h2 className="text-xl font-semibold text-gray-800 mb-2">
+                {club.clubname}
+              </h2>
+
+              {matchPercent !== null && (
+                <p className="text-sm font-normal text-gray-600 mb-2">
+                  Match Score: {matchPercent}%
+                </p>
+              )}
+
+              <div className="flex flex-wrap gap-3">
                 <a
-                  href={club.website}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="bg-gray-200 text-gray-800 px-4 py-2 rounded-md text-sm hover:bg-gray-300 transition"
+                  href={`mailto:${club.email}`}
+                  className="bg-blue-600 text-white px-4 py-2 rounded-md text-sm hover:bg-blue-700 transition"
                 >
-                  Website
+                  Contact
                 </a>
-              )} */}
+              </div>
             </div>
-          </div>
-        ))}
+          );
+        })}
       </div>
-      <button className="back-button" onClick={() => navigate('/')}>
+
+      <button className="back-button" onClick={() => navigate("/")}>
         Back to Home
       </button>
     </div>

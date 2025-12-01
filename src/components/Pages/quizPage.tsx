@@ -57,7 +57,7 @@ function QuizPage() {
       }
 
       // 2) Fetch club recommendations based on quiz answers
-      const getRecommendationsResp = await fetch(`/recommendations/${userId}/top?limit=5`, {
+      const getRecommendationsResp = await fetch(`/recommendations/${userId}/all`, {
         method: 'GET',
         headers: { 'Accept': 'application/json' },
       });

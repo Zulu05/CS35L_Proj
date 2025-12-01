@@ -69,18 +69,7 @@ export function computePearsonCorrelation(a: number[], b: number[]): number {
  *
  * userId param can be string or ObjectId-like.
  */
-export async function getTopNRecommendations(
-  userId: string,
-  topN = 5
-): Promise<
-  {
-    clubId: string;
-    clubname: string;
-    similarity: number;
-    matchPercent: number;
-    scores?: Record<string, number>;
-  }[]
-> {
+export async function getAllRecommendations(userId: string): Promise<any[]> {
   if (!collections.users || !collections.clubs) {
     throw new Error("Database collections not initialized");
   }
@@ -145,6 +134,10 @@ export async function getTopNRecommendations(
     };
   });
 
-  scored.sort((a, b) => b.similarity - a.similarity);
-  return scored.slice(0, topN);
+  return scored.sort((a, b) => b.similarity - a.similarity);
+}
+
+export async function getTopNRecommendations(userId: string, topN = 5) {
+  const all = await getAllRecommendations(userId);
+  return all.slice(0, topN);
 }

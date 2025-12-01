@@ -1,6 +1,5 @@
 import { AbstractPageObject } from "./AbstractPageObject";
 import { Page } from "playwright";
-import { page } from '../support/hooks';
 
 export class CustomersPage extends AbstractPageObject {
     protected clickToClearFiltersButton
@@ -24,7 +23,7 @@ export class CustomersPage extends AbstractPageObject {
     protected searchResultsTable
         = "//table";
 
-    constructor() {
+    constructor(page: Page) {
         super(page);
     }
 

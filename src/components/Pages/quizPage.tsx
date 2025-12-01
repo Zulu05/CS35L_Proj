@@ -96,12 +96,9 @@ function QuizPage() {
         <>
           {traits.map((trait, index) => (
             <div key={trait.id} className="question-block">
-              <p className="question-text">
-                {trait.labelLeft} ↔ {trait.labelRight}
-              </p>
               <p className="question-subtext">{trait.questionText}</p>
-
               <div className="slider-container">
+                {trait.labelLeft}
                 <input
                   type="range"
                   min="0"
@@ -112,6 +109,8 @@ function QuizPage() {
                   }
                 />
                 <span className="slider-value">{answers[index]}</span>
+                {trait.labelRight}
+                <br />
               </div>
             </div>
           ))}

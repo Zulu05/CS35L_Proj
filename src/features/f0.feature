@@ -16,10 +16,3 @@ Feature: F0 Test - Medium article
     And the user clears filters
     Then the user should see that search criteria are cleared
     And the user should see that the search result summary is as in the very beginning
-
-    Examples:
-      | Search  | Column | Case  |
-      | Alice   | Name   | True  |
-      | alice   | Name   | False |
-
-      

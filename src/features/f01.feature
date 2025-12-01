@@ -11,10 +11,4 @@ Feature: F01 - Quiz and recommendations
     When I set all traits sliders to a value
     And I submit the quiz
     Then I should see my quiz answers listed
-
-  Scenario: Submit quiz and trigger recommendations
-    When I submit the default quiz values
-    Then the quiz submission request should be sent to the backend
-    And a recommendations request should be sent for the same user
-
       

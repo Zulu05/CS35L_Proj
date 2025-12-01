@@ -64,7 +64,22 @@ export default function ProfilePage() {
           <strong>Email:</strong> {user.email}
         </p>
         <p>
-          <strong>Top matches:</strong> {user.quizResponses?.[0]?.latestclubMatches?.join(", ") ?? "No matches yet."}
+          <p>
+            <strong>Top matches:</strong>{" "}
+            <br />
+            {user.latestClubMatches && user.latestClubMatches.length > 0 ? (
+              <>
+              {user.latestClubMatches.map((m: any, idx: number) => (
+                <span key={idx}>
+                {m.clubname} ({m.matchPercent}%)
+                <br />
+                </span>
+              ))}
+              </>
+            ) : (
+              "No matches yet."
+            )}
+          </p>
         </p>
       </div>
     </div>

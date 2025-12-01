@@ -22,6 +22,9 @@ function QuizPage() {
   const [display, setDisplay] = useState(0);
   const [submitting, setSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState<string | null>(null);
+  //Deal with Major separately
+  const majorOptions = ["Arts", "Business", "Computer Science", "Life Sciences", "Social Sciences", "Physical Sciences", "Engineering"];
+  const [major, setMajor] = useState<string>("Computer Science");  // default 
   // : number gets rid of a warning and ensures it index must be a number
   const handleSliderChange = (index: number, value: number) => {
     const newAnswers = [...answers];
@@ -30,6 +33,7 @@ function QuizPage() {
   };
   
   const handleSubmit = async () => {
+    
     const userId = localStorage.getItem('userId');
     if (!userId) return setSubmitError('No user id found. Please log in again.');
   
@@ -116,6 +120,21 @@ function QuizPage() {
               </div>
             </div>
           ))}
+          <div className="question-block">
+          <p className="question-text">What area best fits your major?</p>
+
+          <select
+            className="major-select"
+            value={major}
+            onChange={(e) => setMajor(e.target.value)}
+          >
+            {majorOptions.map((opt) => (
+              <option key={opt} value={opt}>
+                {opt}
+              </option>
+            ))}
+          </select>
+        </div>
           <button
             className="submit-button"
             onClick={handleSubmit}

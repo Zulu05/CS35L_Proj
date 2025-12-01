@@ -1,4 +1,4 @@
-Feature: Quiz and recommendations
+Feature: F01 - Quiz and recommendations
 
   As a UCLA student using the clubs recommender
   I want to fill out the quiz and see my results
@@ -19,5 +19,5 @@ Feature: Quiz and recommendations
     When I submit the default quiz values
     Then the quiz submission request should be sent to the backend
     And a recommendations request should be sent for the same user
-    
+
       

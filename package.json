@@ -11,7 +11,7 @@
     "dev:backend": "ts-node src/index.ts",
     "dev:frontend": "vite",
     "dev": "run-p dev:backend dev:frontend",
-    "test": "tsc && cucumber-js --require ./dist/src/step_definitions/**/*.js --format ./dist/features/support/reporter.js:.dummy.txt \"src/features/**/*.feature\""
+     "test": "cucumber-js --require-module ts-node/register --require src/step_definitions/**/*.ts --require src/features/support/**/*.ts --format ./src/features/support/reporter.js:.dummy.txt src/features/**/*.feature"
   },
   "dependencies": {
     "allure": "^3.0.0-beta.23",
@@ -25,6 +25,7 @@
   "devDependencies": {
     "@cucumber/cucumber": "^12.3.0",
     "@eslint/js": "^9.36.0",
+    "@playwright/test": "^1.57.0",
     "@types/express": "^5.0.5",
     "@types/node": "^24.10.1",
     "@types/react": "^19.1.16",

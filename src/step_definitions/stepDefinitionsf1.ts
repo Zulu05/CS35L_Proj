@@ -1,13 +1,16 @@
- // src/step_definitions/f0.steps.ts
+ // src/step_definitions/f01.steps.ts
 
 import { Given, When, Then } from "@cucumber/cucumber";
+import { expect } from "@playwright/test";
+
+const BASE_URL = "http://localhost:5173";
  
 //  ? Given I am on the quiz page
 //        Undefined. Implement with the following snippet:
        
-         Given('I am on the quiz page', function () {
-           // Write code here that turns the phrase above into concrete actions
-           return 'pending';
+         Given('I am on the quiz page', async function () {
+           await this.page.goto(`${BASE_URL}/quiz`);
+           await expect(this.page.getByRole("heading", { name: "Quiz" })).toBeVisible();
          });
        
 //    ? When I set the "Social" slider to 80

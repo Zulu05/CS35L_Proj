@@ -1,4 +1,4 @@
-Feature: F0 Searching - Medium article test
+Feature: F0 Test - Medium article
 
   User story:
   * As a user of Customers page

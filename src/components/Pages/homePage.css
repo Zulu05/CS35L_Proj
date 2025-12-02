@@ -100,8 +100,8 @@ button {
   border-radius: 12px;
   border: none;
 
-  background: var(--ucla-blue);
-  color: white;
+  background: var(--ucla-blue) !important;
+  color: white !important;
 
   transition: background 0.2s ease, transform 0.12s ease,
               box-shadow 0.2s ease;

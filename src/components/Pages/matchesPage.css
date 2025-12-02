@@ -1,3 +1,11 @@
+/*
+AI generated CSS. Used CHATGPT 5
+Prompt:
+Imagine you are a software engineer with 160 IQ making a quiz to match users to clubs at UCLA. One of the main metrics of your 
+success is how visually appealing your matches page is. Please make an elegant and attractive CSS file for the matchesPage bellow.
+Remember it should work in all browsers including chrome in dark mode
+
+
 /* ---------------------------------------
    THEME COLORS — Light & Dark Mode
 ----------------------------------------*/
@@ -19,7 +27,7 @@
     --bg: #0f1216;
     --fg: #e5e7eb;
     --card-bg: #1a1f24;
-    --accent: #6ea8ff;
+    --accent: #1459c2;
     --accent-soft: #1f2f47;
     --border: #2b2f33;
     --text-soft: #9ca3af;

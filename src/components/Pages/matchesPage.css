@@ -1,0 +1,205 @@
+/* ---------------------------------------
+   THEME COLORS — Light & Dark Mode
+----------------------------------------*/
+
+:root {
+  --bg: #f8f9fb;
+  --fg: #1a1a1a;
+  --card-bg: #ffffff;
+  --accent: #0c05f1;         /* UCLA-friendly blue */
+  --accent-soft: #d8e4ff;
+  --border: #dddddd;
+  --text-soft: #6a6a6a;
+  --shadow: 0 4px 18px rgba(0,0,0,0.08);
+  --shadow-hover: 0 6px 24px rgba(0,0,0,0.15);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #0f1216;
+    --fg: #e5e7eb;
+    --card-bg: #1a1f24;
+    --accent: #6ea8ff;
+    --accent-soft: #1f2f47;
+    --border: #2b2f33;
+    --text-soft: #9ca3af;
+    --shadow: 0 4px 18px rgba(0,0,0,0.4);
+    --shadow-hover: 0 6px 24px rgba(0,0,0,0.55);
+  }
+}
+
+/* ---------------------------------------
+   PAGE LAYOUT
+----------------------------------------*/
+
+.matches-page {
+  max-width: 750px;
+  margin: 50px auto;
+  padding: 20px 30px;
+  color: var(--fg);
+  background: var(--bg);
+  font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+  transition: background 0.3s ease, color 0.3s ease;
+}
+
+.matches-title {
+  text-align: center;
+  font-size: 2.4rem;
+  font-weight: 800;
+  margin-bottom: 8px;
+}
+
+.matches-subtitle {
+  text-align: center;
+  color: var(--text-soft);
+  font-size: 1.1rem;
+  margin-bottom: 32px;
+}
+
+/* ---------------------------------------
+   EMPTY STATE
+----------------------------------------*/
+
+.no-matches {
+  text-align: center;
+  color: var(--text-soft);
+  font-size: 1.2rem;
+  margin-top: 40px;
+}
+
+/* ---------------------------------------
+   MATCH CARDS
+----------------------------------------*/
+
+.matches-list {
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+}
+
+/* Individual Card */
+.match-card {
+  display: flex;
+  gap: 20px;
+  align-items: center;
+  padding: 22px 26px;
+  background: var(--card-bg);
+  border-radius: 18px;
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow);
+  transition: transform 0.15s ease, box-shadow 0.15s ease, background 0.3s;
+}
+
+.match-card:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-hover);
+}
+
+/* Rank Number */
+.match-rank {
+  font-size: 1.9rem;
+  font-weight: 700;
+  color: var(--accent);
+  min-width: 50px;
+  text-align: center;
+}
+
+/* Club Info */
+.match-content {
+  flex-grow: 1;
+}
+
+.match-name {
+  font-size: 1.35rem;
+  font-weight: 700;
+  margin-bottom: 10px;
+}
+
+/* ---------------------------------------
+   PROGRESS BAR
+----------------------------------------*/
+
+.match-bar-container {
+  width: 100%;
+  height: 10px;
+  background: var(--border);
+  border-radius: 6px;
+  overflow: hidden;
+  margin-bottom: 10px;
+}
+
+.match-bar-fill {
+  height: 100%;
+  background: var(--accent);
+  border-radius: 6px;
+  transition: width 0.45s ease;  /* Smooth loading effect */
+}
+
+.match-percent {
+  font-size: 1rem;
+  color: var(--text-soft);
+  margin-top: 4px;
+}
+
+/* ---------------------------------------
+   BUTTONS
+----------------------------------------*/
+
+button {
+  width: 100%;
+  padding: 14px;
+  font-size: 1.15rem;
+  border-radius: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  border: none;
+  margin-top: 22px;
+  background: var(--accent);
+  color: white;
+  transition: background 0.2s ease, transform 0.1s ease;
+}
+
+button:hover {
+  background: var(--accent-soft);
+  color: var(--fg);
+}
+
+button:active {
+  transform: scale(0.97);
+}
+
+.back-button {
+  background: transparent;
+  border: 2px solid var(--accent);
+  color: var(--accent);
+  margin-top: 30px;
+}
+
+.back-button:hover {
+  background: var(--accent-soft);
+}
+
+.back-quiz-button {
+  margin-top: 14px;
+}
+
+/* ---------------------------------------
+   RESPONSIVE DESIGN
+----------------------------------------*/
+
+@media (max-width: 600px) {
+  .match-card {
+    padding: 18px 20px;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .match-rank {
+    font-size: 1.6rem;
+    margin-bottom: 10px;
+  }
+
+  .match-name {
+    font-size: 1.25rem;
+  }
+}

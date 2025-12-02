@@ -1,6 +1,7 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import HomePage from './components/Pages/homePage';
 import QuizPage from './components/Pages/quizPage';
+import MatchesPage from './components/Pages/matchesPage';
 import LoginPage from './components/Pages/loginPage';
 import SignUpPage from './components/Pages/signUpPage';
 import ClubInfoPage from './components/Pages/clubInfoPage';
@@ -15,9 +16,6 @@ import React, { useEffect, useState } from 'react';
 
 
 function App() {
-  //backend stuff <3 <3 <3
-
-  //frontend stuff <3 <3 <3
   return ( 
     <>
     <Banner/>
@@ -25,6 +23,7 @@ function App() {
       <Routes>
         <Route path="/" element={<HomePage />} />
         <Route path="/quiz" element={<QuizPage />} />
+        <Route path="/matches" element={<MatchesPage />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/signUp" element={<SignUpPage />} />
         <Route path="/clubInfo" element={<ClubInfoPage />} />

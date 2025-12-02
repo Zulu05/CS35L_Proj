@@ -11,7 +11,6 @@ function QuizPage() {
   const [answers, setAnswers] = useState<number[]>([]);
   const [loading, setLoading] = useState(true);
 
-  const [display, setDisplay] = useState(0);
   const [submitting, setSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState<string | null>(null);
   useEffect(() => {
@@ -64,14 +63,19 @@ function QuizPage() {
       const recResp = await fetch(`/recommendations/${userId}/all`);
       const recJson = await recResp.json();
 
-      // Save recommendations
-      await fetch(`/users/${userId}/quiz/latest-matches`, {
-        method: "PATCH",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ clubMatches: recJson.results }),
-      });
+     // Save recommendations
+    await fetch(`/users/${userId}/quiz/latest-matches`, {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ clubMatches: recJson.results }),
+    });
 
-      setDisplay(1);
+    // Extract the top 5 clubs from the results
+    const top5 = recJson.results.slice(0, 5);
+
+    // Redirect to the results page, passing top5 along
+    navigate("/matches", { state: { top5 } });
+
     } catch (err: any) {
       setSubmitError(err.message ?? "Failed to submit.");
     } finally {
@@ -91,8 +95,6 @@ function QuizPage() {
   return (
     <div className="quiz-page">
       <h1>Quiz</h1>
-
-      {!display ? (
         <>
           {traits.map((trait, index) => (
             <div key={trait.id} className="question-block">
@@ -137,22 +139,6 @@ function QuizPage() {
             Back to Home
           </button>
         </>
-      ) : (
-        <>
-          <h2>Your Answers:</h2>
-          <ol>
-            {traits.map((trait, i) => (
-              <li key={trait.id}>
-                <strong>{trait.labelLeft} {trait.labelRight}:</strong>{" "}
-                {answers[i]}
-              </li>
-            ))}
-          </ol>
-
-          <button onClick={() => setDisplay(0)}>Return to Quiz</button>
-          <button onClick={() => navigate("/")}>Back to Home</button>
-        </>
-      )}
     </div>
   );
 }

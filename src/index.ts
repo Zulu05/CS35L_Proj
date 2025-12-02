@@ -5,6 +5,7 @@ import { userResultsRouter } from "./routes/userResults.router";
 import { clubsRouter } from "./routes/clubs.router";
 import { clubResultsRouter } from "./routes/clubResults.router";
 import { recommendationRouter } from "./routes/recommendation.router";
+import { traitsRouter } from "./routes/traits.router";
 
 const app = express();
 const port = process.env.PORT || 3000;
@@ -18,6 +19,8 @@ connectToDatabase()
         app.use("/clubs", clubsRouter);
         app.use("/clubs/results", clubResultsRouter);
         app.use("/recommendations", recommendationRouter);
+        app.use("/traits", traitsRouter);
+
 
         app.listen(port, () => {
             console.log(`Server started at http://localhost:${port}`);

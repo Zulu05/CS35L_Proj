@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import Club from '../../models/clubs';
+import Club, { TraitScore } from '../../models/clubs';
 import User from '../../models/users';
 import {
   fetchClubs,
@@ -12,6 +12,8 @@ import {
   validateUsername,
   validatePassword,
 } from '../../services/regex.service';
+import { TraitDefinition } from '../../models/traits';
+import { fetchTraits } from '../../services/traits.service';
 
 function AdminPage() {
   // ERROR & LOADING STATE
@@ -21,6 +23,10 @@ function AdminPage() {
   const [clubsLoading, setClubsLoading] = useState(false);
   const [updateClubLoading, setUpdateClubLoading] = useState(false);
 
+  // TRAITS
+  const [traits, setTraits] = useState<TraitDefinition[]>([]);
+  const [traitsLoading, setTraitsLoading] = useState<boolean>(true);
+
   // FORM STATE FOR NEW USER
   const [newUser, setNewUser] = useState({
     username: '',
@@ -29,25 +35,74 @@ function AdminPage() {
   });
 
   // FORM STATE FOR NEW CLUB (INCLUDING SCORES)
-  const [newClub, setNewClub] = useState({
+  const [newClub, setNewClub] = useState<{
+    clubname: string;
+    email: string;
+    scores: TraitScore[];
+  }>({
     clubname: '',
     email: '',
-    social: 50,
-    academic: 50,
-    leadership: 50,
-    creativity: 50,
+    scores: [],
   });
 
   // STATE FOR EXISTING CLUBS & EDITING SCORES
   const [clubs, setClubs] = useState<Club[]>([]);
   const [selectedClubId, setSelectedClubId] = useState('');
-  const [editScores, setEditScores] = useState({
-    social: 50,
-    academic: 50,
-    leadership: 50,
-    creativity: 50,
-  });
+  const [editScores, setEditScores] = useState<TraitScore[]>([]);
 
+  // Helper to create default scores array (TODO: add to services later?)
+
+  const makeDefaultScores = (ts: TraitDefinition[]): TraitScore[] =>
+    ts.map((t) => ({ traitId: t.id, value: 50 }));
+
+  const getScoreValue = (
+    scores: TraitScore[],
+    traitId: string
+  ): number => {
+    const found = scores.find((s) => s.traitId === traitId);
+    return found ? found.value : 50;
+  };
+
+  const setNewClubTraitValue = (traitId: string, value: number) => {
+    setNewClub((prev) => {
+      const updated = prev.scores.length
+        ? prev.scores
+        : makeDefaultScores(traits);
+
+      const nextScores = updated.map((s) =>
+        s.traitId === traitId ? { ...s, value } : s
+      );
+
+      return { ...prev, scores: nextScores };
+    });
+  };
+
+  const setEditTraitValue = (traitId: string, value: number) => {
+    setEditScores((prev) => {
+      const base = prev.length ? prev : makeDefaultScores(traits);
+      return base.map((s) =>
+        s.traitId === traitId ? { ...s, value } : s
+      );
+    });
+  };
+
+  // Load traits from DB
+  useEffect(() => {
+    (async () => {
+      setTraitsLoading(true);
+      const ts = await fetchTraits();
+      setTraits(ts);
+      setTraitsLoading(false);
+
+      if (ts.length) {
+        const defaults = makeDefaultScores(ts);
+        setNewClub((prev) => ({ ...prev, scores: defaults }));
+        setEditScores(defaults);
+      }
+    })();
+  }, []);
+
+  // Load clubs from DB
   useEffect(() => {
     (async () => {
       const list = await fetchClubs();
@@ -126,6 +181,16 @@ function AdminPage() {
       return;
     }
 
+    if (!traits.length) {
+      setClubsError('Traits are not loaded yet. Try again in a moment.');
+      return;
+    }
+
+    const scoresToSend =
+      newClub.scores.length > 0
+        ? newClub.scores
+        : makeDefaultScores(traits);
+
     setClubsLoading(true);
     try {
       if (newClub.clubname.trim()) {
@@ -142,13 +207,7 @@ function AdminPage() {
       const payload = {
         clubname: newClub.clubname || '',
         email: newClub.email || '',
-        // ensure scores exists in DB even when "empty"
-        scores: {
-          social: newClub.social,
-          academic: newClub.academic,
-          leadership: newClub.leadership,
-          creativity: newClub.creativity,
-        },
+        scores: scoresToSend,
       };
 
       const created = await createClub(payload);
@@ -157,13 +216,12 @@ function AdminPage() {
       const list = await fetchClubs();
       setClubs(list);
 
+// ensure scores exists in DB even when "empty"
+      const defaults = makeDefaultScores(traits);
       setNewClub({
         clubname: '',
         email: '',
-        social: 50,
-        academic: 50,
-        leadership: 50,
-        creativity: 50,
+        scores: defaults,
       });
     } catch (err: unknown) {
       const msg = err instanceof Error ? err.message : String(err);
@@ -177,21 +235,33 @@ function AdminPage() {
   const handleSelectClub = (clubId: string) => {
     setSelectedClubId(clubId);
     const club = clubs.find((c: any) => c._id === clubId || c.id === clubId);
+
+    if (!traits.length) {
+      setEditScores([]);
+      return;
+    }
+
     if (club && (club as any).scores) {
-      const s = (club as any).scores;
-      setEditScores({
-        social: s.social ?? 50,
-        academic: s.academic ?? 50,
-        leadership: s.leadership ?? 50,
-        creativity: s.creativity ?? 50,
-      });
+      const s: any = (club as any).scores;
+
+      if (Array.isArray(s)) {
+        const updated: TraitScore[] = traits.map((t) => {
+          const found = s.find((ts: any) => ts.traitId === t.id);
+          return {
+            traitId: t.id,
+            value: found ? Number(found.value) : 50,
+          };
+        });
+        setEditScores(updated);
+      } else {
+        const updated: TraitScore[] = traits.map((t) => {
+          const val = s[t.id] ?? 50;
+          return { traitId: t.id, value: Number(val) };
+        });
+        setEditScores(updated);
+      }
     } else {
-      setEditScores({
-        social: 50,
-        academic: 50,
-        leadership: 50,
-        creativity: 50,
-      });
+      setEditScores(makeDefaultScores(traits));
     }
   };
 
@@ -204,14 +274,17 @@ function AdminPage() {
       return;
     }
 
+    if (!traits.length) {
+      setClubsError('Traits are not loaded yet.');
+      return;
+    }
+
+    const scoresToSend =
+      editScores.length > 0 ? editScores : makeDefaultScores(traits);
+
     setUpdateClubLoading(true);
     try {
-      const updated = await updateClubScores(selectedClubId, {
-        social: editScores.social,
-        academic: editScores.academic,
-        leadership: editScores.leadership,
-        creativity: editScores.creativity,
-      });
+      const updated = await updateClubScores(selectedClubId, scoresToSend);
       console.log('Updated club scores:', updated);
 
       const list = await fetchClubs();
@@ -224,6 +297,17 @@ function AdminPage() {
       setUpdateClubLoading(false);
     }
   };
+
+  if (traitsLoading) {
+    return (
+      <div className="page">
+        <div style={{ marginTop: '40px', textAlign: 'center' }}>
+          <h1>Admin Panel</h1>
+          <p>Loading traits...</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="page">
@@ -296,62 +380,22 @@ function AdminPage() {
           />
 
           <div style={{ marginTop: 10 }}>
-            <label style={{ marginRight: 4 }}>Social:</label>
-            <input
-              type="number"
-              min={0}
-              max={100}
-              value={newClub.social}
-              onChange={(e) =>
-                setNewClub((prev) => ({
-                  ...prev,
-                  social: Number(e.target.value),
-                }))
-              }
-            />
-            <label style={{ marginLeft: 12, marginRight: 4 }}>Academic:</label>
-            <input
-              type="number"
-              min={0}
-              max={100}
-              value={newClub.academic}
-              onChange={(e) =>
-                setNewClub((prev) => ({
-                  ...prev,
-                  academic: Number(e.target.value),
-                }))
-              }
-            />
-            <label style={{ marginLeft: 12, marginRight: 4 }}>
-              Leadership:
-            </label>
-            <input
-              type="number"
-              min={0}
-              max={100}
-              value={newClub.leadership}
-              onChange={(e) =>
-                setNewClub((prev) => ({
-                  ...prev,
-                  leadership: Number(e.target.value),
-                }))
-              }
-            />
-            <label style={{ marginLeft: 12, marginRight: 4 }}>
-              Creativity:
-            </label>
-            <input
-              type="number"
-              min={0}
-              max={100}
-              value={newClub.creativity}
-              onChange={(e) =>
-                setNewClub((prev) => ({
-                  ...prev,
-                  creativity: Number(e.target.value),
-                }))
-              }
-            />
+            {traits.map((trait) => (
+              <div key={trait.id} style={{ marginTop: 8 }}>
+                <label style={{ marginRight: 4 }}>
+                  {trait.labelLeft} / {trait.labelRight}:
+                </label>
+                <input
+                  type="number"
+                  min={0}
+                  max={100}
+                  value={getScoreValue(newClub.scores, trait.id)}
+                  onChange={(e) =>
+                    setNewClubTraitValue(trait.id, Number(e.target.value))
+                  }
+                />
+              </div>
+            ))}
           </div>
 
           <button
@@ -379,62 +423,22 @@ function AdminPage() {
           </select>
 
           <div style={{ marginTop: 10 }}>
-            <label style={{ marginRight: 4 }}>Social:</label>
-            <input
-              type="number"
-              min={0}
-              max={100}
-              value={editScores.social}
-              onChange={(e) =>
-                setEditScores((prev) => ({
-                  ...prev,
-                  social: Number(e.target.value),
-                }))
-              }
-            />
-            <label style={{ marginLeft: 12, marginRight: 4 }}>Academic:</label>
-            <input
-              type="number"
-              min={0}
-              max={100}
-              value={editScores.academic}
-              onChange={(e) =>
-                setEditScores((prev) => ({
-                  ...prev,
-                  academic: Number(e.target.value),
-                }))
-              }
-            />
-            <label style={{ marginLeft: 12, marginRight: 4 }}>
-              Leadership:
-            </label>
-            <input
-              type="number"
-              min={0}
-              max={100}
-              value={editScores.leadership}
-              onChange={(e) =>
-                setEditScores((prev) => ({
-                  ...prev,
-                  leadership: Number(e.target.value),
-                }))
-              }
-            />
-            <label style={{ marginLeft: 12, marginRight: 4 }}>
-              Creativity:
-            </label>
-            <input
-              type="number"
-              min={0}
-              max={100}
-              value={editScores.creativity}
-              onChange={(e) =>
-                setEditScores((prev) => ({
-                  ...prev,
-                  creativity: Number(e.target.value),
-                }))
-              }
-            />
+            {traits.map((trait) => (
+              <div key={trait.id} style={{ marginTop: 8 }}>
+                <label style={{ marginRight: 4 }}>
+                  {trait.labelLeft} / {trait.labelRight}:
+                </label>
+                <input
+                  type="number"
+                  min={0}
+                  max={100}
+                  value={getScoreValue(editScores, trait.id)}
+                  onChange={(e) =>
+                    setEditTraitValue(trait.id, Number(e.target.value))
+                  }
+                />
+              </div>
+            ))}
           </div>
 
           <button

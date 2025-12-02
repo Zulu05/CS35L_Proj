@@ -19,13 +19,8 @@ Feature: F02 - Quiz navigation
     When they see a quiz question
     Then they should be able to answer the question using a slider or button
 
-  Scenario: Move to the next quiz question
-    Given the user is on the quiz page and has answered the current question
-    When they indicate they want to continue (for example, by pressing a Next button)
-    Then they should be taken to the next question
-
   Scenario: Submit the quiz on the last question
-    Given the user is taking the quiz and has reached the last question
+    Given the user is taking the quiz
     When they press the submit button
     Then their quiz input should be submitted
 

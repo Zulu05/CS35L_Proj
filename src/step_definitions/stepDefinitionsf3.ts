@@ -18,6 +18,7 @@ const BASE_URL = "http://localhost:5173";
 //        Undefined. Implement with the following snippet:
 
          When('they submit their quiz', async function () {
+          await this.page.goto(`${BASE_URL}/quiz`); 
           await this.page.getByRole("button", { name: "Submit" }).click();
          });
        
@@ -25,7 +26,7 @@ const BASE_URL = "http://localhost:5173";
 //        Undefined. Implement with the following snippet:
        
          Then('they should be redirected to a results page', async function () {
-              await expect(this.page.getByRole("heading", { name: "Top Matches:" })).toBeVisible();
+              await expect(this.page).toHaveURL('${BASE_URL}/matches');
          });
 
 // 7) Scenario: See a ranked list of clubs # src/features/f03.feature:12
@@ -39,21 +40,21 @@ const BASE_URL = "http://localhost:5173";
               });
               await this.page.goto(`${BASE_URL}/quiz`);
               await this.page.getByRole("button", { name: "Submit" }).click();
-              await this.page.goto(`${BASE_URL}/results`);
+              await this.page.goto(`${BASE_URL}/matches`);
          });
        
 //    ? When they scroll through the results page
 //        Undefined. Implement with the following snippet:
        
          When('they scroll through the results page', async function () {
-              await expect(this.page.getByRole("heading", { name: "Top Matches:" })).toBeVisible();
+              await expect(this.page).toHaveURL('${BASE_URL}/matches');
          });
        
 //    ? Then they should see a ranked list of clubs
 //        Undefined. Implement with the following snippet:
        
          Then('they should see a ranked list of clubs', async function () {
-           await expect(this.page.getByRole("heading", { name: "Top Matches:" })).toBeVisible();
+           await expect(this.page.getByRole("heading", { name: "Your Top UCLA Club Matches:" })).toBeVisible();
          });
        
    
@@ -67,21 +68,21 @@ const BASE_URL = "http://localhost:5173";
               await this.page.evaluate(() => {
                      localStorage.setItem('userId', 'test-user-id');
               });
-              await this.page.goto(`${BASE_URL}/results`);
+              await this.page.goto(`${BASE_URL}/matches`);
          });
        
 //    ? When they look through their matched clubs
 //        Undefined. Implement with the following snippet:
 
          When('they look through their matched clubs', async function () {
-              await expect(this.page.getByRole("heading", { name: "Top Matches:" })).toBeVisible();
+              await expect(this.page.getByRole("heading", { name: "Your Top UCLA Club Matches:" })).toBeVisible();
          });
        
 //    ? Then they should see multiple club options that correspond to their quiz answers
 //        Undefined. Implement with the following snippet:
        
          Then('they should see multiple club options that correspond to their quiz answers', async function () {
-              const answers = this.page.locator('result');
+              const answers = this.page.locator('Match');
               const count = await answers.count();               
               for (let i = 0; i < count; i++) {
                 const answer = answers.nth(i);

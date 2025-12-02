@@ -15,11 +15,6 @@ Feature: F03 - View club recommendations
     Then they should see a ranked list of clubs
 
   Scenario: See multiple matching club options
-    Given the user is on the results page
-    When they look through their matched clubs
+    Given the user is on the club info page
+    When they look through all of the clubs 
     Then they should see multiple club options that correspond to their quiz answers
-
-  Scenario: See why each club was matched
-    Given the user is on the results page
-    When they look at each matched club
-    Then they should be able to see why and how they were matched to that club

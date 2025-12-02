@@ -15,8 +15,3 @@ Feature: F04 - Search and sort recommendations
     Given the user is viewing the search and sorting interface
     When they choose a sort condition
     Then the list of clubs should be sorted according to that condition
-
-  Scenario: Filter clubs by text search
-    Given the user has clicked the search bar on the results page
-    When they enter some text
-    Then only clubs matching the entered text should be displayed

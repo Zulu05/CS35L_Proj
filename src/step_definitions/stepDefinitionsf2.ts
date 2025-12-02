@@ -39,7 +39,7 @@ const BASE_URL = "http://localhost:5173";
           await this.page.goto(`${BASE_URL}`);
           await expect(this.page.getByRole("heading", { name: "Welcome to the Quiz App" })).toBeVisible();
           await this.page.evaluate(() => {
-            localStorage.setItem('userId', 'test-user-id');
+              localStorage.setItem('userId', 'test-user-id');
           });
          });
        

@@ -7,6 +7,7 @@ import ClubInfoPage from './components/Pages/clubInfoPage';
 import DataBasePage from './components/Pages/databasePage';
 import ProfilePage from './components/Pages/profilePage';
 import AdminPage from './components/Pages/adminPage';
+import Banner from './components/Pages/banner';
 
 
 import './App.css';
@@ -17,8 +18,10 @@ function App() {
   //backend stuff <3 <3 <3
 
   //frontend stuff <3 <3 <3
-  return (
-    <Router>
+  return ( 
+    <>
+    <Banner/>
+
       <Routes>
         <Route path="/" element={<HomePage />} />
         <Route path="/quiz" element={<QuizPage />} />
@@ -29,7 +32,7 @@ function App() {
         <Route path="/profile" element={<ProfilePage />} />
         <Route path="/admin" element={<AdminPage />} />
       </Routes>
-    </Router>
+    </>
   );
 }
 

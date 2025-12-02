@@ -27,6 +27,7 @@ const navigate = useNavigate();
           const id = localStorage.getItem('userId');
           navigate(id ? '/quiz' : '/login');
         }}
+        style={{ marginLeft: 8 }}
       >
         Start Quiz
       </button>

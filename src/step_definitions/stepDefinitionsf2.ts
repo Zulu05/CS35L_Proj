@@ -35,25 +35,26 @@ const BASE_URL = "http://localhost:5173";
 //    ? Given the student is on the app home page and they are logged in
 //        Undefined. Implement with the following snippet:
        
-         Given('the student is on the app home page and they are logged in', function () {
-           // Write code here that turns the phrase above into concrete actions
-           return 'pending';
+         Given('the student is on the app home page and they are logged in', async function () {
+          await this.page.goto(`${BASE_URL}`);
+          await expect(this.page.getByRole("heading", { name: "Welcome to the Quiz App" })).toBeVisible();
+          await this.page.evaluate(() => {
+            localStorage.setItem('userId', 'test-user-id');
+          });
          });
        
   //  ? When they press the quiz button on the main page
   //      Undefined. Implement with the following snippet:
        
         //  When('they press the quiz button on the main page', function () {
-        //    // Write code here that turns the phrase above into concrete actions
-        //    return 'pending';
+
         //  });
        
   //  ? Then they should be taken to the quiz page
   //      Undefined. Implement with the following snippet:
        
-         Then('they should be taken to the quiz page', function () {
-           // Write code here that turns the phrase above into concrete actions
-           return 'pending';
+         Then('they should be taken to the quiz page', async function () {
+          await expect(this.page.getByRole("heading", { name: "Quiz" })).toBeVisible();
          });
        
 
@@ -62,52 +63,61 @@ const BASE_URL = "http://localhost:5173";
 //    ? Given the user is on the quiz page
 //        Undefined. Implement with the following snippet:
        
-         Given('the user is on the quiz page', function () {
-           // Write code here that turns the phrase above into concrete actions
-           return 'pending';
+         Given('the user is on the quiz page', async function () {
+            await this.page.goto(`${BASE_URL}/quiz`);
+            await expect(this.page.getByRole("heading", { name: "Quiz" })).toBeVisible();
          });
        
   //  ? When they see a quiz question
   //      Undefined. Implement with the following snippet:
        
          When('they see a quiz question', function () {
-           // Write code here that turns the phrase above into concrete actions
-           return 'pending';
+           const question = this.page.locator('input[type="range"]');
          });
        
   //  ? Then they should be able to answer the question using a slider or button
   //      Undefined. Implement with the following snippet:
        
          Then('they should be able to answer the question using a slider or button', function () {
-           // Write code here that turns the phrase above into concrete actions
-           return 'pending';
+            const question = this.page.locator('input[type="range"]');
+            expect(question).toBeDefined();
          });
        
 
 // 4) Scenario: Move to the next quiz question # src/features/f02.feature:22
-//    ✔ Before # src/features/support/hooks.ts:35
 //    ? Given the user is on the quiz page and has answered the current question
 //        Undefined. Implement with the following snippet:
        
-         Given('the user is on the quiz page and has answered the current question', function () {
-           // Write code here that turns the phrase above into concrete actions
-           return 'pending';
-         });
+         Given('the user is on the quiz page and has answered the current question', async function () {
+            await this.page.goto(`${BASE_URL}/quiz`);
+            await expect(this.page.getByRole("heading", { name: "Quiz" })).toBeVisible();
+
+            const firstSlider = this.page.locator('input[type="range"]').nth(0);
+
+            await firstSlider.evaluate((el: HTMLInputElement) => {
+              el.value = "60";
+              el.dispatchEvent(new Event("input", { bubbles: true }));
+              el.dispatchEvent(new Event("change", { bubbles: true }));
+            });
+          
+            const firstQuestion = await this.page.locator(".question-subtext").first().textContent();
+            this.firstQuestion = firstQuestion; 
+          }
+      );
        
   //  ? When they indicate they want to continue (for example, by pressing a Next button)
   //      Undefined. Implement with the following snippet:
        
-         When('they indicate they want to continue \\(for example, by pressing a Next button)', function () {
-           // Write code here that turns the phrase above into concrete actions
-           return 'pending';
+         When('they indicate they want to continue \\(for example, by pressing a Next button)', async function () {
+          await this.page.getByRole("button", { name: "Next" }).click();
          });
        
   //  ? Then they should be taken to the next question
   //      Undefined. Implement with the following snippet:
        
-         Then('they should be taken to the next question', function () {
-           // Write code here that turns the phrase above into concrete actions
-           return 'pending';
+         Then('they should be taken to the next question', async function () {
+            const newQuestionText = await this.page.locator(".question-subtext").first().textContent();
+            expect(newQuestionText).not.toBe(this.firstQuestion);
          });
        
 
@@ -116,24 +126,22 @@ const BASE_URL = "http://localhost:5173";
 //    ? Given the user is taking the quiz and has reached the last question
 //        Undefined. Implement with the following snippet:
        
-         Given('the user is taking the quiz and has reached the last question', function () {
-           // Write code here that turns the phrase above into concrete actions
-           return 'pending';
+         Given('the user is taking the quiz and has reached the last question', async function () {
+          await this.page.goto(`${BASE_URL}/quiz`);
+          await expect(this.page.getByRole("button", { name: "Submit" })).toBeVisible();
          });
        
   //  ? When they press the submit button
   //      Undefined. Implement with the following snippet:
        
-         When('they press the submit button', function () {
-           // Write code here that turns the phrase above into concrete actions
-           return 'pending';
+         When('they press the submit button', async function () {
+          await this.page.getByRole("button", { name: "Submit" }).click();
          });
        
   //  ? Then their quiz input should be submitted
   //      Undefined. Implement with the following snippet:
        
-         Then('their quiz input should be submitted', function () {
-           // Write code here that turns the phrase above into concrete actions
-           return 'pending';
+         Then('their quiz input should be submitted', async function () {
+           await expect(this.page.getByRole("heading", { name: "Your answers" })).toBeVisible();
          });
        

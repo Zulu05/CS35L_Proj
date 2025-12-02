@@ -1,15 +1,31 @@
-Feature: F01 - Quiz and recommendations
+Feature: F02 - Quiz navigation
 
-  As a student at UCLA, 
-  I want to be able to easily answer questions to express my club interests 
-  so that I can get more involved with the school and more extracurricular activities.
+  As a student at UCLA
+  I want to be able to easily answer questions to express my club interests
+  So that I can get more involved with the school and extracurricular activities
 
+  Scenario: Navigate from home page to the quiz page
+    Given the student is on the app home page
+    When they press the quiz button on the main page
+    Then they should be taken to the quiz page
 
-  Background:
-    Given I am on the quiz page
+  Scenario: Answer a quiz question
+    Given the user is on the quiz page
+    When they see a quiz question
+    Then they should be able to answer the question using a slider or button
+
+  Scenario: Move to the next quiz question
+    Given the user is on the quiz page and has answered the current question
+    When they indicate they want to continue (for example, by pressing a Next button)
+    Then they should be taken to the next question
+
+  Scenario: Submit the quiz on the last question
+    Given the user is taking the quiz and has reached the last question
+    When they press the submit button
+    Then their quiz input should be submitted
 
   Scenario: Submit quiz and see answers
+    Given I am on the quiz page
     When I set all traits sliders to a value
     And I submit the quiz
     Then I should see my quiz answers listed
-      

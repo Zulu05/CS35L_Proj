@@ -23,7 +23,9 @@ class CustomWorld {
 setWorldConstructor(CustomWorld);
 
 BeforeAll({ timeout: 60_000 }, async function () {
-  browser = await chromium.launch({ headless: false, slowMo: 300 });
+  browser = await chromium.launch({ headless: true});
+  // To see what is happening in the browser:
+  //browser = await chromium.launch({ headless: false, slowMo: 300}); 
 });
 
 AfterAll(async function () {

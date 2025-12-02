@@ -36,6 +36,7 @@ const navigate = useNavigate();
           <button
             onClick={() => {
               localStorage.removeItem('userId');
+              localStorage.removeItem('userName');
               navigate('/');
             }}
             style={{ marginLeft: 8 }}

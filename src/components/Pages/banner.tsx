@@ -4,6 +4,8 @@ import { useNavigate } from 'react-router-dom';
 
 const Banner: React.FC = () => {
     const userId = typeof window !== 'undefined' ? localStorage.getItem('userId') : null;
+    const username = typeof window !== 'undefined' ? localStorage.getItem('userName') : null;
+    console.log(username);
     const navigate = useNavigate();
     return(
     <>
@@ -37,6 +39,7 @@ const Banner: React.FC = () => {
           <button
             onClick={() => {
               localStorage.removeItem('userId');
+              localStorage.removeItem('userName');
               navigate('/');
             }}
             style={{ marginLeft: 8 }}
@@ -50,7 +53,7 @@ const Banner: React.FC = () => {
             }}
             style={{ marginLeft: 8 }}
           >
-            {userId}
+            {username}
           </button>
         </>
       )}

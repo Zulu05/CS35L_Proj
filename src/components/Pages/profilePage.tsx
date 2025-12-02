@@ -63,7 +63,6 @@ export default function ProfilePage() {
         <p>
           <strong>Email:</strong> {user.email}
         </p>
-        <p>
           <p>
             <strong>Top matches:</strong>{" "}
             <br />
@@ -80,7 +79,6 @@ export default function ProfilePage() {
               "No matches yet."
             )}
           </p>
-        </p>
       </div>
     </div>
   );

@@ -39,7 +39,6 @@ const navigate = useNavigate();
               localStorage.removeItem('userName');
               navigate('/');
             }}
-            style={{ marginLeft: 8 }}
           >
             Logout
           </button>
@@ -48,7 +47,6 @@ const navigate = useNavigate();
               const id = localStorage.getItem('userId');
               navigate(id ? '/profile' : '/login');
             }}
-            style={{ marginLeft: 8 }}
           >
             Profile
           </button>

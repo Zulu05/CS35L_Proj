@@ -9,6 +9,7 @@ import {
   validateUsername,
   validatePassword,
 } from '../../services/regex.service';
+import './homePage.css';
 
 function HomePage() {
 

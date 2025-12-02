@@ -1,0 +1,225 @@
+/*
+AI generated CSS. Used CHATGPT 5
+Prompt:
+Imagine you are a software engineer with 160 IQ making a quiz to match users to clubs at UCLA. One of the main metrics of your 
+success is how visually appealing your quiz page is. Please make an elegant and attractive CSS file for the quizPage bellow. 
+Remember it should work in all browsers including chrome in dark mode
+/* ---------------------------------------
+   GLOBAL LAYOUT + THEME
+----------------------------------------*/
+
+:root {
+  --bg: #f7f7f9;
+  --fg: #1a1a1a;
+  --card-bg: #ffffff;
+  --accent: #4b82f2;
+  --accent-soft: #cfe0ff;
+  --border: #dcdcdc;
+  --slider-track: #e5e5e5;
+  --slider-fill: #4b82f2;
+  --text-soft: #666;
+  --danger: #ff5f5f;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #111418;
+    --fg: #f1f3f5;
+    --card-bg: #1b1f24;
+    --accent: #6ea8fe;
+    --accent-soft: #1f2f47;
+    --border: #2a2e33;
+    --slider-track: #2a2e33;
+    --slider-fill: #6ea8fe;
+    --text-soft: #b2b8c2;
+  }
+}
+
+body, html {
+  margin: 0;
+  padding: 0;
+  background: var(--bg);
+  color: var(--fg);
+  font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+}
+
+/* ---------------------------------------
+   PAGE WRAPPER
+----------------------------------------*/
+
+.quiz-page {
+  max-width: 700px;
+  margin: 40px auto;
+  padding: 20px 30px;
+  background: var(--card-bg);
+  border-radius: 16px;
+  box-shadow: 0 4px 18px rgba(0,0,0,0.08);
+  transition: background 0.3s ease, color 0.3s ease;
+}
+
+.quiz-page h1 {
+  font-size: 2.3rem;
+  text-align: center;
+  margin-bottom: 25px;
+  font-weight: 700;
+}
+
+/* ---------------------------------------
+   QUESTION BLOCKS
+----------------------------------------*/
+
+.question-block {
+  padding: 20px 0;
+  margin-bottom: 25px;
+  border-bottom: 1px solid var(--border);
+}
+
+.question-subtext {
+  margin-bottom: 12px;
+  font-size: 1.05rem;
+  color: var(--text-soft);
+}
+
+/* ---------------------------------------
+   SLIDER AREA
+----------------------------------------*/
+
+.slider-container {
+  width: 100%;
+}
+
+.slider-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.label-left, .label-right {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 90px;
+  text-align: center;
+}
+
+.label-text {
+  font-weight: 600;
+  color: var(--fg);
+}
+
+.label-percent {
+  font-size: 0.85rem;
+  color: var(--text-soft);
+}
+
+/* ---------------------------------------
+   SLIDER STYLE
+----------------------------------------*/
+
+.slider-track-wrapper {
+  flex-grow: 1;
+}
+
+.slider {
+  width: 100%;
+  -webkit-appearance: none;
+  height: 10px;
+  background: var(--slider-track);
+  border-radius: 8px;
+  outline: none;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+/* Chrome / Edge / Safari */
+.slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  height: 22px;
+  width: 22px;
+  border-radius: 50%;
+  background: var(--accent);
+  border: 3px solid var(--card-bg);
+  box-shadow: 0 0 6px rgba(0,0,0,0.25);
+  transition: background 0.2s ease, transform 0.1s ease;
+}
+
+.slider:active::-webkit-slider-thumb {
+  transform: scale(1.15);
+}
+
+/* Firefox */
+.slider::-moz-range-thumb {
+  height: 22px;
+  width: 22px;
+  border-radius: 50%;
+  background: var(--accent);
+  border: 3px solid var(--card-bg);
+  box-shadow: 0 0 6px rgba(0,0,0,0.25);
+  transition: background 0.2s ease, transform 0.1s ease;
+}
+
+.slider::-moz-range-thumb:active {
+  transform: scale(1.15);
+}
+
+.slider::-moz-range-track {
+  background: var(--slider-track);
+  border-radius: 8px;
+}
+
+/* ---------------------------------------
+   BUTTONS
+----------------------------------------*/
+
+button {
+  margin-top: 30px;
+  width: 100%;
+  padding: 14px;
+  font-size: 1.1rem;
+  background: var(--accent);
+  color: white;
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: background 0.2s ease, transform 0.1s ease;
+}
+
+button:hover:not(:disabled) {
+  background: var(--accent-soft);
+  color: var(--fg);
+}
+
+button:active:not(:disabled) {
+  transform: scale(0.97);
+}
+
+button:disabled {
+  opacity: 0.6;
+  cursor: default;
+}
+
+/* BACK BUTTON */
+
+.back-button {
+  margin-top: 15px;
+  background: transparent;
+  color: var(--accent);
+  border: 2px solid var(--accent);
+}
+
+.back-button:hover {
+  background: var(--accent-soft);
+}
+
+/* ---------------------------------------
+   ERROR MESSAGE
+----------------------------------------*/
+
+p.error {
+  margin-top: 10px;
+  color: var(--danger) !important;
+  text-align: center;
+  font-weight: 600;
+}

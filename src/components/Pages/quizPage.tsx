@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import "./quizPage.css";
+import "./quizPageNew.css";
 import { fetchTraits } from "../../services/traits.service";
 import { TraitDefinition } from "../../models/traits";
 

@@ -58,6 +58,7 @@ export default function SignUpPage() {
       const id = user.id ?? user.id ?? userIdFrom(user);
       if (!id) throw new Error('User has no id');
       localStorage.setItem('userId', String(id));
+      localStorage.setItem('userName', String(username));
       console.log(id);
 
       // Navigate to quiz page

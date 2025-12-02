@@ -35,15 +35,6 @@ const navigate = useNavigate();
         <>
           <button
             onClick={() => {
-              localStorage.removeItem('userId');
-              localStorage.removeItem('userName');
-              navigate('/');
-            }}
-          >
-            Logout
-          </button>
-          <button
-            onClick={() => {
               const id = localStorage.getItem('userId');
               navigate(id ? '/profile' : '/login');
             }}

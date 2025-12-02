@@ -36,6 +36,9 @@ export default function LoginPage() {
       if (!user) {
         throw new Error('User does not exist, try signing up first');
       } else {
+        //User exists - save username
+        localStorage.setItem('userName', String(username));
+        console.log(username);
         // User exists — check password if set, otherwise set it
         if (user.hasPassword()) {
           // validate password match

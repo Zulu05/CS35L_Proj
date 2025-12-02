@@ -1,0 +1,159 @@
+/* Page container */
+/* USED CHATGPT 4 TO GENERATE THIS FILE: 
+Promt: 
+Pretend you are a sofware engineer working on a club recomendation app. One of the most important factors that will allow you to
+suceed is how visually appeling is your quiz page. Please create a simple and elegant CSS file to be used by quizPage:*/
+.quiz-page {
+  max-width: 650px;
+  margin: 40px auto;
+  padding: 24px;
+  border-radius: 16px;
+  background: #ffffff;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+  font-family: "Inter", "Helvetica", sans-serif;
+  color: #333;
+}
+
+/* Page title */
+.quiz-page h1 {
+  text-align: center;
+  font-size: 2rem;
+  margin-bottom: 32px;
+  color: #222;
+}
+
+/* Each question block */
+.question-block {
+  margin-bottom: 28px;
+  padding: 16px 20px;
+  border-radius: 12px;
+  background: #f9f9fb;
+  border: 1px solid #e5e7eb;
+}
+
+/* Question text */
+.question-text {
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin-bottom: 12px;
+  color: #444;
+}
+
+/* Slider container */
+.slider-container {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+/* The number next to slider */
+.slider-value {
+  min-width: 32px;
+  text-align: center;
+  font-weight: 600;
+  font-size: 1rem;
+  color: #333;
+}
+
+/* Slider styling */
+.slider {
+  flex-grow: 1;
+  appearance: none;
+  height: 6px;
+  border-radius: 3px;
+  background: #ddd;
+  outline: none;
+  transition: background 0.2s ease;
+}
+
+.slider:hover {
+  background: #ccc;
+}
+
+/* Slider thumb */
+.slider::-webkit-slider-thumb {
+  appearance: none;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: #4f46e5; /* Indigo accent */
+  cursor: pointer;
+  transition: transform 0.15s ease;
+}
+
+.slider::-webkit-slider-thumb:hover {
+  transform: scale(1.15);
+}
+
+/* Major dropdown */
+.major-select {
+  width: 100%;
+  padding: 10px 14px;
+  border-radius: 10px;
+  border: 1px solid #d1d5db;
+  font-size: 1rem;
+  background: white;
+  cursor: pointer;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.major-select {
+  color: #111 !important;
+  background-color: #fff !important;
+  -webkit-text-fill-color: #111 !important;  /* <-- CRITICAL FOR CHROME */
+}
+
+.major-select:focus {
+  border-color: #4f46e5;
+  box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.2);
+}
+
+/* Submit + Back buttons */
+.submit-button,
+.back-button {
+  width: 100%;
+  padding: 12px;
+  margin-top: 12px;
+  font-size: 1.05rem;
+  border-radius: 10px;
+  cursor: pointer;
+  border: none;
+  transition: transform 0.1s ease, background-color 0.2s ease;
+}
+
+/* Primary action */
+.submit-button {
+  background: #4f46e5;
+  color: white;
+}
+
+.submit-button:hover {
+  background: #4338ca;
+}
+
+.submit-button:disabled {
+  background: #888;
+  cursor: not-allowed;
+}
+
+/* Secondary action */
+.back-button {
+  background: #e5e7eb;
+  color: #333;
+}
+
+.back-button:hover {
+  background: #d4d4d8;
+}
+
+.back-button:active,
+.submit-button:active {
+  transform: scale(0.97);
+}
+
+/* Results list */
+ol {
+  font-size: 1.1rem;
+  margin-top: 20px;
+  line-height: 1.7;
+}

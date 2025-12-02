@@ -58,7 +58,6 @@ const navigate = useNavigate();
           onClick={() => {
             navigate('/login');
           }}
-          style={{ marginLeft: 8 }}
         >
           Login
         </button>

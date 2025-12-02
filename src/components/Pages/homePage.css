@@ -1,0 +1,154 @@
+/*
+AI generated CSS. Used CHATGPT 5
+Prompt: Imagine you are a software engineer with 160 IQ making a quiz to match users to clubs at UCLA. One of the main metrics 
+of your success is how visually appealing your home page is. Please make an elegant and attractive CSS file for the homePage 
+bellow using UCLA colors for both light and dark modes. Remember it should work in all browsers including chrome in dark mode
+
+/* ----------------------------------------------------
+   UCLA THEME COLORS (light + dark)
+   Primary UCLA Blue:   #2774AE
+   UCLA Gold:           #FFD100
+-----------------------------------------------------*/
+
+:root {
+  --ucla-blue: #2774ae;
+  --ucla-blue-soft: #5fa3d7;
+  --ucla-gold: #ffd100;
+
+  /* Light mode */
+  --bg: #f8fafc;
+  --fg: #1a1a1a;
+  --card-bg: #ffffff;
+  --text-soft: #6b7280;
+  --border: #dcdcdc;
+  --shadow: 0 4px 16px rgba(0,0,0,0.08);
+  --shadow-hover: 0 6px 22px rgba(0,0,0,0.14);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #0f1216;
+    --fg: #e5e7eb;
+    --card-bg: #1a1f24;
+    --text-soft: #9ca3af;
+    --border: #2d3135;
+    --shadow: 0 4px 16px rgba(0,0,0,0.45);
+    --shadow-hover: 0 6px 22px rgba(0,0,0,0.6);
+  }
+}
+
+/* ----------------------------------------------------
+   PAGE LAYOUT
+-----------------------------------------------------*/
+
+.page {
+  max-width: 800px;
+  margin: 60px auto;
+  padding: 30px;
+  background: var(--card-bg);
+  color: var(--fg);
+  border-radius: 18px;
+  box-shadow: var(--shadow);
+  font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+  transition: background 0.3s ease, color 0.3s ease, box-shadow 0.2s ease;
+}
+
+/* Title */
+.page h1 {
+  font-size: 2.6rem;
+  font-weight: 800;
+  text-align: center;
+  margin-bottom: 20px;
+  color: var(--ucla-blue);
+}
+
+/* Section text */
+.page h2 {
+  font-size: 1.7rem;
+  margin-top: 40px;
+  margin-bottom: 12px;
+  font-weight: 700;
+}
+
+.page p {
+  font-size: 1.15rem;
+  line-height: 1.6;
+  color: var(--text-soft);
+  margin-bottom: 24px;
+}
+
+/* Credits */
+.page h3 {
+  margin-top: 40px;
+  color: var(--text-soft);
+  font-size: 1rem;
+  text-align: center;
+  font-weight: 500;
+}
+
+/* ----------------------------------------------------
+   BUTTON STYLES
+-----------------------------------------------------*/
+
+button {
+  padding: 14px 22px;
+  margin-top: 14px;
+  font-size: 1.1rem;
+  font-weight: 600;
+  cursor: pointer;
+
+  border-radius: 12px;
+  border: none;
+
+  background: var(--ucla-blue);
+  color: white;
+
+  transition: background 0.2s ease, transform 0.12s ease,
+              box-shadow 0.2s ease;
+}
+
+/* Hover */
+button:hover:not(:disabled) {
+  background: var(--ucla-blue-soft);
+  box-shadow: var(--shadow-hover);
+}
+
+/* Pressed */
+button:active:not(:disabled) {
+  transform: scale(0.96);
+}
+
+/* Secondary buttons (Logout / Profile) */
+button.secondary {
+  background: transparent;
+  color: var(--ucla-blue);
+  border: 2px solid var(--ucla-blue);
+}
+
+button.secondary:hover {
+  background: rgba(39, 116, 174, 0.1);
+  box-shadow: none;
+}
+
+button.secondary:active {
+  transform: scale(0.96);
+}
+
+/* ----------------------------------------------------
+   RESPONSIVE BEHAVIOR
+-----------------------------------------------------*/
+
+@media (max-width: 600px) {
+  .page {
+    padding: 22px;
+  }
+
+  button {
+    width: 100%;
+    margin-top: 12px;
+  }
+
+  .page h1 {
+    font-size: 2.2rem;
+  }
+}

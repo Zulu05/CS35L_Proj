@@ -8,7 +8,7 @@ export const collections: {
   userResults?: mongoDB.Collection;
   clubs?: mongoDB.Collection;
   clubResults?: mongoDB.Collection;
-  traits?: mongoDB.Collection;   
+  traits?: mongoDB.Collection;   // ✅ traits is part of collections
 } = {};
 
 // Initialize Connection
@@ -50,6 +50,7 @@ export async function connectToDatabase() {
     throw new Error(
       "Environment variable CLUB_RESULTS_COLLECTION_NAME must be set"
     );
+  // traitsCollectionName has a default, so we don't hard-throw here
 
   const db: mongoDB.Db = client.db(dbName);
 
@@ -60,6 +61,7 @@ export async function connectToDatabase() {
   const clubResultsCollection: mongoDB.Collection =
     db.collection(clubResultsCollectionName);
 
+  // ✅ actually open the traits collection
   const traitsCollection: mongoDB.Collection = db.collection(
     traitsCollectionName
   );
@@ -68,7 +70,7 @@ export async function connectToDatabase() {
   collections.userResults = userResultsCollection;
   collections.clubs = clubsCollection;
   collections.clubResults = clubResultsCollection;
-  collections.traits = traitsCollection; 
+  collections.traits = traitsCollection; // ✅ critical line
 
   console.log(
     `Successfully connected to database: ${db.databaseName} and collections: ` +

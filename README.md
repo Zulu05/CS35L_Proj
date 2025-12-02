@@ -12,4 +12,3 @@ current stack: MERN
 (Let's use assignment 5's README as a template)
 
 https://www.sohamkamani.com/typescript/rest-http-api-call/
-https://daniel-delimata.medium.com/cucumber-in-the-typescript-a86bd03117a7

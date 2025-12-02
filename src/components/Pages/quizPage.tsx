@@ -77,7 +77,6 @@ function QuizPage() {
       // Redirect to the results page, passing top5 along
       navigate("/matches", { state: { top5 } });
 
-      setDisplay(1);
     } catch (err) {
       const e = err as any;
       setSubmitError(e?.message ?? "Failed to submit.");

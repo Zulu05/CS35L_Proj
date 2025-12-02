@@ -8,6 +8,10 @@
     "esModuleInterop": true,      // Needed for default imports like express
     "skipLibCheck": true          // Skip type checking of node_modules
   },
-  "include": ["src/**/*.ts"],     // Include all .ts files under src
-  "exclude": ["node_modules"]     // Exclude dependencies
+  "include": [
+    "src/**/*.ts", // Include all .ts files under src
+    "src/features/step_definitions/**/*", //Needed for cucumber
+    "src/features/support/**/*"
+  ],    
+  "exclude": ["node_modules"],     // Exclude dependencies
 }

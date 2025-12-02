@@ -5,7 +5,12 @@ Feature: F02 - Quiz navigation
   So that I can get more involved with the school and extracurricular activities
 
   Scenario: Navigate from home page to the quiz page
-    Given the student is on the app home page
+    Given the student is on the app home page and they are not logged in
+    When they press the quiz button on the main page
+    Then they should be taken to the login page
+
+  Scenario: Navigate from home page to the quiz page
+    Given the student is on the app home page and they are logged in
     When they press the quiz button on the main page
     Then they should be taken to the quiz page
 

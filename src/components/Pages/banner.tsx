@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from 'react-router-dom';
 
-
 const Banner: React.FC = () => {
     const userId = typeof window !== 'undefined' ? localStorage.getItem('userId') : null;
     const username = typeof window !== 'undefined' ? localStorage.getItem('userName') : null;

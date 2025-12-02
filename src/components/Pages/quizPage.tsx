@@ -1,29 +1,31 @@
-import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import './quizPageGPT.css';
-import React from 'react';
-import{addResult} from "../../services/user.service"
-import User from "../../models/users";
+import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import "./quizPage.css";
+import { fetchTraits } from "../../services/traits.service";
+import { TraitDefinition } from "../../models/traits";
 
 function QuizPage() {
   const navigate = useNavigate();
 
-  // Question List
-  const questions = [
-    { text: 'Social' },
-    { text: 'Academic' },
-    { text: 'Leadership' },
-    { text: 'Creativity' },
-    { text: 'Time Commitment'}
-  ];
+  const [traits, setTraits] = useState<TraitDefinition[]>([]);
+  const [answers, setAnswers] = useState<number[]>([]);
+  const [loading, setLoading] = useState(true);
 
   const [display, setDisplay] = useState(0);
   const [submitting, setSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState<string | null>(null);
-  //Deal with Major separately
-  const majorOptions = ["Arts", "Business", "Computer Science", "Life Sciences", "Social Sciences", "Physical Sciences", "Engineering"];
-  const [major, setMajor] = useState<string>("Computer Science");  // default 
-  // : number gets rid of a warning and ensures it index must be a number
+  useEffect(() => {
+    (async () => {
+      setLoading(true);
+      const t = await fetchTraits();
+      console.log("Fetched traits:", t);
+
+      setTraits(t);
+      setAnswers(Array(t.length).fill(50));
+      setLoading(false);
+    })();
+  }, []);
+
   const handleSliderChange = (index: number, value: number) => {
     const newAnswers = [...answers];
     newAnswers[index] = value;
@@ -31,19 +33,17 @@ function QuizPage() {
   };
 
   const handleSubmit = async () => {
-    
     const userId = localStorage.getItem('userId');
     if (!userId) return setSubmitError('No user id found. Please log in again.');
-  
-    // Build answers object that matches backend expectation
-    const answersObj = {
-      social: answers[0],
-      academic: answers[1],
-      leadership: answers[2],
-      creativity: answers[3],
-      timeCommitment: answers[4],
-      major_area: major,
-    };
+
+    if (!traits.length) {
+      return setSubmitError("No traits are configured yet. Try again later.");
+    }
+
+    const answersArray = traits.map((trait, index) => ({
+      traitId: trait.id,
+      value: answers[index],
+    }));
 
     setSubmitError(null);
     setSubmitting(true);
@@ -126,27 +126,9 @@ function QuizPage() {
               </div>
             </div>
           ))}
-          <div className="question-block">
-          <p className="question-text">What area best fits your major?</p>
 
-          <select
-            className="major-select"
-            value={major}
-            onChange={(e) => setMajor(e.target.value)}
-          >
-            {majorOptions.map((opt) => (
-              <option key={opt} value={opt}>
-                {opt}
-              </option>
-            ))}
-          </select>
-        </div>
-          <button
-            className="submit-button"
-            onClick={handleSubmit}
-            disabled={submitting}
-          >
-            {submitting ? 'Submitting...' : 'Submit'}
+          <button disabled={submitting} onClick={handleSubmit}>
+            {submitting ? "Submitting..." : "Submit"}
           </button>
 
           {submitError && <p style={{ color: "red" }}>{submitError}</p>}
@@ -165,7 +147,6 @@ function QuizPage() {
                 {answers[i]}
               </li>
             ))}
-            <strong>Major Area</strong> → {major}
           </ol>
 
           <button onClick={() => setDisplay(0)}>Return to Quiz</button>

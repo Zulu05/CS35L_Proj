@@ -27,3 +27,6 @@ process.txt
 *.sln
 *.sw?
 *.env
+
+#Exclude test results
+allure-results

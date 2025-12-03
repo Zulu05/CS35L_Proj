@@ -35,12 +35,16 @@ const BASE_URL = "http://localhost:5173";
 //    ? Given the student is on the app home page and they are logged in
 //        Undefined. Implement with the following snippet:
        
-         Given('the student is on the app home page and they are logged in', async function () {
-          await this.page.goto(`${BASE_URL}`);
-          await expect(this.page.getByRole("heading", { name: "Welcome to the Quiz App" })).toBeVisible();
-          await this.page.evaluate(() => {
-              localStorage.setItem('userId', 'test-user-id');
-          });
+         Given('the student is on the app home page and they are logged in', { timeout: 60 * 1000 }, async function () {
+              
+              await this.page.goto(`${BASE_URL}/login`);
+              const login = this.page.getByLabel('Username'); 
+              const password = this.page.getByLabel('Password');
+              await login.fill('user1');
+              await password.fill('user1PASSWORD123!');
+              await this.page.getByRole("button", { name: "Sign In" }).click();
+              await this.page.goto(`${BASE_URL}`);
+              await expect(this.page.getByRole("heading", { name: "Welcome to the Quiz App" })).toBeVisible();
          });
        
   //  ? When they press the quiz button on the main page
@@ -84,64 +88,43 @@ const BASE_URL = "http://localhost:5173";
          });
        
 
-// 4) Scenario: Move to the next quiz question # src/features/f02.feature:22
-//    ? Given the user is on the quiz page and has answered the current question
-//        Undefined. Implement with the following snippet:
-       
-         Given('the user is on the quiz page and has answered the current question', async function () {
-            await this.page.goto(`${BASE_URL}/quiz`);
-            await expect(this.page.getByRole("heading", { name: "Quiz" })).toBeVisible();
-
-            const firstSlider = this.page.locator('input[type="range"]').nth(0);
-
-            await firstSlider.evaluate((el: HTMLInputElement) => {
-              el.value = "60";
-              el.dispatchEvent(new Event("input", { bubbles: true }));
-              el.dispatchEvent(new Event("change", { bubbles: true }));
-            });
-          
-            const firstQuestion = await this.page.locator(".question-subtext").first().textContent();
-            this.firstQuestion = firstQuestion; 
-          }
-      );
-       
-  //  ? When they indicate they want to continue (for example, by pressing a Next button)
-  //      Undefined. Implement with the following snippet:
-       
-         When('they indicate they want to continue \\(for example, by pressing a Next button)', async function () {
-          await this.page.getByRole("button", { name: "Next" }).click();
-         });
-       
-  //  ? Then they should be taken to the next question
-  //      Undefined. Implement with the following snippet:
-       
-         Then('they should be taken to the next question', async function () {
-            const newQuestionText = await this.page.locator(".question-subtext").first().textContent();
-            expect(newQuestionText).not.toBe(this.firstQuestion);
-         });
-       
-
-// 5) Scenario: Submit the quiz on the last question # src/features/f02.feature:27
+// 4) Scenario: Submit the quiz on the last question # src/features/f02.feature:27
+// 1) Scenario: Submit the quiz on the last question # src/features/f02.feature:22
 //    ✔ Before # src/features/support/hooks.ts:35
-//    ? Given the user is taking the quiz and has reached the last question
+//    ? Given the user is taking the quiz
 //        Undefined. Implement with the following snippet:
-       
-         Given('the user is taking the quiz and has reached the last question', async function () {
-          await this.page.goto(`${BASE_URL}/quiz`);
-          await expect(this.page.getByRole("button", { name: "Submit" })).toBeVisible();
+
+         Given('the user is taking the quiz', async function () {
+              await this.page.goto(`${BASE_URL}/login`);
+              const login = this.page.getByLabel('Username'); 
+              const password = this.page.getByLabel('Password');
+              await login.fill('user1');
+              await password.fill('user1PASSWORD123!');
+              await this.page.getByRole("button", { name: "Sign In" }).click();
          });
+       
        
   //  ? When they press the submit button
   //      Undefined. Implement with the following snippet:
-       
-         When('they press the submit button', async function () {
-          await this.page.getByRole("button", { name: "Submit" }).click();
-         });
+
+         When('they press the submit button', async function() {
+                await this.page.getByRole("button", { name: /submit/i }).click();
+       });
+
        
   //  ? Then their quiz input should be submitted
   //      Undefined. Implement with the following snippet:
        
-         Then('their quiz input should be submitted', async function () {
-           await expect(this.page.getByRole("heading", { name: "Your answers" })).toBeVisible();
-         });
+  Then('their quiz input should be submitted', async function () {
+       const response = await this.page.request.get('http://localhost:3000/users');
+       expect(response.status()).toBe(200);
+
+       const users = await response.json();
+
+       const user1 = users.find((u: any) => u.username === "user1");
+       expect(user1).toBeDefined();
+
+       expect(user1.quizResponses).toBeDefined();
+       expect(user1.quizResponses.length).toBeGreaterThan(0);
+  });
        

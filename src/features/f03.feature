@@ -5,7 +5,7 @@ Feature: F03 - View club recommendations
   So that I know which clubs I should check out
 
   Scenario: Redirect to results page after submitting the quiz
-    Given the user is on the app
+    Given the user is logged and on the app
     When they submit their quiz
     Then they should be redirected to a results page
 

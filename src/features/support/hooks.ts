@@ -6,6 +6,7 @@ import {
   After,
   Status,
   setWorldConstructor,
+  setDefaultTimeout,
 } from "@cucumber/cucumber";
 import { chromium, Browser, Page } from "playwright";
 
@@ -21,6 +22,8 @@ class CustomWorld {
 }
 
 setWorldConstructor(CustomWorld);
+
+setDefaultTimeout(5 * 1000); // 5 seconds for every step
 
 BeforeAll({ timeout: 60_000 }, async function () {
   browser = await chromium.launch({ headless: true});

@@ -34,7 +34,7 @@ export async function createUser(user: {username: string, email: string, passwor
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(user),
       });
-      if (!res.ok) throw new Error('Failed to create club');
+      if (!res.ok) throw new Error('Failed to create user');
       const data = await res.json();
       return new User(data.username, data.email, data._id || data.id);
     } catch (err) {
@@ -45,7 +45,7 @@ export async function createUser(user: {username: string, email: string, passwor
 }
 
 export async function addPassword(id: string, password: string){
-    // Fetch Users
+    // Add Users
     try{
         const res = await fetch(`/users/${id}`, {
         method: 'PUT',
@@ -60,7 +60,7 @@ export async function addPassword(id: string, password: string){
         return new User(data.username, data.email, data.password, data._id || data.id);
     } catch (err)
     {
-        console.log("error fetching users: ", err);
+        console.log("error adding user passwords: ", err);
         return null;
     }
 }
@@ -120,6 +120,26 @@ export async function fetchSingleUser(userId: string): Promise<User | null> {
     return user;
   } catch (err) {
     console.error("error fetching single user:", err);
+    return null;
+  }
+}
+
+export async function checkPassword(username: string, password: string) {
+  try {
+    const res = await fetch("/users/login", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ username, password }),
+    });
+
+    if (!res.ok) {
+      console.error("Login failed with status:", res.status);
+      return null;
+    }
+
+    return await res.json();
+  } catch (err) {
+    console.log("Error checking password:", err);
     return null;
   }
 }

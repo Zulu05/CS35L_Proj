@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './loginPage.css';
 import { fetchUsers, addPassword } from "../../services/user.service"
-import { validatePassword, validateUsername } from "../../services/regex.service"
 
 export default function LoginPage() {
   const navigate = useNavigate();
@@ -16,13 +15,16 @@ export default function LoginPage() {
     e.preventDefault();
     setError(null);
 
-    if (!username.trim() || !validateUsername(username)) {
-      setError('Please enter a valid username, at least 3 alphanumeric characters');
+    // Only check if empty. Do not Regex validate existing users.
+    if (!username.trim()) {
+      setError('Please enter a username');
       return;
     }
-    // Basic password validation for creation: at least 8 chars
-    if (!password || !validatePassword(password)) {
-      setError('Password must be at least 8 characters with at least one digit, one upper and lower case letter, and one special character (@$!%*?&)');
+    
+    // We do NOT enforce complexity here (e.g. special chars) because 
+    // legacy passwords might not meet new rules.
+    if (!password) {
+      setError('Please enter a password');
       return;
     }
 

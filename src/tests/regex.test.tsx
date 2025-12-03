@@ -82,5 +82,33 @@ test ("validateUsername", () => {
 
 test ("validateEmail", () => {
     //failing tests
-    expect(validateUsername('')).toBe(false)
+    expect(validateEmail('')).toBe(false) // no characters
+    expect(validateEmail('     ')).toBe(false) // all whitespace
+    expect(validateEmail('a@g')).toBe(false) // not enough chars throughout
+    expect(validateEmail('@gmail.com')).toBe(false) // not enough chars to start
+    expect(validateUsername('a@g.c')).toBe(false) // not enough chars throughout
+    expect(validateEmail('aaa  @gmail.com')).toBe(false) // whitespace in middle
+    expect(validateEmail('   aaa@gmail.com')).toBe(false) // starting whitespace
+    expect(validateEmail('aa@gmail.com   ')).toBe(false) // ending with whitespace
+    expect(validateEmail('aaa@gm   ail.com')).toBe(false) // middle whitespace in domain
+    expect(validateEmail('aaa@gmail.co   m')).toBe(false) // whitespace in domain
+    expect(validateEmail('**@gmail.com')).toBe(false) // invalid chars
+    expect(validateEmail('aaaa@g.c')).toBe(false) // invalid domain
+    expect(validateEmail('testing----@gmail.com')).toBe(false) // ending with dashes
+
+    //passing tests
+    expect(validateEmail('aaa@gmail.com')).toBe(true) // all alphabet
+    expect(validateEmail('AAAAA@gmail.com')).toBe(true) // capitalized
+    expect(validateEmail('123@gmail.com')).toBe(true) //numbers
+    expect(validateEmail('1234aaaAAA@gmail.com')).toBe(true) // mixed, start with number
+    expect(validateEmail('aaa1123AAA@gmail.com')).toBe(true) // mixed start with lowercase
+    expect(validateEmail('AAAA123aaa@gmail.com')).toBe(true) // mixed start with capital
+    expect(validateEmail('aaAAAaa123@gmail.com')).toBe(true) // mixed, end with number
+    expect(validateEmail('aaa-aa123@gmail.com')).toBe(true) // testing with dashes
+    expect(validateEmail('aaa.aa123@gmail.com')).toBe(true) // test with periods
+    expect(validateEmail('aa....123@gmail.com')).toBe(true) // multiple periods
+    expect(validateEmail('aa----123@gmail.com')).toBe(true) // multiple dashes
+    expect(validateEmail('aaa@g.ucla.edu')).toBe(true) // different domain
+    expect(validateEmail('123aaa@g.ucla.edu')).toBe(true) // numbers start with different domain
+    expect(validateEmail('testing----aaa@gmail.com')).toBe(true) // multiple dashes with only alphabet
 })

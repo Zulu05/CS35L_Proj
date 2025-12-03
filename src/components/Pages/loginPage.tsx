@@ -1,3 +1,5 @@
+// TODO: Use not inline styling from main when Youssef/MainMenu merged (so both have black rounded input)
+
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './loginPage.css';

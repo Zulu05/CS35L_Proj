@@ -6,8 +6,14 @@
     "outDir": "./dist",           // Where JS files go if you compile
     "strict": true,               // Enable strict type-checking
     "esModuleInterop": true,      // Needed for default imports like express
-    "skipLibCheck": true          // Skip type checking of node_modules
+    "skipLibCheck": true,          // Skip type checking of node_modules
+    "jsx": "react"
   },
-  "include": ["src/**/*.ts"],     // Include all .ts files under src
-  "exclude": ["node_modules"]     // Exclude dependencies
+  "include": [
+    "src/tests/homePage.test.tsx",
+    "src/**/*.ts", // Include all .ts files under src
+    "src/features/step_definitions/**/*", //Needed for cucumber
+    "src/features/support/**/*"
+, "src/tests/regex.test.tsx"  ],    
+  "exclude": ["node_modules"],     // Exclude dependencies
 }

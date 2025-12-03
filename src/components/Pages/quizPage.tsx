@@ -32,9 +32,8 @@ function QuizPage() {
   };
 
   const handleSubmit = async () => {
-    const userId = localStorage.getItem("userId");
-
-    if (!userId) return setSubmitError("No user id found. Please log in again.");
+    const userId = localStorage.getItem('userId');
+    if (!userId) return setSubmitError('No user id found. Please log in again.');
 
     if (!traits.length) {
       return setSubmitError("No traits are configured yet. Try again later.");
@@ -48,11 +47,11 @@ function QuizPage() {
     setSubmitError(null);
     setSubmitting(true);
 
-    try {
+    try { //TODO: Create service function for this instead
       // Save answers
       const saveAnswersResp = await fetch(`/users/${userId}/quiz`, {
-        method: "PATCH",
-        headers: { "Content-Type": "application/json" },
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ answers: answersArray }),
       });
 
@@ -64,22 +63,21 @@ function QuizPage() {
       const recResp = await fetch(`/recommendations/${userId}/all`);
       const recJson = await recResp.json();
 
-      // Save recommendations
-      await fetch(`/users/${userId}/quiz/latest-matches`, {
-        method: "PATCH",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ clubMatches: recJson.results }),
-      });
+     // Save recommendations
+    await fetch(`/users/${userId}/quiz/latest-matches`, {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ clubMatches: recJson.results }),
+    });
 
-      // Extract the top 5 clubs from the results
-      const top5 = (recJson.results || []).slice(0, 5);
+    // Extract the top 5 clubs from the results
+    const top5 = recJson.results.slice(0, 5);
 
-      // Redirect to the results page, passing top5 along
-      navigate("/matches", { state: { top5 } });
+    // Redirect to the results page, passing top5 along
+    navigate("/matches", { state: { top5 } });
 
-    } catch (err) {
-      const e = err as any;
-      setSubmitError(e?.message ?? "Failed to submit.");
+    } catch (err: any) {
+      setSubmitError(err.message ?? "Failed to submit.");
     } finally {
       setSubmitting(false);
     }

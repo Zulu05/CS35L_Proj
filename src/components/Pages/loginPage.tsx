@@ -129,7 +129,6 @@ export default function LoginPage() {
         onClick={() => navigate('/signUp')}
         disabled={loading}
         style={{
-          marginLeft: 8,
           background: 'none',
           border: 'none',
           color: 'blue',

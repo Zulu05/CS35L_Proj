@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import './quizPage.css';
+import './loginPage.css';
 import User from "../../models/users";
 import { fetchUsers, addPassword, createUser } from "../../services/user.service"
 import {validatePassword, validateUsername, validateEmail} from "../../services/regex.service"
@@ -18,7 +18,7 @@ export default function SignUpPage() {
     setError(null);
 
     if (!username.trim() || !validateUsername(username)) {
-      setError('Please enter a valid username');
+      setError('Username must be at least 3 alphanumeric characters');
       return;
     }
     // Basic password validation for creation: at least 8 chars
@@ -82,47 +82,47 @@ export default function SignUpPage() {
   }
 
   return (
-    <div className="quiz-page">
+    <div className="login-page">
       <h1>Sign Up</h1>
-      <form onSubmit={handleSubmit} style={{ maxWidth: 420 }}>
-        <div style={{ marginBottom: 8 }}>
+      <form onSubmit={handleSubmit} className="login-form">
+        <div className="input-group">
           <label>
             Username
             <input
+              className="styled-input"
               value={username}
               onChange={(e) => setUsername(e.target.value)}
-              style={{ display: 'block', width: '100%', padding: 8, marginTop: 4 }}
               disabled={loading}
             />
           </label>
         </div>
-        <div style={{ marginBottom: 8 }}>
+        <div className="input-group">
           <label>
             Email
             <input
+              className="styled-input"
               value={email} 
               onChange={(e) => setEmail(e.target.value)}
-              style={{ display: 'block', width: '100%', padding: 8, marginTop: 4 }}
               disabled={loading}
             />
           </label>
         </div>
-        <div style={{ marginBottom: 12 }}>
+        <div className="input-group">
           <label>
             Password
             <input
+              className="styled-input"
               type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              style={{ display: 'block', width: '100%', padding: 8, marginTop: 4 }}
               disabled={loading}
             />
           </label>
         </div>
 
-        <div style={{ display: 'flex', gap: 8 }}>
+        <div className="button-group">
           <button type="submit" disabled={loading}>
-            {loading ? 'Signing in...' : 'Create account'}
+            {loading ? 'Creating account...' : 'Create account'}
           </button>
           <button type="button" onClick={() => navigate('/')} disabled={loading}>
             Cancel
@@ -130,7 +130,7 @@ export default function SignUpPage() {
         </div>
 
         {error && (
-          <div style={{ marginTop: 12, color: 'crimson' }}>
+          <div className="error-message">
             {error}
           </div>
         )}

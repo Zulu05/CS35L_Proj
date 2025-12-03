@@ -29,4 +29,4 @@ process.txt
 *.env
 
 #Exclude test results
-allure-results
+allure-results/

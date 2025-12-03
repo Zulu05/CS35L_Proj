@@ -30,40 +30,6 @@ const navigate = useNavigate();
       >
         Start Quiz
       </button>
-
-      {userId && (
-        <>
-          <button
-            onClick={() => {
-              localStorage.removeItem('userId');
-              localStorage.removeItem('userName');
-              navigate('/');
-            }}
-          >
-            Logout
-          </button>
-          <button
-            onClick={() => {
-              const id = localStorage.getItem('userId');
-              navigate(id ? '/profile' : '/login');
-            }}
-          >
-            Profile
-          </button>
-        </>
-      )}
-
-      {!userId && (
-        <button
-          onClick={() => {
-            navigate('/login');
-          }}
-          style={{ marginLeft: 8 }}
-        >
-          Login
-        </button>
-      )}
-
       <h2>What do we do?</h2>
       <p>
         This is a quiz app that lets you take a quiz to match you with a club at

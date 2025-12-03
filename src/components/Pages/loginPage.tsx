@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './loginPage.css';
-import { fetchUsers, addPassword } from "../../services/user.service"
+import { fetchUsers, addPassword, checkPassword } from "../../services/user.service"
 import { validatePassword, validateUsername } from "../../services/regex.service"
 
 export default function LoginPage() {
@@ -38,10 +38,16 @@ export default function LoginPage() {
         //User exists - save username
         localStorage.setItem('userName', String(username));
         console.log(username);
+        console.log("Login attempt for username:", username);
+
         // User exists — check password if set, otherwise set it
         if (user.hasPassword()) {
+          console.log(password);
+          console.log("User from DB:", user);
+          const matchingPassword  = await checkPassword(username, password);
+
           // validate password match
-          if (!user.checkPassword(password)) {
+          if (!matchingPassword) {
             throw new Error('Invalid password, password does not match existing user');
           }
         } else {

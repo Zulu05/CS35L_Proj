@@ -5,9 +5,12 @@ export default defineConfig({
   plugins: [react()],
   server: {
     proxy: {
-      '/users': 'http://localhost:3000', 
+      '/users': {
+        target: 'http://localhost:3000',
+        changeOrigin: true,
+      },
       '/traits': 'http://localhost:3000',
-      '/clubs': 'http://localhost:3000', 
+      '/clubs': 'http://localhost:3000',
       '/recommendations': 'http://localhost:3000',
     },
   },

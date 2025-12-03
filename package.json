@@ -11,7 +11,7 @@
     "dev:backend": "ts-node src/index.ts",
     "dev:frontend": "vite",
     "dev": "run-p dev:backend dev:frontend",
-    "test": "cucumber-js --require-module ts-node/register --require src/step_definitions/**/*.ts --require src/features/support/**/*.ts src/features/**/*.feature",
+    "test": "cucumber-js --format progress --format ./src/features/support/reporter.js:allure-output.log --require-module ts-node/register --require src/step_definitions/**/*.ts --require src/features/support/**/*.ts src/features/**/*.feature",
     "test:unit": "vitest"
   },
   "dependencies": {

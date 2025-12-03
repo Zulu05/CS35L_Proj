@@ -1,9 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import './quizPage.css';
-import User from "../../models/users";
-import { fetchUsers, addPassword, createUser } from "../../services/user.service"
-import {validatePassword, validateUsername, validateEmail} from "../../services/regex.service"
+import './loginPage.css';
+import { fetchUsers, addPassword, checkPassword } from "../../services/user.service"
+import { validatePassword, validateUsername } from "../../services/regex.service"
 
 export default function LoginPage() {
   const navigate = useNavigate();
@@ -39,10 +38,16 @@ export default function LoginPage() {
         //User exists - save username
         localStorage.setItem('userName', String(username));
         console.log(username);
+        console.log("Login attempt for username:", username);
+
         // User exists — check password if set, otherwise set it
         if (user.hasPassword()) {
+          console.log(password);
+          console.log("User from DB:", user);
+          const matchingPassword  = await checkPassword(username, password);
+
           // validate password match
-          if (!user.checkPassword(password)) {
+          if (!matchingPassword) {
             throw new Error('Invalid password, password does not match existing user');
           }
         } else {
@@ -88,16 +93,16 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="quiz-page">
+    <div className="login-page">
       <h1>Login</h1>
-      <form onSubmit={handleSubmit} style={{ maxWidth: 420 }}>
+      <form onSubmit={handleSubmit} style={{ maxWidth: 420, margin: '0 auto', textAlign: 'left' }}>
         <div style={{ marginBottom: 8 }}>
           <label>
             Username
             <input
               value={username}
               onChange={(e) => setUsername(e.target.value)}
-              style={{ display: 'block', width: '100%', padding: 8, marginTop: 4 }}
+              style={{ display: 'block', width: '100%', padding: 8, marginTop: 4, boxSizing: 'border-box' }}
               disabled={loading}
             />
           </label>
@@ -109,7 +114,7 @@ export default function LoginPage() {
               type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              style={{ display: 'block', width: '100%', padding: 8, marginTop: 4 }}
+              style={{ display: 'block', width: '100%', padding: 8, marginTop: 4, boxSizing: 'border-box' }}
               disabled={loading}
             />
           </label>
@@ -129,13 +134,12 @@ export default function LoginPage() {
         onClick={() => navigate('/signUp')}
         disabled={loading}
         style={{
-          marginLeft: 8,
           background: 'none',
           border: 'none',
           color: 'blue',
           textDecoration: 'underline',
           cursor: 'pointer',
-          padding: 10
+          padding: 11
         }}
       >
         No account? Sign Up Here

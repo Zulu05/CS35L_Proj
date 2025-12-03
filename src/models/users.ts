@@ -30,8 +30,4 @@ export default class User {
   public hasPassword(): boolean {
     return !!this.password;
   }
-
-  public checkPassword(password: string): boolean {
-    return this.password === password;
-  }
 }

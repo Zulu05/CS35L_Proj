@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import './quizPage.css';
+import './loginPage.css';
 import { fetchUsers, addPassword } from "../../services/user.service"
 import { validatePassword, validateUsername } from "../../services/regex.service"
 

@@ -1,0 +1,44 @@
+.login-form {
+  max-width: 420px;
+  margin: 0 auto; 
+  text-align: left; 
+}
+
+.input-group {
+  margin-bottom: 12px;
+}
+
+.styled-input {
+  display: block;
+  width: 100%;
+  padding: 8px;
+  margin-top: 4px;
+  box-sizing: border-box;
+}
+
+.button-group {
+  display: flex;
+  gap: 8px;
+  margin-top: 16px;
+}
+
+.link-button {
+  background: none;
+  border: none;
+  color: blue;
+  text-decoration: underline;
+  cursor: pointer;
+  padding: 11px 0;
+  margin-top: 8px;
+  font-size: 0.9rem;
+}
+
+.link-button:hover {
+  color: darkblue;
+}
+
+.error-message {
+  margin-top: 12px;
+  color: crimson;
+  font-weight: 500;
+}

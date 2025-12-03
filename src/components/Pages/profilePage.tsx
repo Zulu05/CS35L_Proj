@@ -52,34 +52,38 @@ export default function ProfilePage() {
     );
   }
 
-  return (
-    <div className="profile-page">
-      <h1>Profile</h1>
-      <h3>User Information</h3>
-      <div className="user-block">
+return (
+  <div className="profile-page">
+    <h1>Profile</h1>
+
+    <div className="user-block">
+      <p>
+        <strong>Username:</strong> {user.username}
+      </p>
+
+      <p>
+        <strong>Email:</strong> {user.email}
+      </p>
+
+      <div className="matches-section">
         <p>
-          <strong>Username:</strong> {user.username}
         </p>
-        <p>
-          <strong>Email:</strong> {user.email}
-        </p>
-          <p>
-            <strong>Top matches:</strong>{" "}
-            <br />
-            {user.latestClubMatches && user.latestClubMatches.length > 0 ? (
-              <>
-              {user.latestClubMatches.slice(0, 5).map((m: any, idx: number) => (
-                <span key={idx}>
+        <strong>Top Matches</strong>
+        <br />
+
+        {user.latestClubMatches && user.latestClubMatches.length > 0 ? (
+          <ol className="matches-list">
+            {user.latestClubMatches.slice(0, 5).map((m: any, idx: number) => (
+              <li key={idx}>
                 {m.clubname} ({m.matchPercent}%)
-                <br />
-                </span>
-              ))}
-              </>
-            ) : (
-              "No matches yet."
-            )}
-          </p>
+              </li>
+            ))}
+          </ol>
+        ) : (
+          <p>No matches yet.</p>
+        )}
       </div>
     </div>
-  );
+  </div>
+);
 }

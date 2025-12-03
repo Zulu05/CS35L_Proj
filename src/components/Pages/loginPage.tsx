@@ -87,7 +87,7 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="quiz-page">
+    <div className="login-page">
       <h1>Login</h1>
       <form onSubmit={handleSubmit} style={{ maxWidth: 420, margin: '0 auto', textAlign: 'left' }}>
         <div style={{ marginBottom: 8 }}>

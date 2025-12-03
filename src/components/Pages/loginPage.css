@@ -1,44 +1,156 @@
+:root {
+  --bg: #f7f7f9;
+  --fg: #1a1a1a;
+  --card-bg: #ffffff;
+  --accent: #4b82f2;
+  --accent-soft: #cfe0ff;
+  --border: #dcdcdc;
+  --text-soft: #666;
+  --danger: #ff5f5f;
+  --input-bg: #ffffff;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #111418;
+    --fg: #f1f3f5;
+    --card-bg: #1b1f24;
+    --accent: #6ea8fe;
+    --accent-soft: #1f2f47;
+    --border: #2a2e33;
+    --text-soft: #b2b8c2;
+    --input-bg: #0d1117;
+  }
+}
+
+.login-page {
+  /* narrower than the quiz page for a better login look */
+  max-width: 420px; 
+  margin: 60px auto;
+  padding: 30px 40px;
+  
+  /* card background */
+  background: var(--card-bg);
+  border-radius: 16px;
+  box-shadow: 0 4px 18px rgba(0,0,0,0.08);
+  
+  font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+  color: var(--fg);
+  text-align: center;
+}
+
+.login-page h1 {
+  font-size: 2rem;
+  font-weight: 700;
+  margin-bottom: 25px;
+  color: var(--fg);
+}
+
 .login-form {
-  max-width: 420px;
-  margin: 0 auto; 
   text-align: left; 
 }
 
 .input-group {
-  margin-bottom: 12px;
+  margin-bottom: 16px;
+}
+
+.input-group label {
+  font-weight: 600;
+  font-size: 0.95rem;
+  color: var(--fg);
+  display: block;
+  margin-bottom: 6px;
 }
 
 .styled-input {
   display: block;
   width: 100%;
-  padding: 8px;
-  margin-top: 4px;
-  box-sizing: border-box;
+  padding: 12px;
+  
+  background: var(--input-bg);
+  border: 1px solid var(--border);
+  color: var(--fg);
+  border-radius: 10px;
+  
+  box-sizing: border-box; 
+  transition: border-color 0.2s ease;
+  font-size: 1rem;
+}
+
+.styled-input:focus {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px var(--accent-soft);
 }
 
 .button-group {
   display: flex;
-  gap: 8px;
-  margin-top: 16px;
+  gap: 12px;
+  margin-top: 25px;
 }
+
+.button-group button {
+  flex: 1;
+  padding: 12px;
+  font-size: 1rem;
+  font-weight: 600;
+  border-radius: 12px;
+  border: none;
+  cursor: pointer;
+  transition: background 0.2s ease, transform 0.1s ease;
+}
+
+button[type="submit"] {
+  background: var(--accent);
+  color: white;
+}
+button[type="submit"]:hover:not(:disabled) {
+  background: #3b6bcc;
+}
+
+/* Cancel button */
+button[type="button"] {
+background: var(--text-soft, #666); 
+  color: white;
+  border: none;
+}
+button[type="button"]:hover {
+  border-color: var(--fg);
+  color: var(--fg);
+  background: var(--bg);
+}
+
+/* button active state */
+button:active:not(:disabled) {
+  transform: scale(0.97);
+}
+
 
 .link-button {
   background: none;
   border: none;
-  color: blue;
-  text-decoration: underline;
+  color: var(--accent);
+  text-decoration: none;
   cursor: pointer;
-  padding: 11px 0;
-  margin-top: 8px;
-  font-size: 0.9rem;
+  padding: 10px 0;
+  margin-top: 15px;
+  font-size: 0.95rem;
+  font-weight: 500;
+  display: inline-block;
 }
 
 .link-button:hover {
-  color: darkblue;
+  text-decoration: underline;
+  color: var(--fg);
 }
 
 .error-message {
-  margin-top: 12px;
-  color: crimson;
-  font-weight: 500;
+  margin-top: 15px;
+  color: var(--danger);
+  font-weight: 600;
+  text-align: center;
+  background: rgba(255, 95, 95, 0.1);
+  padding: 10px;
+  border-radius: 8px;
+  font-size: 0.9rem;
 }

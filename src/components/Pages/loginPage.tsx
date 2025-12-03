@@ -1,9 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './quizPage.css';
-import User from "../../models/users";
-import { fetchUsers, addPassword, createUser } from "../../services/user.service"
-import {validatePassword, validateUsername, validateEmail} from "../../services/regex.service"
+import { fetchUsers, addPassword } from "../../services/user.service"
+import { validatePassword, validateUsername } from "../../services/regex.service"
 
 export default function LoginPage() {
   const navigate = useNavigate();
@@ -90,14 +89,14 @@ export default function LoginPage() {
   return (
     <div className="quiz-page">
       <h1>Login</h1>
-      <form onSubmit={handleSubmit} style={{ maxWidth: 420 }}>
+      <form onSubmit={handleSubmit} style={{ maxWidth: 420, margin: '0 auto', textAlign: 'left' }}>
         <div style={{ marginBottom: 8 }}>
           <label>
             Username
             <input
               value={username}
               onChange={(e) => setUsername(e.target.value)}
-              style={{ display: 'block', width: '100%', padding: 8, marginTop: 4 }}
+              style={{ display: 'block', width: '100%', padding: 8, marginTop: 4, boxSizing: 'border-box' }}
               disabled={loading}
             />
           </label>
@@ -109,7 +108,7 @@ export default function LoginPage() {
               type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              style={{ display: 'block', width: '100%', padding: 8, marginTop: 4 }}
+              style={{ display: 'block', width: '100%', padding: 8, marginTop: 4, boxSizing: 'border-box' }}
               disabled={loading}
             />
           </label>
@@ -129,13 +128,12 @@ export default function LoginPage() {
         onClick={() => navigate('/signUp')}
         disabled={loading}
         style={{
-          marginLeft: 8,
           background: 'none',
           border: 'none',
           color: 'blue',
           textDecoration: 'underline',
           cursor: 'pointer',
-          padding: 10
+          padding: 11
         }}
       >
         No account? Sign Up Here

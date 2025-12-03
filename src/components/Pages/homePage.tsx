@@ -35,20 +35,9 @@ const navigate = useNavigate();
         <>
           <button
             onClick={() => {
-              localStorage.removeItem('userId');
-              localStorage.removeItem('userName');
-              navigate('/');
-            }}
-            style={{ marginLeft: 8 }}
-          >
-            Logout
-          </button>
-          <button
-            onClick={() => {
               const id = localStorage.getItem('userId');
               navigate(id ? '/profile' : '/login');
             }}
-            style={{ marginLeft: 8 }}
           >
             Profile
           </button>
@@ -60,7 +49,6 @@ const navigate = useNavigate();
           onClick={() => {
             navigate('/login');
           }}
-          style={{ marginLeft: 8 }}
         >
           Login
         </button>

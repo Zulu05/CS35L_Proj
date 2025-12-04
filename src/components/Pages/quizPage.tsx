@@ -1,8 +1,16 @@
+// External Dependencies
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import '../css/quizPage.css';
-import { fetchTraits } from "../../services/traits.service";
+
+// Internal Dependencies
+// Models
 import { TraitDefinition } from "../../models/traits";
+
+// Services
+import { fetchTraits } from "../../services/traits.service";
+
+// Frontend
+import '../css/quizPage.css';
 
 function QuizPage() {
   const navigate = useNavigate();

@@ -1,9 +1,10 @@
-import { render, screen, fireEvent, waitFor } from "@testing-library/react"
-import { describe, it, expect, vi, beforeEach, test, Mock } from "vitest"
-import QuizPage from "../components/Pages/quizPage"
-import { UNSAFE_getPatchRoutesOnNavigationFunction } from "react-router-dom";
 import React from "react";
 import { MemoryRouter } from 'react-router-dom';
+import { render, screen, fireEvent, waitFor } from "@testing-library/react"
+import { describe, it, expect, vi, beforeEach, test, Mock } from "vitest"
+
+// Internal Dependencies
+import QuizPage from "../components/Pages/quizPage"
 import { fetchTraits } from '../services/traits.service';
 
 const mockNavigate = vi.fn();

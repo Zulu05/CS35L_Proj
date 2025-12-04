@@ -1,9 +1,14 @@
 // External Dependencies
-import express, { Request, Response } from "express";
 import { ObjectId } from "mongodb";
-import { collections } from "../services/database.service";
-import User from "../models/users";
+import express, { Request, Response } from "express";
 import bcrypt from "bcrypt";
+
+// Internal Dependencies
+// Models
+import User from "../models/users";
+
+// Services
+import { collections } from "../services/database.service";
 
 // Global Configuration
 export const usersRouter = express.Router();

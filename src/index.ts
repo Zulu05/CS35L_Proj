@@ -1,9 +1,15 @@
+// External Dependencies
 import express from "express";
+
+// Internal Dependencies
+// Services
 import { connectToDatabase } from "./services/database.service"
+
+// Routes
 import { usersRouter } from "./routes/users.router";
 import { clubsRouter } from "./routes/clubs.router";
-import { recommendationRouter } from "./routes/recommendation.router";
 import { traitsRouter } from "./routes/traits.router";
+import { recommendationRouter } from "./routes/recommendation.router";
 
 const app = express();
 const port = process.env.PORT || 3000;

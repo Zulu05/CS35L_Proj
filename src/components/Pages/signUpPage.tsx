@@ -1,9 +1,14 @@
-import React, { useState, useEffect } from 'react';
+// External Dependencies
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import '../css/quizPage.css';
-import User from "../../models/users";
-import { fetchUsers, addPassword, createUser } from "../../services/user.service"
+
+// Internal Dependencies
+// Services
+import { fetchUsers, createUser } from "../../services/user.service"
 import {validatePassword, validateUsername, validateEmail} from "../../services/regex.service"
+
+// Frontend
+import '../css/quizPage.css';
 
 export default function SignUpPage() {
   const navigate = useNavigate();

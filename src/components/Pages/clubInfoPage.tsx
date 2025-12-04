@@ -1,8 +1,16 @@
+// External Dependencies
 import React, { useEffect, useState } from "react";
-import { fetchClubs } from "../../services/club.service";
-import { fetchSingleUser } from "../../services/user.service";
 import { useNavigate } from "react-router-dom";
+
+// Internal Dependencies
+// Models
 import Club from "../../models/clubs";
+
+// Services
+import { fetchSingleUser } from "../../services/user.service";
+import { fetchClubs } from "../../services/club.service";
+
+// Frontend
 import '../css/clubInformation.css';
 
 const ClubDirectory: React.FC = () => {

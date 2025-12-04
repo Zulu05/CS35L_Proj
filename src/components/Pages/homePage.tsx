@@ -1,14 +1,9 @@
-import React, { useState } from 'react';
+// External Dependencies
+import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import Club from '../../models/clubs';
-import User from '../../models/users';
-import { fetchClubs, createClub } from '../../services/club.service';
-import { fetchUsers, createUser } from '../../services/user.service';
-import {
-  validateEmail,
-  validateUsername,
-  validatePassword,
-} from '../../services/regex.service';
+
+// Internal Dependencies
+// Frontend
 import '../css/homePage.css';
 
 function HomePage() {

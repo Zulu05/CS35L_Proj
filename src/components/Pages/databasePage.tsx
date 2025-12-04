@@ -1,9 +1,15 @@
+// External Dependncies
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import Club from "../../models/clubs";
+
+// Internal Dependencies
+// Models
 import User from "../../models/users";
-import { fetchClubs, createClub } from "../../services/club.service";
-import { fetchUsers, createUser } from "../../services/user.service";
+import Club from "../../models/clubs";
+
+// Services
+import { fetchUsers } from "../../services/user.service";
+import { fetchClubs } from "../../services/club.service";
 
 const DataBasePage: React.FC = () => {
   const navigate = useNavigate();

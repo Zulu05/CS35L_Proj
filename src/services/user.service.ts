@@ -1,4 +1,5 @@
-import { syncBuiltinESMExports } from "module";
+// Internal Dependencies
+// Models
 import User from "../models/users";
 
 export async function fetchUsers() {

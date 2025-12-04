@@ -3,11 +3,13 @@ Must be a logged in user to take the test, new users should use the create accou
 Profile saves username, email and top 5 matches from the latest quiz taken
 Club Information page shows the users match percentage with all clubs (from the latest quiz), but the ability to search by name 
 
+
 How to run and install project:
-    Run "git clone https://github.com/Zulu05/CS35L_Proj"
-    Run "npm install"
-    Create .env from the .env.example file and change "<username>" and "<password>" in "DB_CONN_STRING" to your username and password
-    Run "npm run dev" to test out the application
+    &emsp;Run "git clone https://github.com/Zulu05/CS35L_Proj"
+    &emsp;Run "npm install"
+    &emsp;Create .env from the .env.example file and change "<username>" and "<password>" in "DB_CONN_STRING" to your username and password
+    &emsp;Run "npm run dev" to test out the application
+
     
 Note: end to end testing implemeneted with cucumber and playwright, run via "npm test"
 Note: more tests can be run with the command "npm run test:unit"

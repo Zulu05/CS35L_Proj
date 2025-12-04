@@ -1,4 +1,8 @@
+// External Dependencies
 import { ObjectId } from "mongodb";
+
+// Internal Dependencies
+// Services
 import { collections } from "./database.service";
 
 /**
@@ -29,7 +33,6 @@ export function computeDistanceSimilarity(
   if (maxDistance === 0) return 0;
 
   const similarity = 1 - distance / maxDistance;
-  // Clamp to [0,1] to be safe with floating point noise
   return Math.max(0, Math.min(1, similarity));
 }
 
@@ -75,7 +78,6 @@ function normalizeScoresToMap(raw: any): Record<string, number> {
   const result: Record<string, number> = {};
 
   if (Array.isArray(raw)) {
-    // New style: array of trait objects
     for (const entry of raw) {
       if (!entry) continue;
       const id = entry.traitId ?? entry.id;
@@ -87,15 +89,12 @@ function normalizeScoresToMap(raw: any): Record<string, number> {
   }
 
   if (raw && typeof raw === "object") {
-    // Old style: plain object with traits as keys
     for (const key of Object.keys(raw)) {
       const num = Number((raw as any)[key] ?? 0);
       result[key] = isNaN(num) ? 0 : num;
     }
-    return result;
   }
 
-  // Nothing useful; return empty
   return result;
 }
 
@@ -180,7 +179,6 @@ export async function getAllRecommendations(userId: string): Promise<any[]> {
       clubname: clubDoc.clubname || clubDoc.name || "Unnamed Club",
       similarity,
       matchPercent,
-      // keep original scores shape so existing frontends don't break:
       scores: clubScoresRaw,
     };
   });

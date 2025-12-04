@@ -1,8 +1,14 @@
+// External Dependencies
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import '../css/loginPage.css';
+
+// Internal Dependencies
+// Services
 import { fetchUsers, addPassword, checkPassword } from "../../services/user.service"
 import { validatePassword, validateUsername } from "../../services/regex.service"
+
+// Frontend
+import '../css/loginPage.css';
 
 export default function LoginPage() {
   const navigate = useNavigate();

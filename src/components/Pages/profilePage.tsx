@@ -1,8 +1,15 @@
+// External Dependencies
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import "../css/profilePage.css";
-import { fetchUsers } from "../../services/user.service";
+
+// Internal Dependencies
+// Models
 import User from "../../models/users";
+import { fetchUsers } from "../../services/user.service";
+
+// Frontend
+import "../css/profilePage.css";
+
 
 export default function ProfilePage() {
   const navigate = useNavigate();

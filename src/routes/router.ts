@@ -1,8 +1,14 @@
 // External Dependencies
-import express, { Request, Response } from "express";
 import { ObjectId } from "mongodb";
-import { collections } from "../services/database.service";
+import express, { Request, Response } from "express";
+
+// Internal Dependencies
+// Models
 import Club from "../models/clubs";
+
+// Services
+import { collections } from "../services/database.service";
+
 // Global Config
 export const siteRouter = express.Router();
 

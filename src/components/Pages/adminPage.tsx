@@ -1,19 +1,17 @@
+// External Dependencies
 import React, { useEffect, useState } from 'react';
-import Club, { TraitScore } from '../../models/clubs';
+
+// Internal Dependencies
+// Models
 import User from '../../models/users';
-import {
-  fetchClubs,
-  createClub,
-  changeScores as updateClubScores,
-} from '../../services/club.service';
-import { fetchUsers, createUser } from '../../services/user.service';
-import {
-  validateEmail,
-  validateUsername,
-  validatePassword,
-} from '../../services/regex.service';
+import Club, { TraitScore } from '../../models/clubs';
 import { TraitDefinition } from '../../models/traits';
+
+// Services
+import { fetchUsers, createUser } from '../../services/user.service';
+import { fetchClubs, createClub, changeScores as updateClubScore } from '../../services/club.service';
 import { fetchTraits } from '../../services/traits.service';
+import { validateEmail, validateUsername, validatePassword } from '../../services/regex.service';
 
 function AdminPage() {
   // ERROR & LOADING STATE
@@ -51,7 +49,6 @@ function AdminPage() {
   const [editScores, setEditScores] = useState<TraitScore[]>([]);
 
   // Helper to create default scores array (TODO: add to services later?)
-
   const makeDefaultScores = (ts: TraitDefinition[]): TraitScore[] =>
     ts.map((t) => ({ traitId: t.id, value: 50 }));
 
@@ -284,7 +281,7 @@ function AdminPage() {
 
     setUpdateClubLoading(true);
     try {
-      const updated = await updateClubScores(selectedClubId, scoresToSend);
+      const updated = await updateClubScore(selectedClubId, scoresToSend);
       console.log('Updated club scores:', updated);
 
       const list = await fetchClubs();

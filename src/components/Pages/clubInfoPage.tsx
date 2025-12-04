@@ -1,8 +1,16 @@
+// External Dependencies
 import React, { useEffect, useState } from "react";
-import { fetchClubs } from "../../services/club.service";
-import { fetchSingleUser } from "../../services/user.service";
 import { useNavigate } from "react-router-dom";
+
+// Internal Dependencies
+// Models
 import Club from "../../models/clubs";
+
+// Services
+import { fetchSingleUser } from "../../services/user.service";
+import { fetchClubs } from "../../services/club.service";
+
+// Frontend
 import '../css/clubInformation.css';
 
 const ClubDirectory: React.FC = () => {
@@ -46,6 +54,16 @@ const ClubDirectory: React.FC = () => {
     })();
   }, []);
 
+// Sort clubs by match percentage (highest first)
+const sortedClubs = [...clubs].sort((a, b) => {
+  const aId = a.id?.toString();
+  const bId = b.id?.toString();
+
+  const aMatch = aId && aId in matchMap ? matchMap[aId] : -1;
+  const bMatch = bId && bId in matchMap ? matchMap[bId] : -1;
+
+  return bMatch - aMatch; // descending order
+});
  return (
   <div className="club-directory-container">
     <div className="text-center">
@@ -59,7 +77,7 @@ const ClubDirectory: React.FC = () => {
     </div>
 
     <div className="club-grid-force-2">
-      {clubs.map((club) => {
+      {sortedClubs.map((club) => {
         const clubId = club.id?.toString();
         const matchPercent =
           clubId && clubId in matchMap ? matchMap[clubId] : null;

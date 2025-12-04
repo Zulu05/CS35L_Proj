@@ -42,6 +42,14 @@ describe("HomePage tests if user not logged in", () => {
         fireEvent.click(screen.getByText('Login'));
         expect(mockNavigate).toHaveBeenCalledWith('/login');
     })
+    test("quiz page button navigates to /login", () =>{
+        fireEvent.click(screen.getByText('Start Quiz'));
+        expect(mockNavigate).toHaveBeenCalledWith('/login');
+    })
+    test("club info button navigates to /clubInfo", () =>{
+        fireEvent.click(screen.getByText('Club Information'));
+        expect(mockNavigate).toHaveBeenCalledWith('/clubInfo');
+    })
 })
 
 describe("HomePage tests if user is logged in", () => {
@@ -65,6 +73,18 @@ describe("HomePage tests if user is logged in", () => {
     })
     test("renders profile button", ()=>{
         expect(screen.getByText('Profile')).toBeInTheDocument();
+    })
+    test("quiz page button navigates to /quiz", () =>{
+        fireEvent.click(screen.getByText('Start Quiz'));
+        expect(mockNavigate).toHaveBeenCalledWith('/quiz');
+    })
+    test("club info button navigates to /clubInfo", () =>{
+        fireEvent.click(screen.getByText('Club Information'));
+        expect(mockNavigate).toHaveBeenCalledWith('/clubInfo');
+    })
+    test("profile button navigates to /profile", () =>{
+        fireEvent.click(screen.getByText('Profile'));
+        expect(mockNavigate).toHaveBeenCalledWith('/profile');
     })
 
 })

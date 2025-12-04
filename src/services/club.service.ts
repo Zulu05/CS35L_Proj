@@ -1,5 +1,7 @@
 // src/services/club.service.ts
 
+// Internal Dependencies
+// Models
 import Club, { TraitScore } from '../models/clubs';
 
 const DEFAULT_TRAITS = ['social', 'academic', 'leadership', 'creativity'];

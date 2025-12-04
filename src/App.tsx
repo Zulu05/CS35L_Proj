@@ -1,4 +1,8 @@
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+// External Dependencies
+import React from 'react';
+import { Routes, Route } from 'react-router-dom';
+
+// Internal Dependencies
 import HomePage from './components/Pages/homePage';
 import QuizPage from './components/Pages/quizPage';
 import MatchesPage from './components/Pages/matchesPage';
@@ -10,9 +14,8 @@ import ProfilePage from './components/Pages/profilePage';
 import AdminPage from './components/Pages/adminPage';
 import Banner from './components/Pages/banner';
 
-
+// Frontend
 import './App.css';
-import React, { useEffect, useState } from 'react';
 
 
 function App() {

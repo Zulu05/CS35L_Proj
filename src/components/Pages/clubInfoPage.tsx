@@ -1,100 +1,157 @@
-import React, { useEffect, useState } from "react";
-import { fetchClubs } from "../../services/club.service";
-import { fetchSingleUser } from "../../services/user.service";
+// External Dependencies
+import React, { useEffect, useState, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
+
+// Internal Dependencies
+// Models
 import Club from "../../models/clubs";
 
-const ClubDirectory: React.FC = () => {
-  const navigate = useNavigate();
+// Services
+import { fetchSingleUser } from "../../services/user.service";
+import { fetchClubs } from "../../services/club.service";
+
+// Frontend
+import '../css/clubInformation.css';
+
+// Type Definitions
+type MatchMap = Record<string, number>;
+
+// Helper:
+// Transforms raw user match data into a quick lookup map (ClubID -> Percentage)
+// Isolated for testability and readability.
+function extractMatchMap(user: any): MatchMap {
+  if (!user?.latestClubMatches || !Array.isArray(user.latestClubMatches)) {
+    return {};
+  }
+
+  const map: MatchMap = {};
+  
+  user.latestClubMatches.forEach((match: any) => {
+    // Normalizing club ID access 
+    const clubId = match.clubId?.toString() 
+                ?? match.club?.id?.toString();
+    
+    if (!clubId) return;
+
+    // Normalizing percentage vs similarity decimal (backward compatibility)
+    const score = typeof match.matchPercent === "number"
+      ? match.matchPercent
+      : Math.round((match.similarity ?? 0) * 100);
+
+    map[clubId] = score;
+  });
+
+  return map;
+}
+
+// Hook: data fetching for returning raw data needed for view
+function useClubData() {
   const [clubs, setClubs] = useState<Club[]>([]);
-  const [matchMap, setMatchMap] = useState<Record<string, number>>({});
+  const [matchMap, setMatchMap] = useState<MatchMap>({});
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const userId = localStorage.getItem("userId");
+    const loadData = async () => {
+      try {
+        const userId = localStorage.getItem("userId");
+        
+        const [clubList, user] = await Promise.all([
+          fetchClubs(),
+          userId ? fetchSingleUser(userId) : Promise.resolve(null)
+        ]);
 
-    (async () => {
-      // 1) Load all clubs
-      const clubList = await fetchClubs();
-      setClubs(clubList);
+        setClubs(clubList);
+        setMatchMap(extractMatchMap(user));
+      } catch (error) {
+        console.error("Failed to load directory data", error);
+      } finally {
+        setLoading(false);
+      }
+    };
 
-      // If not logged in, we can't show matches
-      if (!userId) return;
-
-      // 2) Load the current user (with latestClubMatches)
-      const user = await fetchSingleUser(userId);
-      if (!user || !user.latestClubMatches) return;
-
-      // 3) Build a map: clubId -> matchPercent
-      const map: Record<string, number> = {};
-      (user.latestClubMatches as any[]).forEach((m) => {
-        const cid =
-          m.clubId?.toString?.() ??
-          m.clubId ??
-          m.club?.id?.toString?.();
-        if (!cid) return;
-
-        const percent =
-          typeof m.matchPercent === "number"
-            ? m.matchPercent
-            : Math.round((m.similarity ?? 0) * 100);
-
-        map[cid] = percent;
-      });
-
-      setMatchMap(map);
-    })();
+    loadData();
   }, []);
 
+  return { clubs, matchMap, loading };
+}
+
+// Main component
+const ClubDirectory: React.FC = () => {
+  const navigate = useNavigate();
+  const { clubs, matchMap } = useClubData();
+  const [searchTerm, setSearchTerm] = useState("");
+
+  const displayedClubs = useMemo(() => {
+    // 1. Sort by Match Score (Descending)
+    const sorted = [...clubs].sort((a, b) => {
+      const scoreA = matchMap[a.id?.toString() ?? ""] ?? -1;
+      const scoreB = matchMap[b.id?.toString() ?? ""] ?? -1;
+      return scoreB - scoreA;
+    });
+
+    // 2. Filter by Search Term
+    if (!searchTerm) return sorted;
+    
+    return sorted.filter(c => 
+      c.clubname.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+  }, [clubs, matchMap, searchTerm]);
+
   return (
-    <div className="min-h-screen bg-gray-100 py-10 px-6">
-      <div className="max-w-5xl mx-auto text-center mb-10">
-        <h1 className="text-4xl font-bold text-gray-800 mb-3">
-          Club Directory
-        </h1>
-        <p className="text-gray-600">
+    <div className="club-directory-container">
+      <header className="text-center">
+        <h1 className="club-header-title">Club Directory</h1>
+        <p className="club-header-subtitle">
           Discover clubs on campus and find one that matches your interests.
         </p>
-      </div>
 
-      <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-        {clubs.map((club) => {
-          const clubId = club.id?.toString();
-          const matchPercent =
-            clubId && clubId in matchMap ? matchMap[clubId] : null;
+        <div className="search-container">
+          <input
+            type="text"
+            placeholder="Search for a club..."
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            className="club-search-input"
+            aria-label="Search clubs"
+          />
+        </div>
+      </header>
 
-          return (
-            <div
-              key={clubId}
-              className="bg-white rounded-xl shadow-md p-6 text-left hover:shadow-lg transition"
-            >
-              <h2 className="text-xl font-semibold text-gray-800 mb-2">
-                {club.clubname}
-              </h2>
-
-              {matchPercent !== null && (
-                <p className="text-sm font-normal text-gray-600 mb-2">
-                  Match Score: {matchPercent}%
-                </p>
-              )}
-
-              <div className="flex flex-wrap gap-3">
-                <a
-                  href={`mailto:${club.email}`}
-                  className="bg-blue-600 text-white px-4 py-2 rounded-md text-sm hover:bg-blue-700 transition"
-                >
-                  Contact
-                </a>
-              </div>
+      <main className="club-grid-force-2">
+        {displayedClubs.length > 0 ? (
+          displayedClubs.map((club) => (
+            <ClubCard 
+              key={club.id?.toString()} 
+              club={club} 
+              matchScore={matchMap[club.id?.toString() ?? ""]} 
+            />
+          ))
+        ) : (
+            <div style={{ gridColumn: "span 2", textAlign: "center", color: "var(--text-soft)", padding: "2rem" }}>
+              No clubs found matching "{searchTerm}"
             </div>
-          );
-        })}
-      </div>
-
+        )}
+      </main>
+      
       <button className="back-button" onClick={() => navigate("/")}>
         Back to Home
       </button>
     </div>
   );
 };
+
+// Sub-Component for individual club cards
+
+const ClubCard: React.FC<{ club: Club; matchScore?: number }> = ({ club, matchScore }) => (
+  <div className="club-card">
+    <h2>{club.clubname}</h2>
+    {matchScore !== undefined && (
+      <p className="match-score">Match Score: {matchScore}%</p>
+    )}
+    <a href={`mailto:${club.email}`} className="club-contact-btn">
+      Contact
+    </a>
+  </div>
+);
 
 export default ClubDirectory;

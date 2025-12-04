@@ -6,7 +6,7 @@ return usernameRegex.test(username);
 }
 
 export function validateEmail(email: string): boolean { //TODO: double check regex
-const emailRegex = new RegExp('[a-zA-Z0-9]+([a-zA-Z0-9.-]*[a-zA-Z0-9])?@[a-zA-Z0-9]+([a-zA-Z0-9.-]*[a-zA-Z0-9])?\.[a-zA-Z]{2,}')
+const emailRegex = /^[a-zA-Z0-9]+([a-zA-Z0-9.-]*[a-zA-Z0-9])?@[a-zA-Z0-9]+([a-zA-Z0-9.-]*[a-zA-Z0-9])?\.[a-zA-Z]{2,}$/
 
 return emailRegex.test(email);
 }

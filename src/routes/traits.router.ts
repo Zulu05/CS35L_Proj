@@ -1,8 +1,12 @@
-// src/routes/traits.router.ts
-
+// External Dependencies
 import express, { Request, Response } from "express";
-import { collections } from "../services/database.service";
+
+// Internal Dependencies
+// Models
 import { TraitDefinition } from "../models/traits";
+
+// Services
+import { collections } from "../services/database.service";
 
 export const traitsRouter = express.Router();
 traitsRouter.use(express.json());

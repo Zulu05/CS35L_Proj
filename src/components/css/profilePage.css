@@ -1,0 +1,143 @@
+/*
+AI generated CSS. Used CHATGPT 5
+Prompt:
+Imagine you are a software engineer with 160 IQ making a quiz to match users to clubs at UCLA. One of the main metrics of your 
+success is how visually appealing your profile page is. Please make an elegant and attractive CSS file for the profilePage bellow 
+using UCLA colors for both light and dark modes. Remember it should work in all browsers including chrome in dark mode
+
+
+/* ----------------------------------------------------
+   UCLA THEME COLORS (light + dark)
+   Primary UCLA Blue:   #2774AE
+   UCLA Gold:           #FFD100
+-----------------------------------------------------*/
+
+:root {
+  --ucla-blue: #2774ae;
+  --ucla-blue-soft: #5fa3d7;
+  --ucla-gold: #ffd100;
+
+  /* Light mode */
+  --bg: #f8fafc;
+  --fg: #1a1a1a;
+  --card-bg: #ffffff;
+  --text-soft: #666;
+  --border: #dcdcdc;
+  --shadow: 0 4px 18px rgba(0, 0, 0, 0.08);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #0f1216;
+    --fg: #e5e7eb;
+    --card-bg: #1b1f24;
+    --text-soft: #b2b8c2;
+    --border: #2b2f33;
+    --shadow: 0 4px 18px rgba(0, 0, 0, 0.45);
+  }
+}
+
+/* ----------------------------------------------------
+   PAGE CONTAINER
+-----------------------------------------------------*/
+
+.profile-page {
+  max-width: 700px;
+  margin: 50px auto;
+  padding: 30px;
+  background: var(--card-bg);
+  color: var(--fg);
+  border-radius: 18px;
+  box-shadow: var(--shadow);
+  font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+
+  text-align: left;  /* Prevent centering EVERYTHING */
+}
+
+/* ----------------------------------------------------
+   HEADERS
+-----------------------------------------------------*/
+
+.profile-page h1 {
+  font-size: 2.3rem;
+  font-weight: 800;
+  text-align: center;
+  margin-bottom: 25px;
+  color: var(--ucla-blue);
+}
+
+.profile-page h3 {
+  margin-top: 30px;
+  font-size: 1.3rem;
+  font-weight: 600;
+}
+
+/* ----------------------------------------------------
+   USER INFO BLOCK
+-----------------------------------------------------*/
+
+.user-block {
+  background: var(--card-bg);
+  padding: 20px 25px;
+  border-radius: 14px;
+  border: 1px solid var(--border);
+}
+
+.user-block strong {
+  color: var(--ucla-blue);
+}
+
+
+.user-block p {
+  font-size: 1.1rem;
+  margin-bottom: 10px;
+  color: var(--fg) !important;   /* Fix white text in dark mode */
+}
+
+/* ----------------------------------------------------
+   MATCHES SECTION
+-----------------------------------------------------*/
+
+.matches-section {
+  margin-top: 25px;
+}
+
+/* Title */
+.matches-section strong {
+  font-size: 1.3rem;
+  color: var(--ucla-blue);
+}
+
+/* Ordered list */
+.matches-list {
+  margin-top: 10px;
+  margin-left: 20px;
+  padding-left: 18px;
+
+  font-size: 0.95rem; /* smaller font */
+  text-align: left;   /* ensure NOT centered */
+  color: var(--fg);
+}
+
+.matches-list li {
+  margin-bottom: 6px;
+}
+
+/* Highlight % in UCLA blue */
+.matches-list li::marker {
+  color: var(--ucla-blue);
+  font-weight: 700;   /* makes 1. 2. 3. look bold/clean */
+}
+/* ----------------------------------------------------
+   RESPONSIVE DESIGN
+-----------------------------------------------------*/
+
+@media (max-width: 600px) {
+  .profile-page {
+    padding: 20px;
+  }
+
+  .user-block {
+    padding: 15px 18px;
+  }
+}

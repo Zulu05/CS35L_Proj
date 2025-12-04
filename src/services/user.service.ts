@@ -163,3 +163,12 @@ export async function checkPassword(username: string, password: string) {
     return null;
   }
 }
+
+// helper for some shapes
+export function userIdFrom(u: any) {
+  if (!u) return null;
+  if (u._id) return u._id;
+  if (u.id) return u.id;
+  if (u.insertedId) return u.insertedId;
+  return null;
+}

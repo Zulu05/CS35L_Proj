@@ -262,8 +262,8 @@ usersRouter.patch("/:id/quiz", async (req: Request, res: Response) => {
 });
 
 // DELETE
-usersRouter.delete("/:id", async (req: Request, res: Response) => {
-  const id = req?.params?.id;
+usersRouter.delete("/:username", async (req: Request, res: Response) => {
+  const username = req.params.username;
 
   try {
     if (!collections.users) {
@@ -271,15 +271,22 @@ usersRouter.delete("/:id", async (req: Request, res: Response) => {
       return;
     }
 
-    const query = { _id: new ObjectId(id) };
-    const result = await collections.users.deleteOne(query);
+    const user = await collections.users.findOne({ username });
+
+
+    if (!user) {
+      res.status(404).send(`User with username "${username}" does not exist`);
+      return;
+    }
+
+    const result = await collections.users.deleteOne(user);
 
     if (result && result.deletedCount) {
-      res.status(202).send(`Successfully removed user with id ${id}`);
+      res.status(202).send(`Successfully removed user with username ${username}`);
     } else if (!result) {
-      res.status(400).send(`Failed to remove user with id ${id}`);
+      res.status(400).send(`Failed to remove user with username ${username}`);
     } else if (!result.deletedCount) {
-      res.status(404).send(`User with id ${id} does not exist`);
+      res.status(404).send(`User with username ${username} does not exist`);
     }
   } catch (error: unknown) {
     const msg = error instanceof Error ? error.message : String(error);

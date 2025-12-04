@@ -5,8 +5,8 @@ const usernameRegex = /^[a-zA-Z0-9]{3,}$/
 return usernameRegex.test(username);
 }
 
-export function validateEmail(email: string): boolean { //TODO: double check regex
-const emailRegex = /^[a-zA-Z0-9]+([a-zA-Z0-9.-]*[a-zA-Z0-9])?@[a-zA-Z0-9]+([a-zA-Z0-9.-]*[a-zA-Z0-9])?\.[a-zA-Z]{2,}$/
+export function validateEmail(email: string): boolean {
+const emailRegex = /^[a-zA-Z0-9]+([a-zA-Z0-9._+-]*[a-zA-Z0-9])?@[a-zA-Z0-9]+([a-zA-Z0-9.-]*[a-zA-Z0-9])?\.[a-zA-Z]{2,}$/
 
 return emailRegex.test(email);
 }

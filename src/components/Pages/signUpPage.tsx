@@ -87,7 +87,6 @@ export default function SignUpPage() {
             <input
               value={username}
               onChange={(e) => setUsername(e.target.value)}
-              style={{ display: 'block', width: '100%', padding: 8, marginTop: 4 }}
               disabled={loading}
             />
           </label>
@@ -98,7 +97,6 @@ export default function SignUpPage() {
             <input
               value={email} 
               onChange={(e) => setEmail(e.target.value)}
-              style={{ display: 'block', width: '100%', padding: 8, marginTop: 4 }}
               disabled={loading}
             />
           </label>
@@ -110,7 +108,6 @@ export default function SignUpPage() {
               type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              style={{ display: 'block', width: '100%', padding: 8, marginTop: 4 }}
               disabled={loading}
             />
           </label>

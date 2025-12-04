@@ -96,7 +96,6 @@ export default function LoginPage() {
             <input
               value={username}
               onChange={(e) => setUsername(e.target.value)}
-              style={{ display: 'block', width: '100%', padding: 8, marginTop: 4, boxSizing: 'border-box' }}
               disabled={loading}
             />
           </label>
@@ -108,7 +107,6 @@ export default function LoginPage() {
               type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              style={{ display: 'block', width: '100%', padding: 8, marginTop: 4, boxSizing: 'border-box' }}
               disabled={loading}
             />
           </label>

@@ -23,11 +23,10 @@ usersRouter.get("/", async (_req: Request, res: Response) => {
       return;
     }
     
-    // get user from database
+    // get user from database and send it
     const users = (await collections.users.find({}).toArray()) as unknown as User[];
-
-    // successful
     res.status(200).send(users);
+
   } catch (error) {
     res.status(500).send((error as Error).message);
   }
@@ -36,6 +35,7 @@ usersRouter.get("/", async (_req: Request, res: Response) => {
 // POST
 usersRouter.post("/", async (req: Request, res: Response) => {
   try {
+    // get the inputted username, email, and password from request
     const { username, email, password } = req.body;
 
     // check if database initialized / we have collection of users
@@ -50,7 +50,7 @@ usersRouter.post("/", async (req: Request, res: Response) => {
       return;
     }
 
-    // hash the password
+    // hash the password that was inputted
     const hashedPassword = await bcrypt.hash(password, 12);
 
     // create a new user with the hashed password
@@ -134,9 +134,11 @@ usersRouter.post("/login", async (req: Request, res: Response) => {
 
 // PUT
 usersRouter.put("/:id", async (req: Request, res: Response) => {
+  // get the id sent by the user request
   const id = req?.params?.id;
 
   try {
+    // get an updated user from the inputs of the user request
     const updatedUser: User = req.body as User;
 
     if (!collections.users) {
@@ -144,8 +146,8 @@ usersRouter.put("/:id", async (req: Request, res: Response) => {
       return;
     }
 
+    // update the user with that id in the db
     const query = { _id: new ObjectId(id) };
-
     const result = await collections.users.updateOne(query, { $set: updatedUser });
 
     if (result && result.matchedCount) {
@@ -263,6 +265,7 @@ usersRouter.patch("/:id/quiz", async (req: Request, res: Response) => {
 
 // DELETE
 usersRouter.delete("/:username", async (req: Request, res: Response) => {
+  // get the username that was inputted
   const username = req.params.username;
 
   try {
@@ -271,6 +274,7 @@ usersRouter.delete("/:username", async (req: Request, res: Response) => {
       return;
     }
 
+    // find a user in the db with that username
     const user = await collections.users.findOne({ username });
 
 
@@ -279,6 +283,7 @@ usersRouter.delete("/:username", async (req: Request, res: Response) => {
       return;
     }
 
+    // delete that user from the db
     const result = await collections.users.deleteOne(user);
 
     if (result && result.deletedCount) {
@@ -297,6 +302,7 @@ usersRouter.delete("/:username", async (req: Request, res: Response) => {
 
 // PATCH (Add latest matches to the most recent quiz)
 usersRouter.patch("/:id/quiz/latest-matches", async (req: Request, res: Response) => { 
+  // get the inputs from the request
     const userId = req.params.id;
     const { clubMatches } = req.body;
 
@@ -320,6 +326,7 @@ usersRouter.patch("/:id/quiz/latest-matches", async (req: Request, res: Response
         return res.status(400).send(`Invalid user id format: ${userId}`);
       }
 
+      // update the db with the new results / club matches
       const result = await collections.users.updateOne(
         { _id: objectId },
         {

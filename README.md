@@ -25,3 +25,4 @@ How to run and install project:
     Run "npm run dev" to test out the application
 
 Note: end to end testing implemeneted with cucumber and playwright, run via "npm test"
+Note: more tests can be run with the command "npm run test:unit"

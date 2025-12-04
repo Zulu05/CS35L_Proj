@@ -21,14 +21,14 @@ export default function SignUpPage() {
       setError('Username must be at least 3 alphanumeric characters');
       return;
     }
-    // Basic password validation for creation: at least 8 chars
-    if (!password || !validatePassword(password)) {
-      setError('Password must be at least 8 characters with at least one digit, one upper and lower case letter, and one special character (@$!%*?&)');
-      return;
-    }
     // Validate email presence and format
     if (!email.trim() || !validateEmail(email)) {
       setError('Please enter a valid email address');
+      return;
+    }
+    // Basic password validation for creation: at least 8 chars
+    if (!password || !validatePassword(password)) {
+      setError('Password must be at least 8 characters with at least one digit, one upper and lower case letter, and one special character (@$!%*?&)');
       return;
     }
 

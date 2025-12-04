@@ -114,4 +114,7 @@ test ("validateEmail", () => {
     expect(validateEmail('aaa@g.ucla.edu')).toBe(true) // different domain
     expect(validateEmail('123aaa@g.ucla.edu')).toBe(true) // numbers start with different domain
     expect(validateEmail('testing----aaa@gmail.com')).toBe(true) // multiple dashes with only alphabet
+    expect(validateEmail('john_doe@gmail.com')).toBe(true) // underscores
+    expect(validateEmail('john+newsletter@gmail.com')).toBe(true) // plus aliases
+    expect(validateEmail('user@domain.technologies')).toBe(true) // long TLDs
 })

@@ -13,9 +13,11 @@ import { collections } from "../services/database.service";
 export const siteRouter = express.Router();
 
 siteRouter.use(express.json());
+
 // GET
 siteRouter.get("/", async (_req: Request, res: Response) => {
     try {
+        // geting the clubs from the db
        const clubs = (await collections.clubs!.find({}).toArray()) as unknown as  Club[];
 
         res.status(200).send(clubs);
@@ -25,15 +27,17 @@ siteRouter.get("/", async (_req: Request, res: Response) => {
 });
 
 siteRouter.get("/:id", async (req: Request, res: Response) => {
+    // get the id from the request
     const id = req?.params?.id;
 
     try {
-        
+        // find the clubs that match that id in the db
         const query = { _id: new ObjectId(id) };
-        const game = (await collections.clubs!.findOne(query)) as unknown as Club;
+        const club = (await collections.clubs!.findOne(query)) as unknown as Club;
 
-        if (game) {
-            res.status(200).send(game);
+        // send the club if it exists
+        if (club) {
+            res.status(200).send(club);
         }
     } catch (error) {
         res.status(404).send(`Unable to find matching document with id: ${req.params.id}`);
@@ -42,12 +46,13 @@ siteRouter.get("/:id", async (req: Request, res: Response) => {
 // POST
 siteRouter.post("/", async (req: Request, res: Response) => {
     try {
+        // get the club that was sent from request and insert into db
         const newClub = req.body as Club;
         const result = await collections.clubs!.insertOne(newClub);
 
         result
-            ? res.status(201).send(`Successfully created a new game with id ${result.insertedId}`)
-            : res.status(500).send("Failed to create a new game.");
+            ? res.status(201).send(`Successfully created a new club with id ${result.insertedId}`)
+            : res.status(500).send("Failed to create a new club.");
     } catch (error: any) {
         console.error(error);
         res.status(400).send(error.message);
@@ -55,16 +60,19 @@ siteRouter.post("/", async (req: Request, res: Response) => {
 });
 // PUT
 siteRouter.put("/:id", async (req: Request, res: Response) => {
+    // get the id from the request
     const id = req?.params?.id;
 
     try {
+        // get the new club from the requirements 
         const updatedClub: Club = req.body as Club;
         const query = { _id: new ObjectId(id) };
       
+        // set the club with that id with the updates
         const result = await collections.clubs!.updateOne(query, { $set: updatedClub });
 
         result
-            ? res.status(200).send(`Successfully updated game with id ${id}`)
+            ? res.status(200).send(`Successfully updated club with id ${id}`)
             : res.status(304).send(`Club with id: ${id} not updated`);
     } catch (error: any) {
         console.error(error.message);
@@ -73,16 +81,18 @@ siteRouter.put("/:id", async (req: Request, res: Response) => {
 });
 // DELETE
 siteRouter.delete("/:id", async (req: Request, res: Response) => {
+    // get the id from the user request
     const id = req?.params?.id;
 
     try {
+        // delete the club with that id
         const query = { _id: new ObjectId(id) };
         const result = await collections.clubs!.deleteOne(query);
 
         if (result && result.deletedCount) {
-            res.status(202).send(`Successfully removed game with id ${id}`);
+            res.status(202).send(`Successfully removed club with id ${id}`);
         } else if (!result) {
-            res.status(400).send(`Failed to remove game with id ${id}`);
+            res.status(400).send(`Failed to remove club with id ${id}`);
         } else if (!result.deletedCount) {
             res.status(404).send(`Club with id ${id} does not exist`);
         }

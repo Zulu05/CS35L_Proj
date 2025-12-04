@@ -146,13 +146,13 @@ const BASE_URL = "http://localhost:5173";
             await this.page.goto(`${BASE_URL}/signUp`);
          });
        
-  //  ? When they enter a valid username, email, and password
+  //  ? When they enter an used username, valid email, and valid password
        
-         When('they enter a valid username, email, and password', async function () {
+         When('they enter an used username, valid email, and valid password', async function () {
             const login = this.page.getByLabel('Username'); 
             const email = this.page.getByLabel('Email')
             const password = this.page.getByLabel('Password');
-            await login.fill('wUsername');
+            await login.fill('cucumbertest');
             await email.fill('testing@gmail.com');
             await password.fill('Cucumber1!');
          });
@@ -175,21 +175,19 @@ const BASE_URL = "http://localhost:5173";
        
   //  ? And they should be logged in
        
-         Then('they should be logged in', async function () {
-            await expect (this.page.getByText("wUsername")).toBeVisible();
-         });
+        //  Then('they should be logged in', async function () {
+        //     await expect (this.page.getByText("wUsername")).toBeVisible();
+        //  });
        
   //  ? And they should be redirected to the quiz page
        
-         Then('they should be redirected to the quiz page', async function () {
-            await expect(this.page).toHaveURL(/\/quiz/);
+         Then('they should stay on the sign up page', async function () {
+            await expect(this.page).toHaveURL(/\/signUp/);
          });
 
-  //  ?     And they should be able to be deleted
+  //  ?     And they should receive an error message
 
-        Then('they should be able to be deleted', async function () {
-            const deleted = deleteUser('wUsername');
-            if (!deleted)
-              throw new Error('User has not been deleted'); 
+        Then('they should receive an error message', async function () {
+          await expect (this.page.getByText("User already exists, try logining in instead")).toBeVisible();
          });
        

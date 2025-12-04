@@ -25,10 +25,9 @@ Scenario: Login fails with non-existing username
     Then they should see an error message saying the login failed
     And get a suggestion to go to the sign up page
 
-  Scenario: Successful sign up creates a new account
+  Scenario: Invalid email does not lead to sign up
     Given a user is on the sign up page
-    When they enter a valid username, email, and password
+    When they enter an used username, valid email, and valid password
     And they press the sign up button
-    Then they should be logged in
-    And they should be redirected to the quiz page
-    And they should be able to be deleted
+    Then they should stay on the sign up page
+    And they should receive an error message

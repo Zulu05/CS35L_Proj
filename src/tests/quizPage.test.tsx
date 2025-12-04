@@ -54,7 +54,7 @@ global.fetch = vi.fn().mockResolvedValueOnce({
 });
 
 
-  describe("QuizPage tests if user is not logged in", () => {
+describe("QuizPage tests if user is not logged in", () => {
     beforeEach(()=>{
         vi.clearAllMocks();
         localStorage.clear();

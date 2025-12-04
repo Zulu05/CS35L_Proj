@@ -52,7 +52,7 @@ export default function SignUpPage() {
         user = reUsers.find((u: any) => u.username === username);
       } else {
         // User exists
-                throw new Error('User already exists, try logining in instead');
+          throw new Error('User already exists, try logining in instead');
       }
 
       if (!user) {

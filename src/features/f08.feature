@@ -1,24 +1,30 @@
-Feature: F08 - Club Directory Search and Filter
+Feature: F08 - More User Authentication for Logging Out
 
   As a UCLA student
-  I want to search and filter the club directory
-  So that I can find clubs that match my specific criteria
+  I want to be able to log out of the app
+  So that my quiz results and club matches are saved under my account but others can't access it
 
-  Background:
-    Given I am on the club directory page
+  Scenario: Test completed successfully to see results
+    Given the user has logged in successfully
+    And they are on the quiz page
+    When they press the Submit button
+    Then they should be taken to the results page
+    And they should see their club matches
 
-  Scenario: Search for a club by name
-    When I enter "Chess" into the search bar
-    Then I should see "Chess Club at UCLA" visible
-    And I should not see "Bruin Birding Club" visible
+  Scenario: After taking test, results should be saved to the profile from banner
+    Given the user has logged in successfully
+    When they press the their username button
+    Then they should see their top club matches
 
-  Scenario: Filter clubs by specific attribute threshold
-    When I click the "Filter by Attributes" button
-    And I set the "academic" filter slider to 60
-    Then I should see "Archaeology Club" visible
+  Scenario: User is able to take quiz and log out of their account
+    Given the user has logged in successfully
+    And they are on the quiz page
+    When they press the Submit button
+    And they should be able to press the Logout button
+    Then they should get redirected to the Home Page
 
-  Scenario: Resetting filters
-    When I click the "Filter by Attributes" button
-    And I click the "Reset Filters" button
-    Then I should see "Chess Club at UCLA" visible
-    And I should see "Bruin Birding Club" visible
+  Scenario: User is able to log out of their account
+    Given the user has logged in successfully
+    When they should be able to press the Logout button
+    Then they should get redirected to the Home Page
+    And no longer access their profile

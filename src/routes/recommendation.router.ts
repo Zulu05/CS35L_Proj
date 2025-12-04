@@ -13,6 +13,7 @@ recommendationRouter.use(express.json());
  * Returns top N matching clubs sorted by chosen correlation score.
  */
 recommendationRouter.get("/:userId/top", async (req: Request, res: Response) => {
+  // get the user request and set as limited variables
   const userId = req.params.userId;
   const limitParam = req.query.limit as string | undefined;
   const limit = limitParam ? parseInt(limitParam, 10) : 5;
@@ -23,6 +24,7 @@ recommendationRouter.get("/:userId/top", async (req: Request, res: Response) => 
   }
 
   try {
+    // get the recommendations based on the user id with the inputs
     const top = await getTopNRecommendations(userId, limit);
     res.status(200).json({ results: top });
   } catch (err: any) {
@@ -33,6 +35,7 @@ recommendationRouter.get("/:userId/top", async (req: Request, res: Response) => 
 
 
 recommendationRouter.get("/:userId/all", async (req: Request, res: Response) => {
+  // get the user id from request
   const userId = req.params.userId;
 
   if (!userId) {
@@ -41,8 +44,10 @@ recommendationRouter.get("/:userId/all", async (req: Request, res: Response) => 
   }
 
   try {
+    // get all the recommendations for that user id
     const all = await getAllRecommendations(userId);
     res.status(200).json({ results: all });
+    
   } catch (err: any) {
     console.error("Recommendation error:", err?.message ?? err);
     res.status(500).json({ error: err?.message ?? "Internal server error" });

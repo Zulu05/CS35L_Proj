@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 
 // Internal Dependencies
 // Services
-import { fetchUsers, addPassword, checkPassword } from "../../services/user.service"
+import { fetchUsers, addPassword, checkPassword, userIdFrom } from "../../services/user.service"
 import { validatePassword, validateUsername } from "../../services/regex.service"
 
 // Frontend
@@ -32,6 +32,7 @@ export default function LoginPage() {
       return;
     }
 
+    //try catch block handles login behavior and stores username and id
     setLoading(true);
     try {
       // Try to find an existing user by username
@@ -68,12 +69,8 @@ export default function LoginPage() {
         }
       }
 
-      if (!user) {
-        throw new Error('Unable to locate or create user');
-      }
-
       // Save user id in localStorage for later quiz submission
-      const id = user.id ?? user.id ?? userIdFrom(user);
+      const id = user?.id ?? user?.id ?? userIdFrom(user);
       if (!id) throw new Error('User has no id');
       localStorage.setItem('userId', String(id));
       console.log(id);
@@ -89,15 +86,6 @@ export default function LoginPage() {
     }
   };
 
-  // helper for some shapes
-  function userIdFrom(u: any) {
-    if (!u) return null;
-    if (u._id) return u._id;
-    if (u.id) return u.id;
-    if (u.insertedId) return u.insertedId;
-    return null;
-  }
-
   return (
     <div className="login-page">
       <h1>Login</h1>
@@ -108,7 +96,6 @@ export default function LoginPage() {
             <input
               value={username}
               onChange={(e) => setUsername(e.target.value)}
-              style={{ display: 'block', width: '100%', padding: 8, marginTop: 4, boxSizing: 'border-box' }}
               disabled={loading}
             />
           </label>
@@ -120,7 +107,6 @@ export default function LoginPage() {
               type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              style={{ display: 'block', width: '100%', padding: 8, marginTop: 4, boxSizing: 'border-box' }}
               disabled={loading}
             />
           </label>
@@ -140,12 +126,7 @@ export default function LoginPage() {
         onClick={() => navigate('/signUp')}
         disabled={loading}
         style={{
-          background: 'none',
-          border: 'none',
-          color: 'blue',
           textDecoration: 'underline',
-          cursor: 'pointer',
-          padding: 11
         }}
       >
         No account? Sign Up Here

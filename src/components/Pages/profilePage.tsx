@@ -18,16 +18,16 @@ export default function ProfilePage() {
 
   useEffect(() => {
     async function loadUser() {
-      const storedId = localStorage.getItem("userId"); // string | null
+      const userId = typeof window !== 'undefined' ? localStorage.getItem('userId') : null; // string | null
 
-      if (!storedId) {
+      if (!userId) {
         setError("No logged-in user.");
         return;
       }
 
       try {
         const users = await fetchUsers();
-        const data = users.find((u: any) => u.id === storedId);
+        const data = users.find((u: any) => u.id === userId);
         // if getUserById returns a class instance, you can still store it in state
         if (!data) {
           setError("User not found.");

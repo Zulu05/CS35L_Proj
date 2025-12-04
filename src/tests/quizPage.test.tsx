@@ -1,6 +1,6 @@
 import React from "react";
 import { MemoryRouter } from 'react-router-dom';
-import { render, screen, fireEvent, waitFor } from "@testing-library/react"
+import { render, screen, fireEvent, waitFor, act } from "@testing-library/react"
 import { describe, it, expect, vi, beforeEach, test, Mock } from "vitest"
 
 // Internal Dependencies
@@ -16,8 +16,8 @@ vi.mock('react-router-dom', async (importOriginal) => {
     }
 });
 
-const renderQuiz = () =>
-    render(<MemoryRouter><QuizPage/></MemoryRouter>);
+const renderQuiz = async () =>
+    await act( async ()=>{render(<MemoryRouter><QuizPage/></MemoryRouter>);});
 
 vi.mock("../services/traits.service", () => ({
     fetchTraits: vi.fn(),
@@ -64,7 +64,7 @@ describe("QuizPage tests if user is not logged in", () => {
 
     // test if in loading state
     test("loading state before quiz page appears", async () => {
-        expect(screen.getByText('Loading traits...')).toBeInTheDocument();
+        expect(screen.getByText('Loading Quiz')).toBeInTheDocument();
     })
     // test if after loading, there is a submit button
     test("no traits should still show submit button", async () => {
@@ -105,7 +105,7 @@ describe("QuizPage tests if user is logged in but no traits", () => {
 
     // test if in loading state
     test("loading state before quiz page appears", async () => {
-        expect(screen.getByText('Loading traits...')).toBeInTheDocument();
+        expect(screen.getByText('Loading Quiz')).toBeInTheDocument();
     })
     // test if after loading, there is a submit button
     test("no traits should still show submit button", async () => {
@@ -258,7 +258,7 @@ describe("QuizPage tests if user is logged in and all traits fetched successfull
 
     // test if in loading state
     test("loading state to start", async () => {
-        expect(screen.getByText('Loading traits...')).toBeInTheDocument();
+        expect(screen.getByText('Loading Quiz')).toBeInTheDocument();
     })
     // test if there is a submit button
     test("shows submit button", async () => {

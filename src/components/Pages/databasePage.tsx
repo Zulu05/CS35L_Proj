@@ -57,7 +57,7 @@ const DataBasePage: React.FC = () => {
 
   return (
     <>
-      <div style={{ marginTop: "40px", textAlign: "center" }}>
+      <div>
         <h1>Library</h1>
         {/* USERS */}
         <section>
@@ -66,7 +66,6 @@ const DataBasePage: React.FC = () => {
           {usersLoading && !usersError && <p>Loading users...</p>}
           {!usersLoading && users.length > 0 && (
             <ul style={{ listStyle: "none", padding: 0 }}>
-              {/* USER RESULTS */}
               {users.map((user) => {
                 const lastQuiz =
                   user.quizResponses && user.quizResponses.length > 0

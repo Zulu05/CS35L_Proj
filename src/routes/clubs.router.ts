@@ -22,8 +22,7 @@ clubsRouter.get("/", async (_req: Request, res: Response) => {
       return;
     }
 
-    // `collections.clubs.find().toArray()` returns `WithId<Document>[]` from the driver.
-    // cast via `unknown` to align with our `Club` class type for now.
+    // getting the clubs as an array
     const clubs = (await collections.clubs.find({}).toArray()) as unknown as Club[];
 
     res.status(200).json(clubs);
@@ -35,6 +34,7 @@ clubsRouter.get("/", async (_req: Request, res: Response) => {
 // POST
 clubsRouter.post("/", async (req: Request, res: Response) => {
   try {
+    // create a new club from request info
     const newClub = req.body as Club;
 
     if (!collections.clubs) {
@@ -42,11 +42,12 @@ clubsRouter.post("/", async (req: Request, res: Response) => {
       return;
     }
 
-    const result = await collections.clubs.insertOne(newClub);
+    // add club to db
+    const addedClub = await collections.clubs.insertOne(newClub);
 
-    if (result && result.insertedId) {
-      // Return the created document as JSON so the frontend can parse it
-      const created = await collections.clubs.findOne({ _id: result.insertedId });
+    if (addedClub && addedClub.insertedId) {
+      // look for the added club in db with id and return it
+      const created = await collections.clubs.findOne({ _id: addedClub.insertedId });
       res.status(201).json(created);
     } else {
       res.status(500).send("Failed to create a new club.");
@@ -60,10 +61,11 @@ clubsRouter.post("/", async (req: Request, res: Response) => {
 
 // PUT
 clubsRouter.put("/:id", async (req: Request, res: Response) => {
+  // getting the id from request info
   const id = req?.params?.id;
 
   try {
-    // Allow partial updates, e.g. { scores: TraitScore[] }
+    // get a partial club from the user request
     const updates: Partial<Club> = req.body as Partial<Club>;
 
     if (!collections.clubs) {
@@ -71,15 +73,15 @@ clubsRouter.put("/:id", async (req: Request, res: Response) => {
       return;
     }
 
+    // update the database by searching for the id and setting the updates
     const query = { _id: new ObjectId(id) };
+    const updatedClub = await collections.clubs.updateOne(query, { $set: updates });
 
-    const result = await collections.clubs.updateOne(query, { $set: updates });
-
-    if (result && result.matchedCount) {
-      // Return the updated document as JSON
+    if (updatedClub && updatedClub.matchedCount) {
+      // return the updated club
       const updated = await collections.clubs.findOne(query);
       res.status(200).json(updated);
-    } else if (result && !result.matchedCount) {
+    } else if (updatedClub && !updatedClub.matchedCount) {
       res.status(404).send(`Club with id ${id} does not exist`);
     } else {
       res.status(500).send(`Failed to update club with id ${id}`);
@@ -93,6 +95,7 @@ clubsRouter.put("/:id", async (req: Request, res: Response) => {
 
 // DELETE
 clubsRouter.delete("/:id", async (req: Request, res: Response) => {
+  // get the user id from the request
   const id = req?.params?.id;
 
   try {
@@ -101,14 +104,15 @@ clubsRouter.delete("/:id", async (req: Request, res: Response) => {
       return;
     }
 
+    // delete the club from the db based on the id
     const query = { _id: new ObjectId(id) };
-    const result = await collections.clubs.deleteOne(query);
+    const deletedClub = await collections.clubs.deleteOne(query);
 
-    if (result && result.deletedCount) {
+    if (deletedClub && deletedClub.deletedCount) {
       res.status(202).send(`Successfully removed club with id ${id}`);
-    } else if (!result) {
+    } else if (!deletedClub) {
       res.status(400).send(`Failed to remove club with id ${id}`);
-    } else if (!result.deletedCount) {
+    } else if (!deletedClub.deletedCount) {
       res.status(404).send(`Club with id ${id} does not exist`);
     }
   } catch (error: unknown) {

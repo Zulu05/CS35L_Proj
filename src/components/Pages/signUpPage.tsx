@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 
 // Internal Dependencies
 // Services
-import { fetchUsers, createUser } from "../../services/user.service"
+import { fetchUsers, createUser, userIdFrom } from "../../services/user.service"
 import {validatePassword, validateUsername, validateEmail} from "../../services/regex.service"
 
 // Frontend
@@ -59,7 +59,7 @@ export default function SignUpPage() {
         throw new Error('Unable to locate or create user');
       }
 
-      // Save user id in localStorage for later quiz submission
+      // Save user id and username in localStorage for later quiz submission and profile display
       const id = user.id ?? user.id ?? userIdFrom(user);
       if (!id) throw new Error('User has no id');
       localStorage.setItem('userId', String(id));
@@ -77,15 +77,6 @@ export default function SignUpPage() {
     }
   };
 
-  // helper for some shapes
-  function userIdFrom(u: any) {
-    if (!u) return null;
-    if (u._id) return u._id;
-    if (u.id) return u.id;
-    if (u.insertedId) return u.insertedId;
-    return null;
-  }
-
   return (
     <div className="quiz-page">
       <h1>Sign Up</h1>
@@ -96,7 +87,6 @@ export default function SignUpPage() {
             <input
               value={username}
               onChange={(e) => setUsername(e.target.value)}
-              style={{ display: 'block', width: '100%', padding: 8, marginTop: 4 }}
               disabled={loading}
             />
           </label>
@@ -107,7 +97,6 @@ export default function SignUpPage() {
             <input
               value={email} 
               onChange={(e) => setEmail(e.target.value)}
-              style={{ display: 'block', width: '100%', padding: 8, marginTop: 4 }}
               disabled={loading}
             />
           </label>
@@ -119,7 +108,6 @@ export default function SignUpPage() {
               type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              style={{ display: 'block', width: '100%', padding: 8, marginTop: 4 }}
               disabled={loading}
             />
           </label>

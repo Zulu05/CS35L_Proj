@@ -89,7 +89,6 @@ const BASE_URL = "http://localhost:5173";
        
 
 // 4) Scenario: Submit the quiz on the last question # src/features/f02.feature:27
-// 1) Scenario: Submit the quiz on the last question # src/features/f02.feature:22
 //    ✔ Before # src/features/support/hooks.ts:35
 //    ? Given the user is taking the quiz
 //        Undefined. Implement with the following snippet:

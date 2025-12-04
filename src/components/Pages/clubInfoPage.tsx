@@ -58,7 +58,7 @@ const ClubDirectory: React.FC = () => {
       </p>
     </div>
 
-    <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+    <div className="club-grid-force-2">
       {clubs.map((club) => {
         const clubId = club.id?.toString();
         const matchPercent =

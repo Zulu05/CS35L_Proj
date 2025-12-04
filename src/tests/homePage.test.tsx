@@ -1,9 +1,12 @@
-import { render, screen, fireEvent } from "@testing-library/react"
-import { describe, it, expect, vi, beforeEach, test } from "vitest"
-import HomePage from "../components/Pages/homePage"
-import { UNSAFE_getPatchRoutesOnNavigationFunction } from "react-router-dom";
+// External Dependencies
 import React from "react";
 import { MemoryRouter } from 'react-router-dom';
+import { render, screen, fireEvent } from "@testing-library/react"
+import { describe, it, expect, vi, beforeEach, test } from "vitest"
+ 
+// Internal Dependencies
+import HomePage from "../components/Pages/homePage"
+
 
 const mockNavigate = vi.fn();
 vi.mock('react-router-dom', async (importOriginal) => {

@@ -8,7 +8,7 @@ export const collections: {
   userResults?: mongoDB.Collection;
   clubs?: mongoDB.Collection;
   clubResults?: mongoDB.Collection;
-  traits?: mongoDB.Collection;   // ✅ traits is part of collections
+  traits?: mongoDB.Collection; 
 } = {};
 
 // Initialize Connection
@@ -34,9 +34,7 @@ export async function connectToDatabase() {
   const clubCollectionName = process.env.CLUBS_COLLECTION_NAME;
   const clubResultsCollectionName = process.env.CLUB_RESULTS_COLLECTION_NAME;
 
-  // NEW: traits collection name (defaults to "traits")
-  const traitsCollectionName =
-    process.env.TRAITS_COLLECTION_NAME || "traits";
+  const traitsCollectionName = process.env.TRAITS_COLLECTION_NAME || "traits";
 
   if (!usersCollectionName) {
     throw new Error("Environment variable USERS_COLLECTION_NAME must be set");
@@ -50,7 +48,6 @@ export async function connectToDatabase() {
     throw new Error(
       "Environment variable CLUB_RESULTS_COLLECTION_NAME must be set"
     );
-  // traitsCollectionName has a default, so we don't hard-throw here
 
   const db: mongoDB.Db = client.db(dbName);
 
@@ -61,7 +58,6 @@ export async function connectToDatabase() {
   const clubResultsCollection: mongoDB.Collection =
     db.collection(clubResultsCollectionName);
 
-  // ✅ actually open the traits collection
   const traitsCollection: mongoDB.Collection = db.collection(
     traitsCollectionName
   );
@@ -70,14 +66,9 @@ export async function connectToDatabase() {
   collections.userResults = userResultsCollection;
   collections.clubs = clubsCollection;
   collections.clubResults = clubResultsCollection;
-  collections.traits = traitsCollection; // ✅ critical line
+  collections.traits = traitsCollection; 
 
-  console.log(
-    `Successfully connected to database: ${db.databaseName} and collections: ` +
-      `${usersCollection.collectionName}, ` +
-      `${userResultsCollection.collectionName}, ` +
-      `${clubsCollection.collectionName}, ` +
-      `${clubResultsCollection.collectionName}, ` +
-      `${traitsCollection.collectionName}`
-  );
+  console.log(`Successfully connected to database: ${db.databaseName} and collections: ` + `${usersCollection.collectionName}, ` 
+    + `${userResultsCollection.collectionName}, ` + `${clubsCollection.collectionName}, ` + `${clubResultsCollection.collectionName}, ` 
+    + `${traitsCollection.collectionName}`);
 }

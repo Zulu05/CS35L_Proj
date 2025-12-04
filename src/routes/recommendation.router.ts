@@ -1,6 +1,9 @@
+// External Dependencies
 import express, { Request, Response } from "express";
-import { getTopNRecommendations } from "../services/recommendation.service";
-import { getAllRecommendations } from "../services/recommendation.service";
+
+// Internal Dependencies
+// Services
+import { getTopNRecommendations, getAllRecommendations } from "../services/recommendation.service";
 
 export const recommendationRouter = express.Router();
 recommendationRouter.use(express.json());

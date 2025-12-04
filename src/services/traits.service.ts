@@ -1,4 +1,5 @@
-// src/services/traits.service.ts
+// Internal Dependencies
+// Models
 import { TraitDefinition } from "../models/traits";
 
 export async function fetchTraits(): Promise<TraitDefinition[]> {

@@ -9,15 +9,6 @@ const BASE_URL = "http://localhost:5173";
 // 3) Scenario: Successful login with existing account # src/features/f06.feature:7
 
 // ? Given a user account exists with username cucumbertest and password Cucumber1!
-       
-        //  Given('a user account exists with username cucumbertest', async function () {
-        //     const newUser = await fetchSingleUserByUsername('cucumbertest');
-        //     if (newUser)
-        //       expect(newUser.username).toBe('cucumbertest');
-        //     else 
-        //       throw new Error('User has not been created');
-        //  });
-       
   //  ? And the user is on the login page
        
          Given('the user is on the login page', async function () {
@@ -41,10 +32,6 @@ const BASE_URL = "http://localhost:5173";
        
   //  ? Then they should be taken to the quiz page
        
-        //  Then('they should be taken to the quiz page', async function () {
-        //     await expect (this.page.getByText("Quiz")).toBeVisible();
-        //  });
-       
   //  ? And they should see that they are logged in as cucumbertest
        
          Then('they should see that they are logged in as cucumbertest', async function () {
@@ -53,19 +40,7 @@ const BASE_URL = "http://localhost:5173";
        
 // 4) Scenario: Login fails with wrong password # src/features/f06.feature:15
   //  ? Given a user account exists with username cucumbertest and password Cucumber1!
-       
-        //  Given('a user account exists with username cucumbertest and password Cucumber1!', function () {
-        //    // Write code here that turns the phrase above into concrete actions
-        //    return 'pending';
-        //  });
-       
   //  ? And the user is on the login page
-       
-        //  Given('the user is on the login page', function () {
-        //    // Write code here that turns the phrase above into concrete actions
-        //    return 'pending';
-        //  });
-       
   //  ? When they enter username cucumbertest and password wrongpassword
        
          When('they enter username cucumbertest and password wrongpassword', async function () {
@@ -76,12 +51,6 @@ const BASE_URL = "http://localhost:5173";
          });
        
   //  ? And they press the login button
-       
-        //  When('they press the login button', function () {
-        //    // Write code here that turns the phrase above into concrete actions
-        //    return 'pending';
-        //  });
-       
   //  ?     Then they should see an error message saying the password is not possible
        
          Then('they should see an error message saying the password is not possible', async function () {
@@ -96,19 +65,7 @@ const BASE_URL = "http://localhost:5173";
        
 // 5) Scenario: Login fails with non-existing username # src/features/f06.feature:23
   //  ? Given a user account exists with username cucumbertest and password Cucumber1!
-       
-        //  Given('a user account exists with username cucumbertest and password Cucumber1!', function () {
-        //    // Write code here that turns the phrase above into concrete actions
-        //    return 'pending';
-        //  });
-       
   //  ? And the user is on the login page
-       
-        //  Given('the user is on the login page', function () {
-        //    // Write code here that turns the phrase above into concrete actions
-        //    return 'pending';
-        //  });
-       
   //  ? When they enter username wrongUsername and password Cucumber1!
        
          When('they enter username wrongUsername and password Cucumber1!', async function () {
@@ -119,12 +76,6 @@ const BASE_URL = "http://localhost:5173";
          });
        
   //  ? And they press the login button
-       
-        //  When('they press the login button', function () {
-        //    // Write code here that turns the phrase above into concrete actions
-        //    return 'pending';
-        //  });
-       
   //  ? Then they should see an error message saying the login failed
        
          Then('they should see an error message saying the login failed', async function () {
@@ -162,21 +113,7 @@ const BASE_URL = "http://localhost:5173";
         });
        
   //  ? Then a new account should be created in the database
-       
-        //  Then('a new account should be created in the database', async function () {
-        //   const newUser = await fetchSingleUserByUsername('wUsername');
-        //   if (newUser)
-        //     expect(newUser.username).toBe('wUsername');
-        //   else 
-        //     throw new Error('User has not been created');
-        //  });
-       
   //  ? And they should be logged in
-       
-        //  Then('they should be logged in', async function () {
-        //     await expect (this.page.getByText("wUsername")).toBeVisible();
-        //  });
-       
   //  ? And they should be redirected to the quiz page
        
          Then('they should stay on the sign up page', async function () {

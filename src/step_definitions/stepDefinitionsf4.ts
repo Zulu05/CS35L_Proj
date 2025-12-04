@@ -1,58 +1,49 @@
- // src/step_definitions/f05.steps.ts
-
 import { Given, When, Then } from "@cucumber/cucumber";
 import { expect } from "@playwright/test";
 
 const BASE_URL = "http://localhost:5173";
- 
-// 1) Scenario: Open the search/filter interface on the results page # src/features/f04.feature:9
 
-//     ? Given the user is on the results page   (IMPLEMENTED IN FEATURE 3)
-        
-        // Given('the user is on the results page', async function () { 
-        //     await this.page.goto(`${BASE_URL}/matches`);
-        // });
-        
-//     ? When they press the search or filter button
+// Scenario: Search and filter clubs in the directory # src/features/f04
 
-          When('they press the search or filter button', async function () {
-              await this.page.getByRole("button", { name: "Filter" }).click();
-              });
-        
-//     ? Then they should see a search and sorting interface
+Given('I am on the club directory page', async function () {
+  await this.page.goto(`${BASE_URL}/clubInfo`);
+  await expect(this.page.getByRole("heading", { name: "Club Directory" })).toBeVisible();
+});
 
-          Then('they should see a search and sorting interface', async function () {
-              await expect(this.page.getByRole("heading", { name: "Filter by" })).toBeVisible();
-          });
-        
-          
-// 2) Scenario: Sort results by a given condition # src/features/f04.feature:14
+// Search functionality
 
-//     ? Given the user is viewing the search and sorting interface
+When('I enter {string} into the search bar', async function (searchTerm: string) {
+  const searchInput = this.page.getByPlaceholder("Search for a club...");
+  await searchInput.fill(searchTerm);
+});
 
-          Given('the user is viewing the search and sorting interface', async function () {
-              await this.page.goto(`${BASE_URL}/clubInfo`);
-          });
-        
-//     ? When they choose a sort condition
-        
-          When('they choose a sort condition', async function () {
-              await this.page.getByRole("button", { name: "Filter" }).click();
-              await expect(this.page.getByRole("heading", { name: "Filter by" })).toBeVisible();
-              await this.page.getByRole("button", { name: "Name" }).click();
-          });
-        
-//     ? Then the list of clubs should be sorted according to that condition
-        
-          Then('the list of clubs should be sorted according to that condition', async function () {
-            const headings = this.page.getByRole('heading', { level: 2 });
-            const names = (await headings.allTextContents())
-              .map((s: string) => s.trim())
-              .filter((s: string) => s.length > 0);
+Then('I should see {string} visible', async function (clubName: string) {
+  // check if a heading with the club name exists and is visible
+  await expect(this.page.getByRole("heading", { name: clubName })).toBeVisible();
+});
 
-            // Verify names are sorted A->Z (case-insensitive)
-            const expected = [...names].sort((a, b) =>
-              a.localeCompare(b, undefined, { sensitivity: 'base' })
-            );
-            expect(names).toEqual(expected);
-          });
+Then('I should not see {string} visible', async function (clubName: string) {
+  await expect(this.page.getByRole("heading", { name: clubName })).not.toBeVisible();
+});
+
+// Filtering functionality
+
+When('I click the {string} button', async function (buttonName: string) {
+  await this.page.getByRole("button", { name: buttonName }).click();
+});
+
+When('I set the {string} filter slider to {int}', async function (traitName: string, value: number) {
+  // Find the container (div) that contains the specific text (e.g. "academic")
+  // Then look for the slider inside that specific container
+  const slider = this.page.locator('div')
+    .filter({ hasText: traitName })
+    .locator('input[type="range"]')
+    .first(); 
+
+  // Force the value update
+  await slider.evaluate((el: HTMLInputElement, val: number) => {
+    el.value = String(val);
+    el.dispatchEvent(new Event('input', { bubbles: true }));
+    el.dispatchEvent(new Event('change', { bubbles: true }));
+  }, value);
+});

@@ -64,10 +64,10 @@ usersRouter.post("/", async (req: Request, res: Response) => {
     };
 
     // add new user to database
-    const result = await collections.users.insertOne(newUser);
+    const addedUser = await collections.users.insertOne(newUser);
 
-    if (result && result.insertedId) {
-      res.status(201).send(`Successfully created a new user with id ${result.insertedId}`);
+    if (addedUser && addedUser.insertedId) {
+      res.status(201).send(`Successfully created a new user with id ${addedUser.insertedId}`);
     } else {
       res.status(500).send("Failed to create a new user.");
     }
@@ -139,7 +139,7 @@ usersRouter.put("/:id", async (req: Request, res: Response) => {
 
   try {
     // get an updated user from the inputs of the user request
-    const updatedUser: User = req.body as User;
+    const updates: User = req.body as User;
 
     if (!collections.users) {
       res.status(500).send("Database not initialized");
@@ -148,11 +148,11 @@ usersRouter.put("/:id", async (req: Request, res: Response) => {
 
     // update the user with that id in the db
     const query = { _id: new ObjectId(id) };
-    const result = await collections.users.updateOne(query, { $set: updatedUser });
+    const updatedUser = await collections.users.updateOne(query, { $set: updates });
 
-    if (result && result.matchedCount) {
+    if (updatedUser && updatedUser.matchedCount) {
       res.status(200).send(`Successfully updated user with id ${id}`);
-    } else if (result && !result.matchedCount) {
+    } else if (updatedUser && !updatedUser.matchedCount) {
       res.status(404).send(`User with id ${id} does not exist`);
     } else {
       res.status(500).send(`Failed to update user with id ${id}`);
@@ -166,10 +166,10 @@ usersRouter.put("/:id", async (req: Request, res: Response) => {
 
 // PATCH (add answers to user)
 usersRouter.patch("/:id/quiz", async (req: Request, res: Response) => {
-  const userId = req.params.id;
+  const id = req.params.id;
   const { answers } = req.body;
 
-  if (!userId) {
+  if (!id) {
     return res.status(400).send("Missing user id");
   }
 
@@ -178,7 +178,7 @@ usersRouter.patch("/:id/quiz", async (req: Request, res: Response) => {
   }
 
   // get what is in the user right now
-  const updatedUser: Partial<User> = { ...req.body }; 
+  const updatedUser: Partial<User> = { ...answers }; 
 
   // hash the user's password
   if ('password' in updatedUser && updatedUser.password) {
@@ -188,9 +188,9 @@ usersRouter.patch("/:id/quiz", async (req: Request, res: Response) => {
   // validate user id
   let objectId: ObjectId;
   try {
-    objectId = new ObjectId(userId);
+    objectId = new ObjectId(id);
   } catch {
-    return res.status(400).send(`Invalid user id format: ${userId}`);
+    return res.status(400).send(`Invalid user id format: ${id}`);
   }
 
   // make sure answers exist
@@ -208,18 +208,18 @@ usersRouter.patch("/:id/quiz", async (req: Request, res: Response) => {
         return res.status(400).send(`answers[${i}] must be an object like { id/traitId: string, value: number }`);
       }
 
-      const id = (entry as any).id ?? (entry as any).traitId;
+      const traitId = (entry as any).id ?? (entry as any).traitId;
       const value = (entry as any).value;
 
       // check that there is a string id
-      if (!id || typeof id !== "string") {
+      if (!traitId || typeof traitId !== "string") {
         return res.status(400).send(`answers[${i}].id or answers[${i}].traitId must be a non-empty string`);
       }
 
       // check if score is in range
       const num = Number(value);
       if (typeof value !== "number" || Number.isNaN(num) || num < 0 || num > 100) {
-        return res.status(400).send(`Invalid score for trait "${id}" at index ${i}: must be a number between 0 and 100`);
+        return res.status(400).send(`Invalid score for trait "${traitId}" at index ${i}: must be a number between 0 and 100`);
       }
     }
   } else {
@@ -239,7 +239,7 @@ usersRouter.patch("/:id/quiz", async (req: Request, res: Response) => {
     };
 
     // set quiz responses as the latest
-    const result = await collections.users.updateOne(
+    const patchedUser = await collections.users.updateOne(
       { _id: objectId },
       {
         $set: {
@@ -249,8 +249,8 @@ usersRouter.patch("/:id/quiz", async (req: Request, res: Response) => {
       }
     );
 
-    if (result.matchedCount === 0) {
-      return res.status(404).send(`User with id ${userId} not found`);
+    if (patchedUser.matchedCount === 0) {
+      return res.status(404).send(`User with id ${id} not found`);
     }
 
     return res.status(200).json({
@@ -284,13 +284,13 @@ usersRouter.delete("/:username", async (req: Request, res: Response) => {
     }
 
     // delete that user from the db
-    const result = await collections.users.deleteOne(user);
+    const deletedUser = await collections.users.deleteOne(user);
 
-    if (result && result.deletedCount) {
+    if (deletedUser && deletedUser.deletedCount) {
       res.status(202).send(`Successfully removed user with username ${username}`);
-    } else if (!result) {
+    } else if (!deletedUser) {
       res.status(400).send(`Failed to remove user with username ${username}`);
-    } else if (!result.deletedCount) {
+    } else if (!deletedUser.deletedCount) {
       res.status(404).send(`User with username ${username} does not exist`);
     }
   } catch (error: unknown) {
@@ -303,10 +303,10 @@ usersRouter.delete("/:username", async (req: Request, res: Response) => {
 // PATCH (Add latest matches to the most recent quiz)
 usersRouter.patch("/:id/quiz/latest-matches", async (req: Request, res: Response) => { 
   // get the inputs from the request
-    const userId = req.params.id;
+    const id = req.params.id;
     const { clubMatches } = req.body;
 
-    if (!userId) {
+    if (!id) {
       return res.status(400).send("Missing user id");
     }
 
@@ -321,13 +321,13 @@ usersRouter.patch("/:id/quiz/latest-matches", async (req: Request, res: Response
 
       let objectId: ObjectId;
       try {
-        objectId = new ObjectId(userId);
+        objectId = new ObjectId(id);
       } catch {
-        return res.status(400).send(`Invalid user id format: ${userId}`);
+        return res.status(400).send(`Invalid user id format: ${id}`);
       }
 
       // update the db with the new results / club matches
-      const result = await collections.users.updateOne(
+      const patchedUser = await collections.users.updateOne(
         { _id: objectId },
         {
           $set: {
@@ -337,8 +337,8 @@ usersRouter.patch("/:id/quiz/latest-matches", async (req: Request, res: Response
         } as any
       );
 
-      if (result.matchedCount === 0) {
-        return res.status(404).send(`User with id ${userId} not found`);
+      if (patchedUser.matchedCount === 0) {
+        return res.status(404).send(`User with id ${id} not found`);
       }
 
       return res.status(200).json({

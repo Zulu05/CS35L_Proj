@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 
 // Internal Dependencies
 // Services
-import { fetchUsers, addPassword, checkPassword } from "../../services/user.service"
+import { fetchUsers, addPassword, checkPassword, userIdFrom } from "../../services/user.service"
 import { validatePassword, validateUsername } from "../../services/regex.service"
 
 // Frontend
@@ -85,15 +85,6 @@ export default function LoginPage() {
       setLoading(false);
     }
   };
-
-  // helper for some shapes
-  function userIdFrom(u: any) {
-    if (!u) return null;
-    if (u._id) return u._id;
-    if (u.id) return u.id;
-    if (u.insertedId) return u.insertedId;
-    return null;
-  }
 
   return (
     <div className="login-page">

@@ -1,5 +1,9 @@
+// External Dependencies
 import React from "react";
 import { useLocation, useNavigate } from "react-router-dom";
+
+// Internal Dependencies
+// Frontend
 import "../css/matchesPage.css";
 
 export default function MatchesPage() {

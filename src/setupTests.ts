@@ -1,5 +1,5 @@
+// External Dependencies
 import '@testing-library/jest-dom';
-import { vi } from 'vitest';
 
 let store: Record<string, string> = {};
 

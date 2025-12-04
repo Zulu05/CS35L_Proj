@@ -1,4 +1,4 @@
-Feature: F02 - Quiz navigation
+Feature: F02 - Navigation
 
   As a student at UCLA
   I want to be able to easily answer questions to express my club interests

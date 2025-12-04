@@ -1,5 +1,8 @@
-import {validatePassword, validateUsername, validateEmail} from "../services/regex.service"
+// External Dependencies
 import { expect, test } from 'vitest'
+
+// Internal Dependencies
+import {validatePassword, validateUsername, validateEmail} from "../services/regex.service"
 
 test ("validatePassword", () => {
     //failing tests

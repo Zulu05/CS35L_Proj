@@ -1,11 +1,11 @@
- // src/step_definitions/f01.steps.ts
+ // src/step_definitions/f03.steps.ts
 
 import { Given, When, Then } from "@cucumber/cucumber";
 import { expect } from "@playwright/test";
 
 const BASE_URL = "http://localhost:5173";
  
-// 6) Scenario: Redirect to results page after submitting the quiz # src/features/f03.feature:7
+// 1) Scenario: Redirect to results page after submitting the quiz # src/features/f03.feature:7
 //    ✔ Before # src/features/support/hooks.ts:35
 //    ? Given the user is on the app
 //        Undefined. Implement with the following snippet:
@@ -14,8 +14,8 @@ const BASE_URL = "http://localhost:5173";
            await this.page.goto(`${BASE_URL}/login`);
            const login = this.page.getByLabel('Username'); 
            const password = this.page.getByLabel('Password');
-              await login.fill('cucumbertest');
-              await password.fill('Cucumber1!');
+            await login.fill('cucumbertest');
+            await password.fill('Cucumber1!');
            await this.page.getByRole("button", { name: "Sign In" }).click();
          });
        
@@ -34,7 +34,7 @@ const BASE_URL = "http://localhost:5173";
                 await expect(this.page).toHaveURL(`${BASE_URL}/matches`);
          });
 
-// 7) Scenario: See a ranked list of clubs # src/features/f03.feature:12
+// 2) Scenario: See a ranked list of clubs # src/features/f03.feature:12
 //    ✔ Before # src/features/support/hooks.ts:35
 //    ? Given the user has completed the quiz and is on the results page
 //        Undefined. Implement with the following snippet:
@@ -67,7 +67,7 @@ const BASE_URL = "http://localhost:5173";
        
    
 
-// 8) Scenario: See multiple matching club options # src/features/f03.feature:17
+// 3) Scenario: See multiple matching club options # src/features/f03.feature:17
 //    ✔ Before # src/features/support/hooks.ts:35
 //    ? Given the user is on the results page
 //        Undefined. Implement with the following snippet:
@@ -91,9 +91,7 @@ const BASE_URL = "http://localhost:5173";
               await expect(this.page.getByRole("heading", { name: /Club Directory/ })).toBeVisible();
          });
        
-//    ? Then they should see multiple club options that correspond to their quiz answers
-//        Undefined. Implement with the following snippet:
-       
+//    ? Then they should see multiple club options that correspond to their quiz answers       
          Then('they should see multiple club options that correspond to their quiz answers', { timeout: 10 * 1000 }, async function () {
                await this.page.waitForTimeout(5000);
                const matches = this.page.getByText(/\d+% Match/); // e.g. "84% Match"
@@ -101,25 +99,21 @@ const BASE_URL = "http://localhost:5173";
                await expect(count).toBeGreaterThan(1);
          });
        
-// 9) Scenario: See why each club was matched # src/features/f03.feature:22
-//    ✔ Before # src/features/support/hooks.ts:35
+// 4) Scenario: See why each club was matched # src/features/f03.feature:22
+
 //    ? Given the user is on the results page
-//        Undefined. Implement with the following snippet:
        
-       //   Given('the user is on the results page', function () {
-       //     // Write code here that turns the phrase above into concrete actions
-       //     return 'pending';
-       //   });
+        Given('the user is on the results page', async function () { 
+            await this.page.goto(`${BASE_URL}/matches`);
+        });
        
 //    ? When they look at each matched club
-//        Undefined. Implement with the following snippet:
        
          When('they look at each matched club', async function () {
               await expect(this.page.getByRole("heading", { name: /Matches/ })).toBeVisible();
          });
        
 //    ? Then they should be able to see why and how they were matched to that club
-//        Undefined. Implement with the following snippet:
 
          Then('they should be able to see why and how they were matched to that club', async function () {
               await expect(this.page.getByRole("heading", { name: "%" })).toBeVisible();

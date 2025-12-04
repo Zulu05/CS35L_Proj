@@ -13,7 +13,9 @@
     "dev": "run-p dev:backend dev:frontend",
     "test": "cucumber-js --format progress --format ./src/features/support/reporter.js:allure-output.log --require-module ts-node/register --require src/step_definitions/**/*.ts --require src/features/support/**/*.ts src/features/**/*.feature",
     "test:unit": "vitest",
-    "postinstall": "playwright install"
+    "postinstall": "playwright install",
+    "allure:report": "allure generate allure-results --clean -o allure-report",
+    "allure:open": "allure open allure-report"
   },
   "dependencies": {
     "bcrypt": "^6.0.0",
@@ -26,6 +28,7 @@
     "react-router-dom": "^7.9.5"
   },
   "devDependencies": {
+    "@cucumber/cucumber": "^12.3.0",
     "@eslint/js": "^9.36.0",
     "@playwright/test": "^1.57.0",
     "@testing-library/jest-dom": "^6.9.1",
@@ -39,6 +42,7 @@
     "@vitejs/plugin-react": "^5.0.4",
     "@vitest/coverage-v8": "^4.0.15",
     "@vitest/ui": "^4.0.15",
+    "allure-commandline": "^2.34.1",
     "allure-cucumberjs": "^2.15.1",
     "allure-js-commons": "^2.15.1",
     "eslint": "^9.36.0",

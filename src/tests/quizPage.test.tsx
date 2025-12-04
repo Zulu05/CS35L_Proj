@@ -1,6 +1,6 @@
 import React from "react";
 import { MemoryRouter } from 'react-router-dom';
-import { render, screen, fireEvent, waitFor } from "@testing-library/react"
+import { render, screen, fireEvent, waitFor, act } from "@testing-library/react"
 import { describe, it, expect, vi, beforeEach, test, Mock } from "vitest"
 
 // Internal Dependencies
@@ -16,8 +16,8 @@ vi.mock('react-router-dom', async (importOriginal) => {
     }
 });
 
-const renderQuiz = () =>
-    render(<MemoryRouter><QuizPage/></MemoryRouter>);
+const renderQuiz = async () =>
+    await act( async ()=>{render(<MemoryRouter><QuizPage/></MemoryRouter>);});
 
 vi.mock("../services/traits.service", () => ({
     fetchTraits: vi.fn(),

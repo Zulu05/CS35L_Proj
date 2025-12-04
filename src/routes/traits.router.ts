@@ -17,11 +17,11 @@ traitsRouter.get("/", async (_req: Request, res: Response) => {
       return res.status(500).send("Traits collection not initialized");
     }
 
+    // get the traits from the db, sorts, and sends it
     const traits = ((await (collections as any).traits?.find({})?.toArray()) ?? []) as TraitDefinition[];
-
     traits.sort((a, b) => a.id.localeCompare(b.id));
-
     res.status(200).json(traits);
+
   } catch (err: any) {
     console.error("Error fetching traits:", err?.message ?? err);
     res.status(500).send(err?.message ?? "Server error");

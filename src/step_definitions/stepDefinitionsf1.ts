@@ -10,14 +10,13 @@ const BASE_URL = "http://localhost:5173";
 
 // 1) Scenario: Submit quiz and see answers # src/features/f01.feature:10
 //    ? Given I am on the quiz page
-       
+
         Given('I am on the quiz page', async function () {
            await this.page.goto(`${BASE_URL}/quiz`);
            await expect(this.page.getByRole("heading", { name: "Quiz" })).toBeVisible();
          });
        
 //    ? When I set all traits sliders to 80
-//        Undefined. Implement with the following snippet:
 
          When("I set all traits sliders to a value", async function () {
             const sliders = this.page.locator('input[type="range"]');
@@ -39,14 +38,12 @@ const BASE_URL = "http://localhost:5173";
 
        
 //    ? And I submit the quiz
-//        Undefined. Implement with the following snippet:
        
          When('I submit the quiz', async function () {
            await this.page.getByRole("button", { name: "Submit" }).click();
          });
        
 //    ? Then I should see my quiz answers listed
-//        Undefined. Implement with the following snippet:
        
          Then("I should see my quiz answers listed", async function () {
               const sliders = this.page.locator('input[type="range"]');

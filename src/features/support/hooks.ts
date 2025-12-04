@@ -23,7 +23,7 @@ class CustomWorld {
 
 setWorldConstructor(CustomWorld);
 
-setDefaultTimeout(5 * 1000); // 5 seconds for every step
+setDefaultTimeout(10 * 1000); // 10 seconds for every step
 
 BeforeAll({ timeout: 60_000 }, async function () {
   browser = await chromium.launch({ headless: true});

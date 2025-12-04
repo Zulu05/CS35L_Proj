@@ -1,4 +1,4 @@
-Feature: F01 - Quiz and recommendations
+Feature: F01 - Taking the quiz
 
   As a UCLA student using the clubs recommender
   I want to fill out the quiz and see my results

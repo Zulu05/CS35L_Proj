@@ -1,10 +1,15 @@
-Feature: F05 - Profile Page Navigation
+Feature: F05 - Profile Page
 
-  As a user of the app who just finished the quiz
-  I want to be able to search and sort through my results
-  So that I can see all my options and compare them, including clubs I am already in -> Change this
+  As a user of the app
+  I want to access my profile page based on my login status
+  So that I can see my information when logged in and be blocked when I am not
 
   Scenario: Profile Page
     Given the user is not logged in 
     When they go to the profile page url
-    Then they should be redirected to the profile page
+    Then it should say No logged-in user.
+
+  Scenario: Profile page when logged in
+    Given the user is logged in and has completed the quiz
+    When they go to the profile page url
+    Then they should see their username and matches

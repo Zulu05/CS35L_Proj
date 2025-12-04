@@ -14,8 +14,8 @@ const BASE_URL = "http://localhost:5173";
            await this.page.goto(`${BASE_URL}/login`);
            const login = this.page.getByLabel('Username'); 
            const password = this.page.getByLabel('Password');
-              await login.fill('cucumbertest');
-              await password.fill('Cucumber1!');
+            await login.fill('cucumbertest');
+            await password.fill('Cucumber1!');
            await this.page.getByRole("button", { name: "Sign In" }).click();
          });
        

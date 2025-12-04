@@ -1,4 +1,4 @@
-Feature: F05 - Profile Page Navigation
+Feature: F05 - Profile Page
 
   As a user of the app
   I want to access my profile page based on my login status

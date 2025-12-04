@@ -32,6 +32,7 @@ export default function LoginPage() {
       return;
     }
 
+    //try catch block handles login behavior and stores username and id
     setLoading(true);
     try {
       // Try to find an existing user by username
@@ -68,12 +69,8 @@ export default function LoginPage() {
         }
       }
 
-      if (!user) {
-        throw new Error('Unable to locate or create user');
-      }
-
       // Save user id in localStorage for later quiz submission
-      const id = user.id ?? user.id ?? userIdFrom(user);
+      const id = user?.id ?? user?.id ?? userIdFrom(user);
       if (!id) throw new Error('User has no id');
       localStorage.setItem('userId', String(id));
       console.log(id);
@@ -140,12 +137,7 @@ export default function LoginPage() {
         onClick={() => navigate('/signUp')}
         disabled={loading}
         style={{
-          background: 'none',
-          border: 'none',
-          color: 'blue',
           textDecoration: 'underline',
-          cursor: 'pointer',
-          padding: 11
         }}
       >
         No account? Sign Up Here

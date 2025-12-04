@@ -94,7 +94,7 @@ function QuizPage() {
   if (loading) {
     return (
       <div className="quiz-page">
-        <h1>Quiz</h1>
+        <h1>Loading Quiz</h1>
         <p>Loading traits...</p>
       </div>
     );

@@ -7,4 +7,4 @@ Feature: F05 - Profile Page Navigation
   Scenario: Profile Page
     Given the user is not logged in 
     When they go to the profile page url
-    Then they should be redirected to the profile page
+    Then it should say No logged-in user.

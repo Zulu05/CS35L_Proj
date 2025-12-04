@@ -17,7 +17,7 @@ const BASE_URL = "http://localhost:5173";
 //    ? And the list of clubs includes Archaeology Club
          Given('the list of clubs includes Archaeology Club', async function () {
            // Write code here that turns the phrase above into concrete actions
-           console.log(await this.page.url());
+        //    console.log(await this.page.url());
            expect(this.page.getByRole("heading", {name: "Archaeology Club"})).toBeVisible();
          });
 

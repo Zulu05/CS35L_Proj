@@ -89,7 +89,7 @@ usersRouter.post("/login", async (req: Request, res: Response) => {
       return;
     }
 
-    // check if no collection of users / database not initialized
+    // check if database is initialized
     if (!collections.users) {
       res.status(500).send("Database not initialized");
       return;

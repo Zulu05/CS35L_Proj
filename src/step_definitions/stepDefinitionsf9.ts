@@ -1,6 +1,6 @@
  // src/step_definitions/f07.steps.ts
 
-import { Given, When, Then } from "@cucumber/cucumber";
+import { When, Then } from "@cucumber/cucumber";
 import { expect } from "@playwright/test";
 const BASE_URL = "http://localhost:5173";
 

@@ -64,12 +64,12 @@ global.fetch = vi.fn().mockResolvedValueOnce({
     // test if in loading state
     test("loading state before quiz page appears", async () => {
         expect(screen.getByText('Loading traits...')).toBeInTheDocument();
-    });
+    })
     // test if after loading, there is a submit button
     test("no traits should still show submit button", async () => {
         await waitFor(() => expect(screen.getByText('Quiz')).toBeInTheDocument());
         expect(screen.getByText('Submit')).toBeInTheDocument();
-    });
+    })
     // test if submit button shows error
     test("submit button leads to no traits error", async () => {
         await waitFor(() => expect(screen.getByText('Quiz')).toBeInTheDocument());
@@ -77,12 +77,12 @@ global.fetch = vi.fn().mockResolvedValueOnce({
 
         fireEvent.click(screen.getByText('Submit'));
         expect(screen.getByText('No user id found. Please log in again.')).toBeInTheDocument();
-    });
+    })
     // test if back to home button exists
     test("shows back to Back to Home button", async () => {
         await waitFor(() => expect(screen.getByText('Quiz')).toBeInTheDocument());
         expect(screen.getByText('Back to Home')).toBeInTheDocument();
-    });
+    })
     // test if back to home button works
     test("Back to Home button should navigate to /", async () => {
         await waitFor(() => expect(screen.getByText('Quiz')).toBeInTheDocument());
@@ -90,7 +90,7 @@ global.fetch = vi.fn().mockResolvedValueOnce({
 
         fireEvent.click(screen.getByText('Back to Home'));
         expect(mockNavigate).toHaveBeenCalledWith('/');
-    });
+    })
 })
 
 describe("QuizPage tests if user is logged in but no traits", () => {
@@ -105,12 +105,12 @@ describe("QuizPage tests if user is logged in but no traits", () => {
     // test if in loading state
     test("loading state before quiz page appears", async () => {
         expect(screen.getByText('Loading traits...')).toBeInTheDocument();
-    });
+    })
     // test if after loading, there is a submit button
     test("no traits should still show submit button", async () => {
         await waitFor(() => expect(screen.getByText('Quiz')).toBeInTheDocument());
         expect(screen.getByText('Submit')).toBeInTheDocument();
-    });
+    })
     // test if submit button shows error
     test("submit button leads to no traits error", async () => {
         await waitFor(() => expect(screen.getByText('Quiz')).toBeInTheDocument());
@@ -118,12 +118,12 @@ describe("QuizPage tests if user is logged in but no traits", () => {
 
         fireEvent.click(screen.getByText('Submit'));
         expect(screen.getByText('No traits are configured yet. Try again later.')).toBeInTheDocument();
-    });
+    })
     // test if back to home button exists
     test("shows back to Back to Home button", async () => {
         await waitFor(() => expect(screen.getByText('Quiz')).toBeInTheDocument());
         expect(screen.getByText('Back to Home')).toBeInTheDocument();
-    });
+    })
     // test if back to home button works
     test("Back to Home button should navigate to /", async () => {
         await waitFor(() => expect(screen.getByText('Quiz')).toBeInTheDocument());
@@ -131,7 +131,7 @@ describe("QuizPage tests if user is logged in but no traits", () => {
 
         fireEvent.click(screen.getByText('Back to Home'));
         expect(mockNavigate).toHaveBeenCalledWith('/');
-    });
+    })
 })
 
 describe("QuizPage tests if user is logged in and all traits fetched successfully", () => {
@@ -258,12 +258,12 @@ describe("QuizPage tests if user is logged in and all traits fetched successfull
     // test if in loading state
     test("loading state to start", async () => {
         expect(screen.getByText('Loading traits...')).toBeInTheDocument();
-    });
+    })
     // test if there is a submit button
     test("shows submit button", async () => {
         await waitFor(() => expect(screen.getByText('Quiz')).toBeInTheDocument());
         expect(screen.getByText('Submit')).toBeInTheDocument();
-    });
+    })
     //test if questions appear
     test("renders all questions", async () => {
         await waitFor(() => expect(screen.getByText('Quiz')).toBeInTheDocument());
@@ -327,7 +327,7 @@ describe("QuizPage tests if user is logged in and all traits fetched successfull
     test("shows back to Back to Home button", async () => {
         await waitFor(() => expect(screen.getByText('Quiz')).toBeInTheDocument());
         expect(screen.getByText('Back to Home')).toBeInTheDocument();
-    });
+    })
     // test if back to home button works
     test("Back to Home button should navigate to /", async () => {
         await waitFor(() => expect(screen.getByText('Quiz')).toBeInTheDocument());
@@ -335,5 +335,5 @@ describe("QuizPage tests if user is logged in and all traits fetched successfull
     
         fireEvent.click(screen.getByText('Back to Home'));
         expect(mockNavigate).toHaveBeenCalledWith('/');
-    });
+    })
 })

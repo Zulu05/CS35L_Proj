@@ -57,7 +57,7 @@ const DataBasePage: React.FC = () => {
 
   return (
     <>
-      <div style={{ marginTop: "40px", textAlign: "center" }}>
+      <div>
         <h1>Library</h1>
         {/* USERS */}
         <section>

@@ -90,35 +90,37 @@ export default function LoginPage() {
     return null;
   }
 
-  return (
+return (
     <div className="login-page">
       <h1>Login</h1>
-      <form onSubmit={handleSubmit} style={{ maxWidth: 420, margin: '0 auto', textAlign: 'left' }}>
-        <div style={{ marginBottom: 8 }}>
+      
+      <form onSubmit={handleSubmit} className="login-form">
+        <div className="input-group">
           <label>
             Username
             <input
+              className="styled-input"
               value={username}
               onChange={(e) => setUsername(e.target.value)}
-              style={{ display: 'block', width: '100%', padding: 8, marginTop: 4, boxSizing: 'border-box' }}
-              disabled={loading}
-            />
-          </label>
-        </div>
-        <div style={{ marginBottom: 12 }}>
-          <label>
-            Password
-            <input
-              type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              style={{ display: 'block', width: '100%', padding: 8, marginTop: 4, boxSizing: 'border-box' }}
               disabled={loading}
             />
           </label>
         </div>
 
-        <div style={{ display: 'flex', gap: 8 }}>
+        <div className="input-group">
+          <label>
+            Password
+            <input
+              className="styled-input"
+              type="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              disabled={loading}
+            />
+          </label>
+        </div>
+
+        <div className="button-group">
           <button type="submit" disabled={loading}>
             {loading ? 'Signing in...' : 'Sign in'}
           </button>
@@ -127,24 +129,17 @@ export default function LoginPage() {
           </button>
         </div>
 
-      <button
-        type="button"
-        onClick={() => navigate('/signUp')}
-        disabled={loading}
-        style={{
-          background: 'none',
-          border: 'none',
-          color: 'blue',
-          textDecoration: 'underline',
-          cursor: 'pointer',
-          padding: 11
-        }}
-      >
-        No account? Sign Up Here
-      </button>
+        <button
+          type="button"
+          className="link-button"
+          onClick={() => navigate('/signUp')}
+          disabled={loading}
+        >
+          No account? Sign Up Here
+        </button>
 
         {error && (
-          <div style={{ marginTop: 12, color: 'crimson' }}>
+          <div className="error-message">
             {error}
           </div>
         )}

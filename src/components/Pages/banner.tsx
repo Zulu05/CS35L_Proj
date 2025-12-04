@@ -11,7 +11,7 @@ const Banner: React.FC = () => {
     return(
     <>
     <div style={{
-        position: "fixed",
+        position: "absolute",
         top: 10,
         left: 10,
         display: "flex",
@@ -28,7 +28,7 @@ const Banner: React.FC = () => {
           </button>
     </div> 
     <div style={{
-        position: "fixed",
+        position: "absolute",
         top: 10,
         right: 10,
         display: "flex",

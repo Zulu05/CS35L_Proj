@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import "./profilePage.css";
+import "../css/profilePage.css";
 import { fetchUsers } from "../../services/user.service";
 import User from "../../models/users";
 

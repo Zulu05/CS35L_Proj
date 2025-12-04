@@ -45,6 +45,25 @@ export async function createUser(user: {username: string, email: string, passwor
     }
 }
 
+
+export async function deleteUser(username: string): Promise<boolean> {
+  try {
+    const res = await fetch(`/users?username=${encodeURIComponent(username)}`, {
+      method: 'DELETE',
+    });
+
+    if (!res.ok) {
+      throw new Error(`Failed to delete user: ${res.status}`);
+    }
+
+    return true;
+  } catch (err) {
+    console.error(err);
+    return false;
+  }
+
+}
+
 export async function addPassword(id: string, password: string){
     // Add Users
     try{

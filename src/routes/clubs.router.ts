@@ -43,11 +43,11 @@ clubsRouter.post("/", async (req: Request, res: Response) => {
     }
 
     // add club to db
-    const result = await collections.clubs.insertOne(newClub);
+    const addedClub = await collections.clubs.insertOne(newClub);
 
-    if (result && result.insertedId) {
+    if (addedClub && addedClub.insertedId) {
       // look for the added club in db with id and return it
-      const created = await collections.clubs.findOne({ _id: result.insertedId });
+      const created = await collections.clubs.findOne({ _id: addedClub.insertedId });
       res.status(201).json(created);
     } else {
       res.status(500).send("Failed to create a new club.");
@@ -75,13 +75,13 @@ clubsRouter.put("/:id", async (req: Request, res: Response) => {
 
     // update the database by searching for the id and setting the updates
     const query = { _id: new ObjectId(id) };
-    const result = await collections.clubs.updateOne(query, { $set: updates });
+    const updatedClub = await collections.clubs.updateOne(query, { $set: updates });
 
-    if (result && result.matchedCount) {
+    if (updatedClub && updatedClub.matchedCount) {
       // return the updated club
       const updated = await collections.clubs.findOne(query);
       res.status(200).json(updated);
-    } else if (result && !result.matchedCount) {
+    } else if (updatedClub && !updatedClub.matchedCount) {
       res.status(404).send(`Club with id ${id} does not exist`);
     } else {
       res.status(500).send(`Failed to update club with id ${id}`);
@@ -106,13 +106,13 @@ clubsRouter.delete("/:id", async (req: Request, res: Response) => {
 
     // delete the club from the db based on the id
     const query = { _id: new ObjectId(id) };
-    const result = await collections.clubs.deleteOne(query);
+    const deletedClub = await collections.clubs.deleteOne(query);
 
-    if (result && result.deletedCount) {
+    if (deletedClub && deletedClub.deletedCount) {
       res.status(202).send(`Successfully removed club with id ${id}`);
-    } else if (!result) {
+    } else if (!deletedClub) {
       res.status(400).send(`Failed to remove club with id ${id}`);
-    } else if (!result.deletedCount) {
+    } else if (!deletedClub.deletedCount) {
       res.status(404).send(`Club with id ${id} does not exist`);
     }
   } catch (error: unknown) {

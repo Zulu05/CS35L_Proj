@@ -33,6 +33,11 @@ describe("Banner tests if user not logged in", () => {
         expect(screen.getByText('Login/Create Account')).toBeInTheDocument();
     })
 
+    //testing if the don't buttons exist 
+     test("doesn't render logout button", ()=>{
+        expect(screen.queryByText('Logout')).not.toBeInTheDocument();
+    })
+
     //testing navigation
     test("login button navigates to /login", () =>{
         fireEvent.click(screen.getByText('Login/Create Account'));
@@ -44,7 +49,7 @@ describe("Banner tests if user not logged in", () => {
     })
 })
 
-describe("HomePage tests if user is logged in", () => {
+describe("Banner tests if user is logged in", () => {
     beforeEach(()=>{
         vi.clearAllMocks();
         localStorage.clear();
@@ -68,6 +73,7 @@ describe("HomePage tests if user is logged in", () => {
     test("logout button clears local storage", () =>{
         fireEvent.click(screen.getByText('Logout'));
         expect(localStorage.getItem('userId')).toBeNull();
+        expect(mockNavigate).toHaveBeenCalledWith('/');
     })
     test("home button navigates to main screen", () =>{
         fireEvent.click(screen.getByText('Home'));
@@ -77,5 +83,4 @@ describe("HomePage tests if user is logged in", () => {
         fireEvent.click(screen.getByText('user'));
         expect(mockNavigate).toHaveBeenCalledWith('/profile');
     })
-
 })

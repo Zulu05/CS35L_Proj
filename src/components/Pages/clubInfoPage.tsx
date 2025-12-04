@@ -9,6 +9,7 @@ const ClubDirectory: React.FC = () => {
   const navigate = useNavigate();
   const [clubs, setClubs] = useState<Club[]>([]);
   const [matchMap, setMatchMap] = useState<Record<string, number>>({});
+  const [searchTerm, setSearchTerm] = useState("");  // For search functionality
 
   useEffect(() => {
     const userId = localStorage.getItem("userId");
@@ -56,49 +57,71 @@ const sortedClubs = [...clubs].sort((a, b) => {
 
   return bMatch - aMatch; // descending order
 });
- return (
-  <div className="club-directory-container">
-    <div className="text-center">
-      <h1 className="club-header-title">
-        Club Directory
-      </h1>
 
-      <p className="club-header-subtitle">
-        Discover clubs on campus and find one that matches your interests.
-      </p>
-    </div>
-
-    <div className="club-grid-force-2">
-      {sortedClubs.map((club) => {
-        const clubId = club.id?.toString();
-        const matchPercent =
-          clubId && clubId in matchMap ? matchMap[clubId] : null;
-
-        return (
-          <div key={clubId} className="club-card">
-            <h2>{club.clubname}</h2>
-
-            {matchPercent !== null && (
-              <p className="match-score">
-                Match Score: {matchPercent}%
-              </p>
-            )}
-
-            <a
-              href={`mailto:${club.email}`}
-              className="club-contact-btn"
-            >
-              Contact
-            </a>
-          </div>
-        );
-      })}
-    </div>
-
-    <button className="back-button" onClick={() => navigate("/")}>
-      Back to Home
-    </button>
-  </div>
+// Search filter logic: creating a filtered list based on search term
+const filteredClubs = sortedClubs.filter((club) =>
+  club.clubname.toLowerCase().includes(searchTerm.toLowerCase())
 );
+
+return (
+    <div className="club-directory-container">
+      <div className="text-center" style={{ textAlign: 'center' }}>
+        <h1 className="club-header-title">
+          Club Directory
+        </h1>
+
+        <p className="club-header-subtitle">
+          Discover clubs on campus and find one that matches your interests.
+        </p>
+
+        <div className="search-container">
+          <input
+            type="text"
+            placeholder="Search for a club..."
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            className="club-search-input"
+          />
+        </div>
+      </div>    
+
+      <div className="club-grid-force-2">
+        {filteredClubs.length > 0 ? (
+          filteredClubs.map((club) => {
+            const clubId = club.id?.toString();
+            const matchPercent =
+              clubId && clubId in matchMap ? matchMap[clubId] : null;
+
+            return (
+              <div key={clubId} className="club-card">
+                <h2>{club.clubname}</h2>
+
+                {matchPercent !== null && (
+                  <p className="match-score">
+                    Match Score: {matchPercent}%
+                  </p>
+                )}
+
+                <a
+                  href={`mailto:${club.email}`}
+                  className="club-contact-btn"
+                >
+                  Contact
+                </a>
+              </div>
+            );
+          })
+        ) : (
+          <div style={{ gridColumn: "span 2", textAlign: "center", color: "var(--text-soft)", padding: "2rem" }}>
+            No clubs found matching "{searchTerm}"
+          </div>
+        )}
+      </div>
+      
+      <button className="back-button" onClick={() => navigate("/")}>
+        Back to Home
+      </button>
+    </div>
+  );
 };
 export default ClubDirectory;

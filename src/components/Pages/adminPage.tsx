@@ -12,8 +12,15 @@ import { fetchUsers, createUser } from '../../services/user.service';
 import { fetchClubs, createClub, changeScores as updateClubScore } from '../../services/club.service';
 import { fetchTraits } from '../../services/traits.service';
 import { validateEmail, validateUsername, validatePassword } from '../../services/regex.service';
+import { useFormState } from 'react-dom';
 
 function AdminPage() {
+  //password locking variables
+  const[passwordInput, setPasswordInput] = useState('');
+  const[isAdmin, setIsAdmin] = useState(false);
+  const[isHacker, setIsHacker] = useState(false);
+  let adminPassword = "testing";
+
   // ERROR & LOADING STATE
   const [usersError, setUsersError] = useState('');
   const [clubsError, setClubsError] = useState('');
@@ -306,9 +313,29 @@ function AdminPage() {
     );
   }
 
+  //handleSubmit for admingpage password
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (passwordInput == adminPassword){setIsAdmin(true);}
+    else {setIsHacker(true)}
+  }
   return (
-    <div className="page">
-     
+    <>
+    {!isAdmin?(
+    <div className="admin-page">
+      <form onSubmit={handleSubmit} className="login-form">
+          <label>
+            {!isHacker? (<span>Password</span>):(<span style = {{color:"red"}}>HACKER</span>)}
+            <input
+              className="password-input"
+              value={passwordInput}
+              onChange={(e) => setPasswordInput(e.target.value)}
+            />
+          </label>
+        </form>
+        </div>
+        ):(
+      <div className="admin-page">
       {/* Dev helper section: add users & clubs into DB */}
       <div style={{ marginTop: '40px', textAlign: 'center' }}>
         <h1>Admin Panel</h1>
@@ -452,7 +479,8 @@ function AdminPage() {
         )}
       </div>
     </div>
-  );
+  )}
+  </>);
 }
 
 export default AdminPage;

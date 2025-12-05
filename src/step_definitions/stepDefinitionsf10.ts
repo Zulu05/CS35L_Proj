@@ -57,12 +57,6 @@ const BASE_URL = "http://localhost:5173";
 
 // 14) Scenario: User takes the quiz and changes the sliders appropriately # src/features/f10.feature:12
 //     ? Given the user logged in
-        
-       //    Given('the user logged in', function () {
-       //      // Write code here that turns the phrase above into concrete actions
-       //      return 'pending';
-       //    });
-        
 //     - And they are on the quiz page # src/step_definitions/stepDefinitionsf8.ts:22
 //     ? When they change the slider to their preferences
         
@@ -89,20 +83,8 @@ const BASE_URL = "http://localhost:5173";
         
 // 15) Scenario: User changes the sliders appropriately and can Submit # src/features/f10.feature:18
 //     ? Given the user logged in
-        
-       //    Given('the user logged in', function () {
-       //      // Write code here that turns the phrase above into concrete actions
-       //      return 'pending';
-       //    });
-        
 //     - And they are on the quiz page # src/step_definitions/stepDefinitionsf8.ts:22
 //     ? When they change the slider to their preferences
-        
-       //    When('they change the slider to their preferences', function () {
-       //      // Write code here that turns the phrase above into concrete actions
-       //      return 'pending';
-       //    });
-        
 //     ? Then they should be able to Submit
         
           Then('they should be able to Submit', async function () {

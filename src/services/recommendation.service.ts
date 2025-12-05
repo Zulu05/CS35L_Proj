@@ -6,33 +6,33 @@ import { ObjectId } from "mongodb";
 import { collections } from "./database.service";
 
 /**
- * Distance-based similarity between two numeric arrays in [0,1].
- * 1 = identical, 0 = as far apart as possible (0 vs maxScore in every dimension).
+ * Distance-based similarity between two numeric arrays a and b (user answer and club scores usually) in [0,1].
+ * 1 = identical, 0 = as far apart as possible.
  */
-export function computeDistanceSimilarity(
+export function computeDistanceSimilarity( 
   a: number[],
   b: number[],
-  maxScore = 100
+  maxScore = 100 // Assuming scores are in [0, 100]
 ): number {
   if (!Array.isArray(a) || !Array.isArray(b) || a.length !== b.length) {
     throw new Error("Vectors must be arrays of the same length");
   }
 
   const n = a.length;
-  if (n === 0) return 0;
+  if (n === 0) return 0; // No dimensions, no similarity
 
   let sumSq = 0;
-  for (let i = 0; i < n; i++) {
-    const diff = a[i] - b[i];
-    sumSq += diff * diff;
+  for (let i = 0; i < n; i++) { // Compute the sum of squared differences
+    const diff = a[i] - b[i];   
+    sumSq += diff * diff;      
   }
 
-  const distance = Math.sqrt(sumSq);
-  const maxDistance = Math.sqrt(n) * maxScore;
+  const distance = Math.sqrt(sumSq); 
+  const maxDistance = Math.sqrt(n) * maxScore; // Convert distance to be out of maxScore (100)
 
   if (maxDistance === 0) return 0;
 
-  const similarity = 1 - distance / maxDistance;
+  const similarity = 1 - distance / maxDistance;  // Convert distance to similarity percentage
   return Math.max(0, Math.min(1, similarity));
 }
 
@@ -74,6 +74,7 @@ export function computePearsonCorrelation(a: number[], b: number[]): number {
  * - [{ traitId: "social", value: 50 }, ...]
  * - [{ id: "social", value: 50 }, ...]  // if your quiz uses 'id'
  */
+
 function normalizeScoresToMap(raw: any): Record<string, number> {
   const result: Record<string, number> = {};
 

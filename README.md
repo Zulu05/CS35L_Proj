@@ -1,7 +1,7 @@
 The app is a personality type quiz meant to match users with different UCLA clubs based on their answers<br />
 Must be a logged in user to take the test, new users should use the create account button on the login page<br />
 Profile saves username, email and top 5 matches from the latest quiz taken<br />
-Club Information page shows the users match percentage with all clubs (from the latest quiz), but the ability to search by name <br />
+Club Information page shows the users match percentage with all clubs (from the latest quiz). Has the ability to search by name and filter by club traits <br />
 
 
 How to run and install project: <br />

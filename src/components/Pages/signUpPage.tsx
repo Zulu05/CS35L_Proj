@@ -9,6 +9,7 @@ import {validatePassword, validateUsername, validateEmail} from "../../services/
 
 // Frontend
 import '../css/loginPage.css';
+import User from '../../models/users';
 
 export default function SignUpPage() {
   const navigate = useNavigate();
@@ -26,12 +27,10 @@ export default function SignUpPage() {
       setError('Username must be at least 3 alphanumeric characters');
       return;
     }
-    // Validate email presence and format
     if (!email.trim() || !validateEmail(email)) {
       setError('Please enter a valid email address');
       return;
     }
-    // Basic password validation for creation: at least 8 chars
     if (!password || !validatePassword(password)) {
       setError('Password must be at least 8 characters with at least one digit, one upper and lower case letter, and one special character (@$!%*?&)');
       return;
@@ -39,34 +38,32 @@ export default function SignUpPage() {
 
     setLoading(true);
     try {
-      // Try to find an existing user by username
+      // find if a user with that username exists
       const users = await fetchUsers();
       let user = users.find((u: any) => u.username === username);
 
       if (!user) {
-        // Create a new user with password
+        // create a new user with inputted password and email
         const addedUser = await createUser({username, email, password});
-        console.log(addedUser);
-        // Re-fetch to get the created user document
-        const reUsers = await fetchUsers();
-        user = reUsers.find((u: any) => u.username === username);
+
+        user = (await fetchUsers()).find((u: any) => u.username === username);
+
       } else {
-        // User exists
-          throw new Error('User already exists, try logining in instead');
+          throw new Error('User already exists, try logging in instead');
       }
 
       if (!user) {
         throw new Error('Unable to locate or create user');
       }
 
-      // Save user id and username in localStorage for later quiz submission and profile display
+      // save user id and username in localStorage for later quiz submission and profile display
       const id = user.id ?? user.id ?? userIdFrom(user);
       if (!id) throw new Error('User has no id');
       localStorage.setItem('userId', String(id));
       localStorage.setItem('userName', String(username));
       console.log(id);
 
-      // Navigate to quiz page
+      // navigate to quiz page
       navigate('/quiz');
     } catch (err: unknown) {
       const msg = err instanceof Error ? err.message : String(err);

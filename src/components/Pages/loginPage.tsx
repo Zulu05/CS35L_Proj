@@ -5,7 +5,6 @@ import { useNavigate } from 'react-router-dom';
 // Internal Dependencies
 // Services
 import { fetchUsers, checkPassword, userIdFrom } from "../../services/user.service"
-import { validatePassword, validateUsername } from "../../services/regex.service"
 
 // Frontend
 import '../css/loginPage.css';
@@ -22,37 +21,34 @@ export default function LoginPage() {
     e.preventDefault();
     setError(null);
 
-    // Only check if empty. Do not Regex validate existing users.
+    // username should not be empty
     if (!username.trim()) {
       setError('Please enter a username');
       return;
     }
     
-    // No regex validation here to ensure legacy passwords remain valid.
+    // check if password has been entered
     if (!password) {
       setError('Please enter a password');
       return;
     }
 
-    //try catch block handles login behavior and stores username and id
     setLoading(true);
     try {
-      // Try to find an existing user by username
+      // find if user with inputted username exists
       const users = await fetchUsers();
       let user = users.find((u: any) => u.username === username);
 
       if (!user) {
         throw new Error('User does not exist, try signing up first');
       } else {
-        //User exists - save username
+        // if it does, save it and attempt to log in
         localStorage.setItem('userName', String(username));
         console.log(username);
         console.log("Login attempt for username:", username);
 
         // User exists — check password if set, otherwise throw error 
         if (user.hasPassword()) {
-          console.log(password);
-          console.log("User from DB:", user);
           const matchingPassword  = await checkPassword(username, password);
 
           // validate password match
@@ -64,13 +60,13 @@ export default function LoginPage() {
         }
       }
 
-      // Save user id in localStorage for later quiz submission
+      // save user id in local storage
       const id = user?.id ?? user?.id ?? userIdFrom(user);
       if (!id) throw new Error('User has no id');
       localStorage.setItem('userId', String(id));
       console.log(id);
 
-      // Navigate to quiz page
+      // after successfully logging in go to quiz page
       navigate('/quiz');
     } catch (err: unknown) {
       const msg = err instanceof Error ? err.message : String(err);

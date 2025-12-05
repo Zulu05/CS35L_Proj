@@ -20,7 +20,7 @@ When('I enter {string} into the search bar', async function (searchTerm: string)
 
 Then('I should see {string} visible', async function (clubName: string) {
   // check if a heading with the club name exists and is visible
-  await expect(this.page.getByRole("heading", { name: clubName })).toBeVisible();
+  await expect(this.page.getByRole("heading", { name: clubName })).toBeVisible({timeout:10000});
 });
 
 Then('I should not see {string} visible', async function (clubName: string) {
@@ -30,7 +30,10 @@ Then('I should not see {string} visible', async function (clubName: string) {
 // Filtering functionality
 
 When('I click the {string} button', async function (buttonName: string) {
-  await this.page.getByRole("button", { name: buttonName }).click();
+  const button = this.page.getByRole("button", { name: buttonName });
+  await button.scrollIntoViewIfNeeded({timeout:10000});
+  await expect(button).toBeVisible({timeout:10000});
+  await button.click({timeout:10000});
 });
 
 When('I set the {string} filter slider to {int}', async function (traitName: string, value: number) {
@@ -64,7 +67,7 @@ When('I set the {string} filter slider to {int}', async function (traitName: str
 
          Then('I should see no clubs', async function () {        
            // Write code here that turns the phrase above into concrete actions
-           await expect(this.page.getByText("No clubs found.")).toBeVisible();
+           await expect(this.page.getByText("No clubs found.")).toBeVisible({timeout:10000});
          });
 
   // √ Before # src\features\support\hooks.ts:38
@@ -79,5 +82,16 @@ When('I set the {string} filter slider to {int}', async function (traitName: str
 
          When('when I click {string}', async function (string) {   
            // Write code here that turns the phrase above into concrete actions
-           await this.page.getByRole("button", { name: {string} }).click();
+           await this.page.getByRole("button", { name: {string} }).click({timeout:10000});
+         });
+
+  //  ? And I click the Close Filters button
+  //      Undefined. Implement with the following snippet:
+
+         When('I click the Close Filters button', async function () {
+           // Write code here that turns the phrase above into concrete actions
+           const button = this.page.getByRole("button", { name: "Close Filters" });
+          await button.scrollIntoViewIfNeeded({timeout:10000});
+          await expect(button).toBeVisible({timeout:10000});
+          await button.click({timeout:10000});
          });

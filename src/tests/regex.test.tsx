@@ -121,4 +121,7 @@ test ("validateEmail", () => {
     expect(validateEmail('john_doe@gmail.com')).toBe(true) // underscores
     expect(validateEmail('john+newsletter@gmail.com')).toBe(true) // plus aliases
     expect(validateEmail('user@domain.technologies')).toBe(true) // long TLDs
+    expect(validateEmail('user@yahoo.com.br')).toBe(true) //multiple domain parts
+    expect(validateEmail('user@yahoo.com.de')).toBe(true) // try different countries
+    expect(validateEmail('user@domain.technologies.br.de.fr')).toBe(true) // multiple .
 })

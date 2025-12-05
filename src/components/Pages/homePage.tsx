@@ -15,7 +15,7 @@ const navigate = useNavigate();
 
   return (
     <div className="Homepage">
-      <h1>Welcome to the Quiz App</h1>
+      <h1>The UCLA Student Club Matcher</h1>
 
       <button
         onClick={() => {
@@ -56,7 +56,7 @@ const navigate = useNavigate();
         below.
       </p>
       <button onClick={() => navigate('/clubInfo')}>Club Information</button>
-      <h3>Credits: us heheheh</h3>
+      <h3>Credits: Team HPGMY</h3>
     </div>
   );
 }

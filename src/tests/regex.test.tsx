@@ -102,6 +102,7 @@ test ("validateEmail", () => {
     expect(validateEmail('**@gmail.com')).toBe(false) // invalid chars
     expect(validateEmail('aaaa@g.c')).toBe(false) // invalid domain
     expect(validateEmail('testing----@gmail.com')).toBe(false) // ending with dashes
+    expect(validateEmail('Dürschmid@g.ucla.edu')).toBe(false) // non ascii in email name
 
     //passing tests
     expect(validateEmail('aaa@gmail.com')).toBe(true) // all alphabet
@@ -124,4 +125,6 @@ test ("validateEmail", () => {
     expect(validateEmail('user@yahoo.com.br')).toBe(true) //multiple domain parts
     expect(validateEmail('user@yahoo.com.de')).toBe(true) // try different countries
     expect(validateEmail('user@domain.technologies.br.de.fr')).toBe(true) // multiple .
+    expect(validateEmail('user@g.ucla.edu')).toBe(true) // short domain is supported
+
 })

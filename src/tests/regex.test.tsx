@@ -69,6 +69,10 @@ test ("validateUsername", () => {
     expect(validateUsername('acb     333')).toBe(false) // whitespace middle with valid 
     expect(validateUsername('acb333    ')).toBe(false) // whitespace end with valid 
     expect(validateUsername('acb33 3')).toBe(false) // only one whitespace
+    expect(validateUsername('a cb 33 3')).toBe(false) // Alternating whitespace
+    expect(validateUsername('Vítor')).toBe(false) // non ascii
+    expect(validateUsername('用户')).toBe(false) // non ascii 
+    expect(validateUsername('Dürschmid')).toBe(false) // non ascii
 
     //passing tests
     expect(validateUsername('abc')).toBe(true) // all alphabet

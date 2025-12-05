@@ -99,12 +99,11 @@ adminRouter.post("/login", async (req: Request, res: Response) => {
       return;
     }
 
-    // compare hashed password using bcrypt
-    const bcrypt = await import("bcrypt");
-    const isMatch = await bcrypt.compare(password, admin.password);
+    // see if inputted password matches the stored password
+    const matches = await bcrypt.compare(password, admin.password);
 
     // make sure password matches
-    if (!isMatch) {
+    if (!matches) {
       res.status(401).send("Invalid password");
       return;
     }

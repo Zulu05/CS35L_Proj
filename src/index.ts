@@ -6,6 +6,7 @@ import express from "express";
 import { connectToDatabase } from "./services/database.service"
 
 // Routes
+import { adminRouter } from "./routes/admin.router";
 import { usersRouter } from "./routes/users.router";
 import { clubsRouter } from "./routes/clubs.router";
 import { traitsRouter } from "./routes/traits.router";
@@ -18,6 +19,7 @@ app.use(express.json());
 
 connectToDatabase()
     .then(() => {
+        app.use("/admin", adminRouter);
         app.use("/users", usersRouter);
         app.use("/clubs", clubsRouter);
         app.use("/recommendations", recommendationRouter);

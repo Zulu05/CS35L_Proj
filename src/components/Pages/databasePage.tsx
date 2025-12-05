@@ -11,8 +11,12 @@ import Club from "../../models/clubs";
 import { fetchUsers } from "../../services/user.service";
 import { fetchClubs } from "../../services/club.service";
 
+//login page
+import AdminLogin from './adminLogin';
 const DataBasePage: React.FC = () => {
   const navigate = useNavigate();
+  //login variables
+  const[isAdmin, setIsAdmin] = useState(false);
 
   // States
   const [users, setUsers] = useState<User[]>([]);
@@ -57,6 +61,8 @@ const DataBasePage: React.FC = () => {
 
   return (
     <>
+    {!isAdmin?(<AdminLogin setIsAdmin={setIsAdmin}/>):(
+      <>
       <div>
         <h1>Library</h1>
         {/* USERS */}
@@ -145,6 +151,8 @@ const DataBasePage: React.FC = () => {
       <button className="back-button" onClick={() => navigate("/")}>
         Back to Home
       </button>
+      </>
+    )}
     </>
   );
 };

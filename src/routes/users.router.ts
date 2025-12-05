@@ -351,3 +351,21 @@ usersRouter.patch("/:id/quiz/latest-matches", async (req: Request, res: Response
     }
   }
 );
+
+// DELETE for artillery testing
+usersRouter.delete("/cleanup/test-users", async (_req: Request, res: Response) => {
+  try {
+    if (!collections.users) {
+      return res.status(500).send("Database not initialized");
+    }
+
+    const result = await collections.users.deleteMany({ username: { $regex: "^test_" } });
+
+    res.status(200).send(`Deleted ${result.deletedCount} test users`);
+    
+  } catch (error: unknown) {
+    const msg = error instanceof Error ? error.message : String(error);
+    console.error(msg);
+    res.status(500).send(msg);
+  }
+});

@@ -45,6 +45,7 @@
     "allure-commandline": "^2.34.1",
     "allure-cucumberjs": "^2.15.1",
     "allure-js-commons": "^2.15.1",
+    "artillery": "^2.0.27",
     "eslint": "^9.36.0",
     "eslint-plugin-react-hooks": "^5.2.0",
     "eslint-plugin-react-refresh": "^0.4.22",

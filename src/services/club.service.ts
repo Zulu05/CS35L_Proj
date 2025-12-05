@@ -92,7 +92,7 @@ export async function createClub(club: {
   try {
     created = raw ? JSON.parse(raw) : {};
   } catch {
-    console.log('Non-JSON response from /clubs:', raw);
+    console.error('Non-JSON response from /clubs:', raw);
   }
 
   const nameFromDb = created.clubname ?? created.username ?? finalName;
@@ -127,7 +127,7 @@ export async function changeScores(
   try {
     updatedData = raw ? JSON.parse(raw) : {};
   } catch {
-    console.log('Non-JSON response from PUT /clubs/:id:', raw);
+    console.error('Non-JSON response from PUT /clubs/:id:', raw);
   }
 
   const nameFromDb = updatedData.clubname ?? updatedData.username ?? '';

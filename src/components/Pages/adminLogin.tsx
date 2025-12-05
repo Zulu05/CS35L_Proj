@@ -13,7 +13,7 @@ function AdminLogin({setIsAdmin}:{setIsAdmin:any}){
         setUsernameInput("");
         setPasswordInput("");
         const passwordMatch = await checkPassword(usernameInput, passwordInput);
-        if (passwordMatch)
+        if (!!passwordMatch)
           setIsAdmin(true);
         else 
             setIsHacker(true);

@@ -1,7 +1,9 @@
  // src/step_definitions/f07.steps.ts
 
+ // External Dependencies
 import { Given, When, Then } from "@cucumber/cucumber";
 import { expect } from "@playwright/test";
+
 const BASE_URL = "http://localhost:5173";
 
 // Scenario: Navigate from results page to club info page # src\features\f07.feature:7

@@ -1,8 +1,8 @@
  // src/step_definitions/f01.steps.ts
 
+ // External Dependencies
 import { Given, When, Then } from "@cucumber/cucumber";
 import { expect } from "@playwright/test";
-import { TRAITS } from "../models/traits";
 
 
 const BASE_URL = "http://localhost:5173";

@@ -61,7 +61,6 @@ export async function deleteUser(username: string): Promise<boolean> {
     console.error(err);
     return false;
   }
-
 }
 
 export async function addResult(userId: string, answersDict: { [key: string]: number }){

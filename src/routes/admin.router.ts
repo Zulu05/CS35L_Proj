@@ -125,3 +125,39 @@ adminRouter.post("/login", async (req: Request, res: Response) => {
   }
 });
 
+// DELETE
+adminRouter.delete("/:username", async (req: Request, res: Response) => {
+  // get the username that was inputted
+  const username = req.params.username;
+
+  try {
+    if (!collections.admin) {
+      res.status(500).send("Database not initialized");
+      return;
+    }
+
+    // find a admin in the db with that username
+    const admin = await collections.admin.findOne({ username });
+
+
+    if (!admin) {
+      res.status(404).send(`User with username "${username}" does not exist`);
+      return;
+    }
+
+    // delete that admin from the db
+    const deletedAdmin = await collections.admin.deleteOne(admin);
+
+    if (deletedAdmin && deletedAdmin.deletedCount) {
+      res.status(202).send(`Successfully removed user with username ${username}`);
+    } else if (!deletedAdmin) {
+      res.status(400).send(`Failed to remove user with username ${username}`);
+    } else if (!deletedAdmin.deletedCount) {
+      res.status(404).send(`User with username ${username} does not exist`);
+    }
+  } catch (error: unknown) {
+    const msg = error instanceof Error ? error.message : String(error);
+    console.error(msg);
+    res.status(400).send(msg);
+  }
+});

@@ -49,7 +49,13 @@ describe("Test when user is not logged in", () => {
     expect(screen.getByText("Username")).toBeInTheDocument();
     expect(screen.getByText("Password")).toBeInTheDocument();
   });
+  test("inputs are initially empty", () => {
+    const username = screen.getByLabelText("Username") as HTMLInputElement;
+    const password = screen.getByLabelText("Password") as HTMLInputElement;
 
+    expect(username.value).toBe("");
+    expect(password.value).toBe("");
+  });
   test("renders login and cancel buttons", () => {
     expect(screen.getByText("Sign in")).toBeInTheDocument();
     expect(screen.getByText("Cancel")).toBeInTheDocument();

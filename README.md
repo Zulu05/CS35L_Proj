@@ -7,7 +7,7 @@ Club Information page shows the users match percentage with all clubs (from the 
 How to run and install project: <br />
     &emsp;Run "git clone https://github.com/Zulu05/CS35L_Proj"<br />
     &emsp;Run "npm install"<br />
-    &emsp;Create .env from the .env.example file and change "<username>" and "<password>" in "DB_CONN_STRING" to your username and password<br />
+    &emsp;Create .env from the .env.example file and change "username" and "password" in "DB_CONN_STRING" to your username and password<br />
     &emsp;Run "npm run dev" to test out the application
 
     

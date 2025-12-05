@@ -19,7 +19,7 @@ app.use(express.json());
 
 connectToDatabase()
     .then(() => {
-        app.use("/admin", adminRouter);
+        app.use("/adminpass", adminRouter);
         app.use("/users", usersRouter);
         app.use("/clubs", clubsRouter);
         app.use("/recommendations", recommendationRouter);

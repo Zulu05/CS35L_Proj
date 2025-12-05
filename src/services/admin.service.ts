@@ -1,7 +1,7 @@
 
 export async function checkPassword(username: string, password: string) {
   try {
-    const res = await fetch("/admin/login", {
+    const res = await fetch("/adminpass/login", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ username, password }),

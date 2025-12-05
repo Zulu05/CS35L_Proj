@@ -317,7 +317,7 @@ function AdminPage() {
     e.preventDefault();
     const username = "B055MAN";
     const passwordMatch = await checkPassword(username, passwordInput);
-    if (passwordMatch)
+    if (!!passwordMatch)
       setIsAdmin(true);
     else 
       setIsHacker(true);

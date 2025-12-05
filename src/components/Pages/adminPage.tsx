@@ -17,7 +17,7 @@ import { validateEmail, validateUsername, validatePassword } from '../../service
 import AdminLogin from './adminLogin';
 
 function AdminPage() {
-  //password locking variables
+  //login variables
   const[isAdmin, setIsAdmin] = useState(false);
 
   // ERROR & LOADING STATE
@@ -314,9 +314,7 @@ function AdminPage() {
 
   return (
     <>
-    {!isAdmin?(
-      <AdminLogin setIsAdmin={setIsAdmin}/>
-        ):(
+    {!isAdmin?(<AdminLogin setIsAdmin={setIsAdmin}/>):(
       <div className="admin-page">
       {/* Dev helper section: add users & clubs into DB */}
       <div style={{ marginTop: '40px', textAlign: 'center' }}>
@@ -341,7 +339,7 @@ function AdminPage() {
             onChange={(e) =>
               setNewUser((prev) => ({ ...prev, email: e.target.value }))
             }
-            style={{ marginLeft: '8px' }}
+             
           />
           <input
             type="password"
@@ -350,11 +348,11 @@ function AdminPage() {
             onChange={(e) =>
               setNewUser((prev) => ({ ...prev, password: e.target.value }))
             }
-            style={{ marginLeft: '8px' }}
+             
           />
           <button
             type="submit"
-            style={{ marginLeft: '8px' }}
+             
             disabled={usersLoading}
           >
             {usersLoading ? 'Adding...' : 'Add User'}
@@ -382,7 +380,7 @@ function AdminPage() {
             onChange={(e) =>
               setNewClub((prev) => ({ ...prev, email: e.target.value }))
             }
-            style={{ marginLeft: '8px' }}
+             
           />
 
           <div style={{ marginTop: 10 }}>
@@ -406,7 +404,7 @@ function AdminPage() {
 
           <button
             type="submit"
-            style={{ marginLeft: '8px', marginTop: 10 }}
+            style={{  marginTop: 10 }}
             disabled={clubsLoading}
           >
             {clubsLoading ? 'Adding...' : 'Add Club'}
@@ -449,7 +447,7 @@ function AdminPage() {
 
           <button
             type="submit"
-            style={{ marginLeft: '8px', marginTop: 10 }}
+            style={{  marginTop: 10 }}
             disabled={updateClubLoading}
           >
             {updateClubLoading ? 'Updating...' : 'Update Scores'}

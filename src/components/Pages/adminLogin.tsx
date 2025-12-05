@@ -14,10 +14,14 @@ function AdminLogin({setIsAdmin}:{setIsAdmin:any}){
         setPasswordInput("");
         const passwordMatch = await checkPassword(usernameInput, passwordInput);
         if (!!passwordMatch)
+        {
+            //tells parent to rerender page
           setIsAdmin(true);
-        else 
+        }
+        else {
             setIsHacker(true);
           setIsAdmin(false);
+        }
       }
     return (
         <>

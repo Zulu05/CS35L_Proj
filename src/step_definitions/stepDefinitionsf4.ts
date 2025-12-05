@@ -20,7 +20,7 @@ When('I enter {string} into the search bar', async function (searchTerm: string)
 
 Then('I should see {string} visible', async function (clubName: string) {
   // check if a heading with the club name exists and is visible
-  await expect(this.page.getByRole("heading", { name: clubName })).toBeVisible();
+  await expect(this.page.getByRole("heading", { name: clubName })).toBeVisible({timeout:10000});
 });
 
 Then('I should not see {string} visible', async function (clubName: string) {
@@ -30,7 +30,10 @@ Then('I should not see {string} visible', async function (clubName: string) {
 // Filtering functionality
 
 When('I click the {string} button', async function (buttonName: string) {
-  await this.page.getByRole("button", { name: buttonName }).click();
+  const button = this.page.getByRole("button", { name: buttonName });
+  await button.scrollIntoViewIfNeeded({timeout:10000});
+  await expect(button).toBeVisible({timeout:10000});
+  await button.click({timeout:10000});
 });
 
 When('I set the {string} filter slider to {int}', async function (traitName: string, value: number) {
@@ -42,9 +45,50 @@ When('I set the {string} filter slider to {int}', async function (traitName: str
     .first(); 
 
   // Force the value update
-  await slider.evaluate((el: HTMLInputElement, val: number) => {
-    el.value = String(val);
-    el.dispatchEvent(new Event('input', { bubbles: true }));
-    el.dispatchEvent(new Event('change', { bubbles: true }));
-  }, value);
+  await slider.fill (String(value));
+  await expect(slider).toHaveValue(String(value),{timeout:10000});
 });
+
+//testing max slide value related behavior
+// Scenario: setting all filters to max # src\features\f04.feature:26
+//    √ Before # src\features\support\hooks.ts:38
+//    √ Given I am on the club directory page # src\step_definitions\stepDefinitionsf4.ts:9
+//    √ When I click the "Filter by Attributes" button # src\step_definitions\stepDefinitionsf4.ts:32
+//    ? And when I set all filters to the max value
+//        Undefined. Implement with the following snippet:     
+
+
+
+  //  ? Then I should see no clubs
+  //      Undefined. Implement with the following snippet:     
+
+         Then('I should see no clubs', async function () {        
+           // Write code here that turns the phrase above into concrete actions
+           await expect(this.page.getByText("No clubs found.")).toBeVisible({timeout:10000});
+         });
+
+  // √ Before # src\features\support\hooks.ts:38
+  //  √ Given I am on the club directory page # src\step_definitions\stepDefinitionsf4.ts:9
+  //  √ When I click the "Filter by Attributes" button # src\step_definitions\stepDefinitionsf4.ts:32
+  //  √ And I set the "academic" filter slider to 100 # src\step_definitions\stepDefinitionsf4.ts:36
+  //  √ And I set the "social" filter slider to 100 # src\step_definitions\stepDefinitionsf4.ts:36
+  //  √ And I set the "leader" filter slider to 100 # src\step_definitions\stepDefinitionsf4.ts:36
+  //  √ And I set the "creative" filter slider to 100 # src\step_definitions\stepDefinitionsf4.ts:36
+  //  ? And when I click "Close Filters"
+  //      Undefined. Implement with the following snippet:      
+
+         When('when I click {string}', async function (string) {   
+           // Write code here that turns the phrase above into concrete actions
+           await this.page.getByRole("button", { name: {string} }).click({timeout:10000});
+         });
+
+  //  ? And I click the Close Filters button
+  //      Undefined. Implement with the following snippet:
+
+         When('I click the Close Filters button', async function () {
+           // Write code here that turns the phrase above into concrete actions
+           const button = this.page.getByRole("button", { name: "Close Filters" });
+          await button.scrollIntoViewIfNeeded({timeout:10000});
+          await expect(button).toBeVisible({timeout:10000});
+          await button.click({timeout:10000});
+         });

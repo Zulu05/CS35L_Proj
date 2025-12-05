@@ -22,3 +22,42 @@ Feature: F04 - Search and sort recommendations
     And I click the "Reset Filters" button
     Then I should see "Chess Club at UCLA" visible
     And I should see "Bruin Birding Club" visible
+
+  Scenario: setting all filters to max
+    When I click the "Filter by Attributes" button
+    And I set the "academic" filter slider to 100
+    And I set the "social" filter slider to 100
+    And I set the "leader" filter slider to 100
+    And I set the "creative" filter slider to 100
+    Then I should see no clubs
+
+  Scenario: setting all filters to max, then clearing all filters
+    When I click the "Filter by Attributes" button
+    And I set the "academic" filter slider to 100
+    And I set the "social" filter slider to 100
+    And I set the "leader" filter slider to 100
+    And I set the "creative" filter slider to 100    
+    And I click the "Reset Filters" button
+    Then I should see "Chess Club at UCLA" visible
+
+  Scenario: Scenario: setting all filters to max, then closing filter functions
+    When I click the "Filter by Attributes" button
+    And I set the "academic" filter slider to 100
+    And I set the "social" filter slider to 100
+    And I set the "leader" filter slider to 100
+    And I set the "creative" filter slider to 100    
+    And I click the Close Filters button    
+    Then I should see no clubs  
+
+  Scenario: If I click the filter by attributes button close filters should not be visible and vice verse 
+    When I click the "Filter by Attributes" button
+    Then I should not see "Close Filters" visible
+    And I click the Close Filters button
+    Then I should not see "Filter by Attributes" visible
+
+
+
+
+
+
+    

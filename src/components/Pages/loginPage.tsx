@@ -5,7 +5,6 @@ import { useNavigate } from 'react-router-dom';
 // Internal Dependencies
 // Services
 import { fetchUsers, checkPassword, userIdFrom } from "../../services/user.service"
-import { validatePassword, validateUsername } from "../../services/regex.service"
 
 // Frontend
 import '../css/loginPage.css';
@@ -22,35 +21,34 @@ export default function LoginPage() {
     e.preventDefault();
     setError(null);
 
-    if (!username.trim() || !validateUsername(username)) {
-      setError('Please enter a valid username, at least 3 alphanumeric characters');
+    // username should not be empty
+    if (!username.trim()) {
+      setError('Please enter a username');
       return;
     }
-    // Basic password validation for creation: at least 8 chars
-    if (!password || !validatePassword(password)) {
-      setError('Password must be at least 8 characters with at least one digit, one upper and lower case letter, and one special character (@$!%*?&)');
+    
+    // check if password has been entered
+    if (!password) {
+      setError('Please enter a password');
       return;
     }
 
-    //try catch block handles login behavior and stores username and id
     setLoading(true);
     try {
-      // Try to find an existing user by username
+      // find if user with inputted username exists
       const users = await fetchUsers();
       let user = users.find((u: any) => u.username === username);
 
       if (!user) {
         throw new Error('User does not exist, try signing up first');
       } else {
-        //User exists - save username
+        // if it does, save it and attempt to log in
         localStorage.setItem('userName', String(username));
         console.log(username);
         console.log("Login attempt for username:", username);
 
         // User exists — check password if set, otherwise throw error 
         if (user.hasPassword()) {
-          console.log(password);
-          console.log("User from DB:", user);
           const matchingPassword  = await checkPassword(username, password);
 
           // validate password match
@@ -62,13 +60,13 @@ export default function LoginPage() {
         }
       }
 
-      // Save user id in localStorage for later quiz submission
+      // save user id in local storage
       const id = user?.id ?? user?.id ?? userIdFrom(user);
       if (!id) throw new Error('User has no id');
       localStorage.setItem('userId', String(id));
       console.log(id);
 
-      // Navigate to quiz page
+      // after successfully logging in go to quiz page
       navigate('/quiz');
     } catch (err: unknown) {
       const msg = err instanceof Error ? err.message : String(err);
@@ -82,21 +80,25 @@ export default function LoginPage() {
   return (
     <div className="login-page">
       <h1>Login</h1>
-      <form onSubmit={handleSubmit} style={{ maxWidth: 420, margin: '0 auto', textAlign: 'left' }}>
-        <div style={{ marginBottom: 8 }}>
+      
+      <form onSubmit={handleSubmit} className="login-form">
+        <div className="input-group">
           <label>
             Username
             <input
+              className="styled-input"
               value={username}
               onChange={(e) => setUsername(e.target.value)}
               disabled={loading}
             />
           </label>
         </div>
-        <div style={{ marginBottom: 12 }}>
+
+        <div className="input-group">
           <label>
             Password
             <input
+              className="styled-input"
               type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
@@ -105,7 +107,7 @@ export default function LoginPage() {
           </label>
         </div>
 
-        <div style={{ display: 'flex', gap: 8 }}>
+        <div className="button-group">
           <button type="submit" disabled={loading}>
             {loading ? 'Signing in...' : 'Sign in'}
           </button>
@@ -126,7 +128,7 @@ export default function LoginPage() {
       </button>
 
         {error && (
-          <div style={{ marginTop: 12, color: 'crimson' }}>
+          <div className="error-message">
             {error}
           </div>
         )}

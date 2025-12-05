@@ -8,17 +8,17 @@ import Club, { TraitScore } from '../../models/clubs';
 import { TraitDefinition } from '../../models/traits';
 
 // Services
-import { checkPassword } from '../../services/admin.service';
 import { fetchUsers, createUser } from '../../services/user.service';
 import { fetchClubs, createClub, changeScores as updateClubScore } from '../../services/club.service';
 import { fetchTraits } from '../../services/traits.service';
 import { validateEmail, validateUsername, validatePassword } from '../../services/regex.service';
 
+//login page
+import AdminLogin from './adminLogin';
+
 function AdminPage() {
   //password locking variables
-  const[passwordInput, setPasswordInput] = useState('');
   const[isAdmin, setIsAdmin] = useState(false);
-  const[isHacker, setIsHacker] = useState(false);
 
   // ERROR & LOADING STATE
   const [usersError, setUsersError] = useState('');
@@ -312,31 +312,10 @@ function AdminPage() {
     );
   }
 
-  //handleSubmit for admingpage password
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    const username = "B055MAN";
-    const passwordMatch = await checkPassword(username, passwordInput);
-    if (passwordMatch)
-      setIsAdmin(true);
-    else 
-      setIsHacker(true);
-  }
   return (
     <>
     {!isAdmin?(
-    <div className="admin-page">
-      <form onSubmit={handleSubmit} className="login-form">
-          <label>
-            {!isHacker? (<span>Password</span>):(<span style = {{color:"red"}}>HACKER</span>)}
-            <input
-              className="password-input"
-              value={passwordInput}
-              onChange={(e) => setPasswordInput(e.target.value)}
-            />
-          </label>
-        </form>
-        </div>
+      <AdminLogin setIsAdmin={setIsAdmin}/>
         ):(
       <div className="admin-page">
       {/* Dev helper section: add users & clubs into DB */}

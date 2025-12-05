@@ -13,3 +13,4 @@ How to run and install project: <br />
     
 Note: end to end testing implemeneted with cucumber and playwright, run via "npm test"
 Note: more tests can be run with the command "npm run test:unit"
+Note: UML Diagrams are in the Diagrams folder 

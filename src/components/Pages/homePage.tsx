@@ -14,7 +14,7 @@ const navigate = useNavigate();
     typeof window !== 'undefined' ? localStorage.getItem('userId') : null;
 
   return (
-    <div className="page">
+    <div className="Homepage">
       <h1>Welcome to the Quiz App</h1>
 
       <button

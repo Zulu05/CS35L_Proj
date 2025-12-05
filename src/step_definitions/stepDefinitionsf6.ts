@@ -3,8 +3,6 @@
 import { Given, When, Then } from "@cucumber/cucumber";
 import { expect } from "@playwright/test";
 
-import { deleteUser } from "../services/user.service";
-
 const BASE_URL = "http://localhost:5173";
 
 

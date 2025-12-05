@@ -26,13 +26,13 @@ export default function LoginPage() {
       return;
     }
     
-    // We do NOT enforce complexity here (e.g. special chars) because 
-    // legacy passwords might not meet new rules.
+    // No regex validation here to ensure legacy passwords remain valid.
     if (!password) {
       setError('Please enter a password');
       return;
     }
 
+    //try catch block handles login behavior and stores username and id
     setLoading(true);
     try {
       // Try to find an existing user by username
@@ -69,12 +69,8 @@ export default function LoginPage() {
         }
       }
 
-      if (!user) {
-        throw new Error('Unable to locate or create user');
-      }
-
       // Save user id in localStorage for later quiz submission
-      const id = user.id ?? user.id ?? userIdFrom(user);
+      const id = user?.id ?? user?.id ?? userIdFrom(user);
       if (!id) throw new Error('User has no id');
       localStorage.setItem('userId', String(id));
       console.log(id);
@@ -90,16 +86,7 @@ export default function LoginPage() {
     }
   };
 
-  // helper for some shapes
-  function userIdFrom(u: any) {
-    if (!u) return null;
-    if (u._id) return u._id;
-    if (u.id) return u.id;
-    if (u.insertedId) return u.insertedId;
-    return null;
-  }
-
-return (
+  return (
     <div className="login-page">
       <h1>Login</h1>
       
@@ -138,14 +125,16 @@ return (
           </button>
         </div>
 
-        <button
-          type="button"
-          className="link-button"
-          onClick={() => navigate('/signUp')}
-          disabled={loading}
-        >
-          No account? Sign Up Here
-        </button>
+      <button
+        type="button"
+        onClick={() => navigate('/signUp')}
+        disabled={loading}
+        style={{
+          textDecoration: 'underline',
+        }}
+      >
+        No account? Sign Up Here
+      </button>
 
         {error && (
           <div className="error-message">

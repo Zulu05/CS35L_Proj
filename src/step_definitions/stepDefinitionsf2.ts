@@ -43,7 +43,7 @@ const BASE_URL = "http://localhost:5173";
               await login.fill('cucumbertest');
               await password.fill('Cucumber1!');
               await this.page.getByRole("button", { name: "Sign In" }).click();
-              await this.page.goto(`${BASE_URL}`);
+              await this.page.getByRole("button", { name: "Home" }).click();
               await expect(this.page.getByRole("heading", { name: "Welcome to the Quiz App" })).toBeVisible();
          });
        

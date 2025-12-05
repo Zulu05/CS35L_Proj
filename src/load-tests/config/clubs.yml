@@ -1,0 +1,21 @@
+config:
+  target: "http://localhost:3000"  
+  phases:
+    - name: Moderate Load
+      duration: 300
+      arrivalRate: 10  
+  defaults:
+    headers:
+      Content-Type: "application/json"
+
+scenarios:
+  - name: "Create clubs"
+    flow:
+      - post:
+          url: "/clubs"
+          json:
+            username: "test_{{ $randomString(8) }}"
+            email: "test_{{ $randomString(8) }}@g.ucla.edu"
+            password: "Password123!"
+  
+

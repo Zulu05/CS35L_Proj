@@ -69,6 +69,10 @@ test ("validateUsername", () => {
     expect(validateUsername('acb     333')).toBe(false) // whitespace middle with valid 
     expect(validateUsername('acb333    ')).toBe(false) // whitespace end with valid 
     expect(validateUsername('acb33 3')).toBe(false) // only one whitespace
+    expect(validateUsername('a cb 33 3')).toBe(false) // Alternating whitespace
+    expect(validateUsername('Vítor')).toBe(false) // non ascii
+    expect(validateUsername('用户')).toBe(false) // non ascii 
+    expect(validateUsername('Dürschmid')).toBe(false) // non ascii
 
     //passing tests
     expect(validateUsername('abc')).toBe(true) // all alphabet
@@ -98,6 +102,7 @@ test ("validateEmail", () => {
     expect(validateEmail('**@gmail.com')).toBe(false) // invalid chars
     expect(validateEmail('aaaa@g.c')).toBe(false) // invalid domain
     expect(validateEmail('testing----@gmail.com')).toBe(false) // ending with dashes
+    expect(validateEmail('Dürschmid@g.ucla.edu')).toBe(false) // non ascii in email name
 
     //passing tests
     expect(validateEmail('aaa@gmail.com')).toBe(true) // all alphabet
@@ -117,4 +122,9 @@ test ("validateEmail", () => {
     expect(validateEmail('john_doe@gmail.com')).toBe(true) // underscores
     expect(validateEmail('john+newsletter@gmail.com')).toBe(true) // plus aliases
     expect(validateEmail('user@domain.technologies')).toBe(true) // long TLDs
+    expect(validateEmail('user@yahoo.com.br')).toBe(true) //multiple domain parts
+    expect(validateEmail('user@yahoo.com.de')).toBe(true) // try different countries
+    expect(validateEmail('user@domain.technologies.br.de.fr')).toBe(true) // multiple .
+    expect(validateEmail('user@g.ucla.edu')).toBe(true) // short domain is supported
+
 })

@@ -43,8 +43,8 @@ export default function LoginPage() {
       } else {
         // if it does, save it and attempt to log in
         localStorage.setItem('userName', String(username));
-        console.log(username);
-        console.log("Login attempt for username:", username);
+        // console.log(username);
+        // console.log("Login attempt for username:", username);
 
         // User exists — check password if set, otherwise throw error 
         if (user.hasPassword()) {
@@ -63,7 +63,7 @@ export default function LoginPage() {
       const id = user?.id ?? user?.id ?? userIdFrom(user);
       if (!id) throw new Error('User has no id');
       localStorage.setItem('userId', String(id));
-      console.log(id);
+      // console.log(id);
 
       // after successfully logging in go to quiz page
       navigate('/quiz');

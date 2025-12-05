@@ -23,7 +23,7 @@ export async function fetchUsers() {
       return user;
     });
   } catch (err) {
-    console.log("error fetching users: ", err);
+    console.error("error fetching users: ", err);
     return [];
   }
 }
@@ -40,7 +40,7 @@ export async function createUser(user: {username: string, email: string, passwor
       return new User(data.username, data.email, data._id || data.id);
     } catch (err) {
       console.error(err);
-      console.log('Error adding user');
+      console.error('Error adding user');
       return null
     }
 }
@@ -137,7 +137,7 @@ export async function checkPassword(username: string, password: string) {
 
     return await res.json();
   } catch (err) {
-    console.log("Error checking password:", err);
+    console.error("Error checking password:", err);
     return null;
   }
 }

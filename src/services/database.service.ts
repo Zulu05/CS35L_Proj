@@ -53,6 +53,6 @@ export async function connectToDatabase() {
   collections.clubs = clubsCollection;
   collections.traits = traitsCollection; 
 
-  console.log(`Successfully connected to database: ${db.databaseName} and collections: ` + `${usersCollection.collectionName}, ` 
-    + `${clubsCollection.collectionName}, `+ `${traitsCollection.collectionName}`);
+  // console.log(`Successfully connected to database: ${db.databaseName} and collections: ` + `${usersCollection.collectionName}, ` 
+    // + `${clubsCollection.collectionName}, `+ `${traitsCollection.collectionName}`);
 }

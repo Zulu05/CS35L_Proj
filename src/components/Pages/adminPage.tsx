@@ -156,13 +156,13 @@ function AdminPage() {
       };
 
       const created = await createUser(payload);
-      console.log('Created user:', created);
+      // console.log('Created user:', created);
 
       // Clear form after success
       setNewUser({ username: '', email: '', password: '' });
     } catch (err: unknown) {
       const msg = err instanceof Error ? err.message : String(err);
-      console.error('Add user error:', msg);
+      // console.error('Add user error:', msg);
       setUsersError(msg || 'Error adding user.');
     } finally {
       setUsersLoading(false);
@@ -214,7 +214,7 @@ function AdminPage() {
       };
 
       const created = await createClub(payload);
-      console.log('Created club:', created);
+      // console.log('Created club:', created);
 
       const list = await fetchClubs();
       setClubs(list);
@@ -288,7 +288,7 @@ function AdminPage() {
     setUpdateClubLoading(true);
     try {
       const updated = await updateClubScore(selectedClubId, scoresToSend);
-      console.log('Updated club scores:', updated);
+      // console.log('Updated club scores:', updated);
 
       const list = await fetchClubs();
       setClubs(list);

@@ -169,11 +169,11 @@ export async function getAllRecommendations(userId: string): Promise<any[]> {
     const similarity = computeDistanceSimilarity(userVector, clubVector);
     const matchPercent = Math.round(similarity * 100);
 
-    console.log(
-      `club ${clubDoc.clubname} | user=${JSON.stringify(
-        userVector
-      )} club=${JSON.stringify(clubVector)} similarity=${similarity} matchPercent=${matchPercent}`
-    );
+    // console.log(
+    //   `club ${clubDoc.clubname} | user=${JSON.stringify(
+    //     userVector
+    //   )} club=${JSON.stringify(clubVector)} similarity=${similarity} matchPercent=${matchPercent}`
+    // );
 
     return {
       clubId: (clubDoc.clubId || clubDoc._id)?.toString(),

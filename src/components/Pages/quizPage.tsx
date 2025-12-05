@@ -25,7 +25,7 @@ function QuizPage() {
     (async () => {
       setLoading(true);
       const t = await fetchTraits();
-      console.log("Fetched traits:", t);
+      // console.log("Fetched traits:", t);
 
       setTraits(t);
       setAnswers(Array(t.length).fill(50));

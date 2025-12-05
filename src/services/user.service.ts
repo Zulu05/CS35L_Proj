@@ -64,27 +64,6 @@ export async function deleteUser(username: string): Promise<boolean> {
 
 }
 
-export async function addPassword(id: string, password: string){
-    // Add Users
-    try{
-        const res = await fetch(`/users/${id}`, {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ password }),
-        });
-        if (!res.ok) {
-        const text = await res.text();
-        throw new Error(text || `Failed to set password: ${res.status}`);
-        }
-        const data = await res.json();
-        return new User(data.username, data.email, data.password, data._id || data.id);
-    } catch (err)
-    {
-        console.log("error adding user passwords: ", err);
-        return null;
-    }
-}
-
 export async function addResult(userId: string, answersDict: { [key: string]: number }){
     try {
       const res = await fetch(`/users/${userId}/quiz`, {

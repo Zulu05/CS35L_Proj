@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 
 // Internal Dependencies
 // Services
-import { fetchUsers, addPassword, checkPassword, userIdFrom } from "../../services/user.service"
+import { fetchUsers, checkPassword, userIdFrom } from "../../services/user.service"
 import { validatePassword, validateUsername } from "../../services/regex.service"
 
 // Frontend
@@ -47,7 +47,7 @@ export default function LoginPage() {
         console.log(username);
         console.log("Login attempt for username:", username);
 
-        // User exists — check password if set, otherwise set it
+        // User exists — check password if set, otherwise throw error 
         if (user.hasPassword()) {
           console.log(password);
           console.log("User from DB:", user);
@@ -58,14 +58,7 @@ export default function LoginPage() {
             throw new Error('Invalid password, password does not match existing user');
           }
         } else {
-          // set password on existing user via PUT (updates only provided fields)
-          const id = user.id ?? user.id ?? userIdFrom(user);
-          if (!id) throw new Error('User has no id to set password on');
-          const changedUser = await addPassword(id, password);
-          console.log(changedUser);
-          // re-fetch user
-          const reUsers = await fetchUsers();
-          user = reUsers.find((u: any) => u.username === username);
+          throw new Error("error finding/matching password, please try again or create new account");
         }
       }
 

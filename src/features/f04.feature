@@ -1,15 +1,24 @@
 Feature: F04 - Search and sort recommendations
 
-  As a user of the app who just finished the quiz
-  I want to be able to search and sort through my results
-  So that I can see all my options and compare them, including clubs I am already in
+  As a UCLA student who completed the quiz
+  I want to search and filter the club directory
+  So that I can find clubs that match my specific criteria
 
-  Scenario: Open the search/filter interface on the results page
-    Given the user is on the results page
-    When they press the search or filter button
-    Then they should see a search and sorting interface
+  Background:
+    Given I am on the club directory page
 
-  Scenario: Sort results by a given condition
-    Given the user is viewing the search and sorting interface
-    When they choose a sort condition
-    Then the list of clubs should be sorted according to that condition
+  Scenario: Search for a club by name
+    When I enter "Chess" into the search bar
+    Then I should see "Chess Club at UCLA" visible
+    And I should not see "Bruin Birding Club" visible
+
+  Scenario: Filter clubs by specific attribute threshold
+    When I click the "Filter by Attributes" button
+    And I set the "academic" filter slider to 60
+    Then I should see "Archaeology Club" visible
+
+  Scenario: Resetting filters
+    When I click the "Filter by Attributes" button
+    And I click the "Reset Filters" button
+    Then I should see "Chess Club at UCLA" visible
+    And I should see "Bruin Birding Club" visible

@@ -28,7 +28,7 @@ export async function fetchUsers() {
   }
 }
 
-export async function createUser(user: {username: string, email: string, password?: string }) {
+export async function createUser(user: {username: string, email: string, password: string }) {
     try {
       const res = await fetch('/users', {
         method: 'POST',

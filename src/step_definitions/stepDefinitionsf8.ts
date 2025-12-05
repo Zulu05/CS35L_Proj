@@ -56,12 +56,6 @@ const BASE_URL = "http://localhost:5173";
 
 // 4) Scenario: After taking test, results should be saved to the profile from home page # src/features/f08.feature:14
   //  ? Given the user has logged in successfully
-       
-        //  Given('the user has logged in successfully', function () {
-        //    // Write code here that turns the phrase above into concrete actions
-        //    return 'pending';
-        //  });
-       
   //  ? And they are on the home page
        
          Given('they are on the home page', async function () {
@@ -89,20 +83,8 @@ const BASE_URL = "http://localhost:5173";
          });
        
   //  ? And they should match with the quiz
-       
-        //  Then('they should match with the quiz', function () {
-        //    // Write code here that turns the phrase above into concrete actions
-        //    return 'pending';
-        //  });
-       
 // 5) Scenario: After taking test, results should be saved to the profile from banner # src/features/f08.feature:21
   //  ? Given the user has logged in successfully
-       
-        //  Given('the user has logged in successfully', function () {
-        //    // Write code here that turns the phrase above into concrete actions
-        //    return 'pending';
-        //  });
-       
   //  ? When they press the their username button
        
          When('they press the their username button', async function () {
@@ -110,41 +92,12 @@ const BASE_URL = "http://localhost:5173";
          });
        
   //  ? Then they should see their top club matches
-       
-        //  Then('they should see their top club matches', function () {
-        //    // Write code here that turns the phrase above into concrete actions
-        //    return 'pending';
-        //  });
-       
   //  ? And they should match with the quiz
-       
-        //  Then('they should match with the quiz', function () {
-        //    // Write code here that turns the phrase above into concrete actions
-        //    return 'pending';
-        //  });
-       
+
 // 6) Scenario: User is able to take quiz and log out of their account # src/features/f08.feature:27
   //  ? Given the user has logged in successfully
-       
-        //  Given('the user has logged in successfully', function () {
-        //    // Write code here that turns the phrase above into concrete actions
-        //    return 'pending';
-        //  });
-       
   //  ? When they finish the quiz
-       
-        //  When('they finish the quiz', function () {
-        //    // Write code here that turns the phrase above into concrete actions
-        //    return 'pending';
-        //  });
-       
   //  ? And they press the Submit button
-       
-        //  When('they press the Submit button', function () {
-        //    // Write code here that turns the phrase above into concrete actions
-        //    return 'pending';
-        //  });
-       
   //  ? And they should be able to press the Logout button
        
          When('they should be able to press the Logout button', async function () {
@@ -160,26 +113,8 @@ const BASE_URL = "http://localhost:5173";
 
 // 7) Scenario: User is able to log out of their account # src/features/f08.feature:34
   //  ? Given the user has logged in successfully
-       
-        //  Given('the user has logged in successfully', function () {
-        //    // Write code here that turns the phrase above into concrete actions
-        //    return 'pending';
-        //  });
-       
   //  ? When they should be able to press the Logout button
-       
-        //  When('they should be able to press the Logout button', function () {
-        //    // Write code here that turns the phrase above into concrete actions
-        //    return 'pending';
-        //  });
-       
   //  ? Then they should get redirected to the Home Page
-       
-        //  Then('they should get redirected to the Home Page', function () {
-        //    // Write code here that turns the phrase above into concrete actions
-        //    return 'pending';
-        //  });
-       
   //  ? And no longer access their profile
        
          Then('no longer access their profile', async function () {

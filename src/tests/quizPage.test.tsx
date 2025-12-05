@@ -292,7 +292,7 @@ describe("QuizPage tests if user is logged in and all traits fetched successfull
 
         expect(sliders.length).toBe(16);
     
-        sliders.forEach((slider, index) => {
+        sliders.forEach((slider) => {
           expect((slider as HTMLInputElement).value).toBe('50');
         });
     })

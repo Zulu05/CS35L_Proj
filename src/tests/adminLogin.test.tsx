@@ -73,4 +73,16 @@ describe("HomePage tests if admin not logged in", () => {
         expect(screen.queryByText('Username')).not.toBeInTheDocument();
         expect(screen.queryByText('Password')).not.toBeInTheDocument();
     })
+    test("typing updates the username and password fields", async () => {
+        const user = userEvent.setup();
+    
+        const username = screen.getByLabelText("Username") as HTMLInputElement;
+        const password = screen.getByLabelText("Password") as HTMLInputElement;
+    
+        await user.type(username, "pedro123");
+        await user.type(password, "mypassword");
+    
+        expect(username.value).toBe("pedro123");
+        expect(password.value).toBe("mypassword");
+      });
 })

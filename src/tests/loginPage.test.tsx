@@ -49,7 +49,13 @@ describe("Test when user is not logged in", () => {
     expect(screen.getByText("Username")).toBeInTheDocument();
     expect(screen.getByText("Password")).toBeInTheDocument();
   });
+  test("inputs are initially empty", () => {
+    const username = screen.getByLabelText("Username") as HTMLInputElement;
+    const password = screen.getByLabelText("Password") as HTMLInputElement;
 
+    expect(username.value).toBe("");
+    expect(password.value).toBe("");
+  });
   test("renders login and cancel buttons", () => {
     expect(screen.getByText("Sign in")).toBeInTheDocument();
     expect(screen.getByText("Cancel")).toBeInTheDocument();
@@ -80,6 +86,25 @@ describe("Test when user is not logged in", () => {
     expect(screen.getByText("Please enter a password")).toBeInTheDocument();
   });
 
+  test("typing updates the username and password fields", async () => {
+    const user = userEvent.setup();
+
+    const username = screen.getByLabelText("Username") as HTMLInputElement;
+    const password = screen.getByLabelText("Password") as HTMLInputElement;
+
+    await user.type(username, "pedro123");
+    await user.type(password, "mypassword");
+
+    expect(username.value).toBe("pedro123");
+    expect(password.value).toBe("mypassword");
+  });
+
+  test("Cancel button navigates to home page", async () => {
+    const user = userEvent.setup();
+
+    await user.click(screen.getByText("Cancel"));
+    expect(mockNavigate).toHaveBeenCalledWith("/");
+  });
   //user not found
   test("user that doesn't exist shows error", async () => {
     const user = userEvent.setup();

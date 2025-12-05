@@ -4,6 +4,7 @@ import * as dotenv from "dotenv";
 
 // Global Variables
 export const collections: {
+  admin?: mongoDB.Collection;
   users?: mongoDB.Collection;
   clubs?: mongoDB.Collection;
   traits?: mongoDB.Collection; 
@@ -27,9 +28,9 @@ export async function connectToDatabase() {
     throw new Error("Environment variable DB_NAME must be set");
   }
 
+  const adminCollectionName = process.env.ADMIN_COLLECTION_NAME ||  "admin";
   const usersCollectionName = process.env.USERS_COLLECTION_NAME;
   const clubCollectionName = process.env.CLUBS_COLLECTION_NAME;
-
   const traitsCollectionName = process.env.TRAITS_COLLECTION_NAME || "traits";
 
   if (!usersCollectionName) 
@@ -39,6 +40,7 @@ export async function connectToDatabase() {
 
   const db: mongoDB.Db = client.db(dbName);
 
+  const adminCollection: mongoDB.Collection = db.collection(adminCollectionName);
   const usersCollection: mongoDB.Collection = db.collection(usersCollectionName);
   const clubsCollection: mongoDB.Collection = db.collection(clubCollectionName);
 
@@ -46,6 +48,7 @@ export async function connectToDatabase() {
     traitsCollectionName
   );
 
+  collections.admin = adminCollection;
   collections.users = usersCollection;
   collections.clubs = clubsCollection;
   collections.traits = traitsCollection; 

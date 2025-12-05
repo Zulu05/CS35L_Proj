@@ -8,18 +8,17 @@ import Club, { TraitScore } from '../../models/clubs';
 import { TraitDefinition } from '../../models/traits';
 
 // Services
+import { checkPassword } from '../../services/admin.service';
 import { fetchUsers, createUser } from '../../services/user.service';
 import { fetchClubs, createClub, changeScores as updateClubScore } from '../../services/club.service';
 import { fetchTraits } from '../../services/traits.service';
 import { validateEmail, validateUsername, validatePassword } from '../../services/regex.service';
-import { useFormState } from 'react-dom';
 
 function AdminPage() {
   //password locking variables
   const[passwordInput, setPasswordInput] = useState('');
   const[isAdmin, setIsAdmin] = useState(false);
   const[isHacker, setIsHacker] = useState(false);
-  let adminPassword = "testing";
 
   // ERROR & LOADING STATE
   const [usersError, setUsersError] = useState('');
@@ -316,8 +315,12 @@ function AdminPage() {
   //handleSubmit for admingpage password
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (passwordInput == adminPassword){setIsAdmin(true);}
-    else {setIsHacker(true)}
+    const username = "B055MAN";
+    const passwordMatch = await checkPassword(username, passwordInput);
+    if (!!passwordMatch)
+      setIsAdmin(true);
+    else 
+      setIsHacker(true);
   }
   return (
     <>

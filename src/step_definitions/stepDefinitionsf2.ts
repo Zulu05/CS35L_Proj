@@ -14,7 +14,7 @@ const BASE_URL = "http://localhost:5173";
        
          Given('the student is on the app home page and they are not logged in', async function () {
           await this.page.goto(`${BASE_URL}`);
-          await expect(this.page.getByRole("heading", { name: "Welcome to the Quiz App" })).toBeVisible();
+          await expect(this.page.getByRole("heading", { name: "The UCLA Student Club Matcher" })).toBeVisible();
          });
        
   //  ? When they press the quiz button on the main page
@@ -45,7 +45,7 @@ const BASE_URL = "http://localhost:5173";
               await password.fill('Cucumber1!');
               await this.page.getByRole("button", { name: "Sign In" }).click();
               await this.page.getByRole("button", { name: "Home" }).click();
-              await expect(this.page.getByRole("heading", { name: "Welcome to the Quiz App" })).toBeVisible();
+              await expect(this.page.getByRole("heading", { name: "The UCLA Student Club Matcher" })).toBeVisible();
          });
        
   //  ? When they press the quiz button on the main page

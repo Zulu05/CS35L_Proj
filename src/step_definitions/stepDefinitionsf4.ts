@@ -48,3 +48,36 @@ When('I set the {string} filter slider to {int}', async function (traitName: str
     el.dispatchEvent(new Event('change', { bubbles: true }));
   }, value);
 });
+
+//testing max slide value related behavior
+// Scenario: setting all filters to max # src\features\f04.feature:26
+//    √ Before # src\features\support\hooks.ts:38
+//    √ Given I am on the club directory page # src\step_definitions\stepDefinitionsf4.ts:9
+//    √ When I click the "Filter by Attributes" button # src\step_definitions\stepDefinitionsf4.ts:32
+//    ? And when I set all filters to the max value
+//        Undefined. Implement with the following snippet:     
+
+
+
+  //  ? Then I should see no clubs
+  //      Undefined. Implement with the following snippet:     
+
+         Then('I should see no clubs', async function () {        
+           // Write code here that turns the phrase above into concrete actions
+           await expect(this.page.getByText("No clubs found.")).toBeVisible();
+         });
+
+  // √ Before # src\features\support\hooks.ts:38
+  //  √ Given I am on the club directory page # src\step_definitions\stepDefinitionsf4.ts:9
+  //  √ When I click the "Filter by Attributes" button # src\step_definitions\stepDefinitionsf4.ts:32
+  //  √ And I set the "academic" filter slider to 100 # src\step_definitions\stepDefinitionsf4.ts:36
+  //  √ And I set the "social" filter slider to 100 # src\step_definitions\stepDefinitionsf4.ts:36
+  //  √ And I set the "leader" filter slider to 100 # src\step_definitions\stepDefinitionsf4.ts:36
+  //  √ And I set the "creative" filter slider to 100 # src\step_definitions\stepDefinitionsf4.ts:36
+  //  ? And when I click "Close Filters"
+  //      Undefined. Implement with the following snippet:      
+
+         When('when I click {string}', async function (string) {   
+           // Write code here that turns the phrase above into concrete actions
+           await this.page.getByRole("button", { name: {string} }).click();
+         });

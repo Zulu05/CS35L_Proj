@@ -50,18 +50,20 @@ const BASE_URL = "http://localhost:5173";
           await password.fill('wrongpassword');
          });
        
-  //  ? And they press the login button
-  //  ?     Then they should see an error message saying the password is not possible
+
+  //  ? Then they should see an error message saying wrong password
        
-         Then('they should see an error message saying the password is not possible', async function () {
-          await expect (this.page.getByText("Password must be at least 8 characters with at least one digit, one upper and lower case letter, and one special character (@$!%*?&)")).toBeVisible();
+           Then('they should see an error message saying wrong password', async function () {
+            await expect (this.page.getByText("Invalid password, password does not match existing user")).toBeVisible();
          });
-       
+
+  //  ? And they press the login button
   //  ? And they should remain on the login page
        
          Then('they should remain on the login page', async function () {
             await expect(this.page).toHaveURL(/\/login/);
          });
+         
        
 // 5) Scenario: Login fails with non-existing username # src/features/f06.feature:23
   //  ? Given a user account exists with username cucumbertest and password Cucumber1!
@@ -123,6 +125,6 @@ const BASE_URL = "http://localhost:5173";
   //  ?     And they should receive an error message
 
         Then('they should receive an error message', async function () {
-          await expect (this.page.getByText("User already exists, try logining in instead")).toBeVisible();
+          await expect (this.page.getByText("User already exists, try logging in instead")).toBeVisible();
          });
        

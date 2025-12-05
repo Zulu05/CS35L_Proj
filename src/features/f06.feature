@@ -15,7 +15,7 @@ Feature: F06 - User Authentication
     Given the user is on the login page    
     When they enter username cucumbertest and password wrongpassword
     And they press the login button
-    Then they should see an error message saying the password is not possible
+    Then they should see an error message saying wrong password
     And they should remain on the login page
 
 Scenario: Login fails with non-existing username

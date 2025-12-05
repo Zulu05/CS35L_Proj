@@ -45,11 +45,8 @@ When('I set the {string} filter slider to {int}', async function (traitName: str
     .first(); 
 
   // Force the value update
-  await slider.evaluate((el: HTMLInputElement, val: number) => {
-    el.value = String(val);
-    el.dispatchEvent(new Event('input', { bubbles: true }));
-    el.dispatchEvent(new Event('change', { bubbles: true }));
-  }, value);
+  await slider.fill (String(value));
+  await expect(slider).toHaveValue(String(value),{timeout:10000});
 });
 
 //testing max slide value related behavior

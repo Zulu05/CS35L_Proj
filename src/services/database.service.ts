@@ -28,7 +28,7 @@ export async function connectToDatabase() {
     throw new Error("Environment variable DB_NAME must be set");
   }
 
-  const adminCollectionName = process.env.ADMIN_COLLECTION_NAME;
+  const adminCollectionName = process.env.ADMIN_COLLECTION_NAME ||  "admin";
   const usersCollectionName = process.env.USERS_COLLECTION_NAME;
   const clubCollectionName = process.env.CLUBS_COLLECTION_NAME;
   const traitsCollectionName = process.env.TRAITS_COLLECTION_NAME || "traits";
@@ -37,8 +37,6 @@ export async function connectToDatabase() {
     throw new Error("Environment variable USERS_COLLECTION_NAME must be set");
   else if (!clubCollectionName)
     throw new Error("Environment variable CLUBS_COLLECTION_NAME must be set");
-  else if (!adminCollectionName)
-    throw new Error("Environment variable ADMIN_COLLECTION_NAME must be set");
 
   const db: mongoDB.Db = client.db(dbName);
 

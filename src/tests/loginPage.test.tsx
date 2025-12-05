@@ -98,7 +98,13 @@ describe("Test when user is not logged in", () => {
     expect(username.value).toBe("pedro123");
     expect(password.value).toBe("mypassword");
   });
-  
+
+  test("Cancel button navigates to home page", async () => {
+    const user = userEvent.setup();
+
+    await user.click(screen.getByText("Cancel"));
+    expect(mockNavigate).toHaveBeenCalledWith("/");
+  });
   //user not found
   test("user that doesn't exist shows error", async () => {
     const user = userEvent.setup();

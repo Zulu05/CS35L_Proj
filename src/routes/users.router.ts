@@ -82,37 +82,33 @@ usersRouter.post("/", async (req: Request, res: Response) => {
 usersRouter.post("/login", async (req: Request, res: Response) => {
   try {
     const { username, password } = req.body;
-
-    // check if we have a username and password
+ 
     if (!username || !password) {
       res.status(400).send("Username and password required");
       return;
     }
-
-    // check if database is initialized
+ 
     if (!collections.users) {
       res.status(500).send("Database not initialized");
       return;
     }
-
-    // look up user by username
+ 
+    // look up user in database by username
     const user = await collections.users.findOne({ username });
-
-    // user is not found
+ 
     if (!user) {
       res.status(404).send("User not found");
       return;
     }
-
-    // see if inputted password matches the stored password
+ 
+    // see if inputted password matches the stored password with bcrypt for hashing
     const matches = await bcrypt.compare(password, user.password);
-
-    // make sure password matches
+ 
     if (!matches) {
       res.status(401).send("Invalid password");
       return;
     }
-
+ 
     res.status(200).json({
       message: "Login successful",
       user: {
@@ -121,14 +117,14 @@ usersRouter.post("/login", async (req: Request, res: Response) => {
         email: user.email
       }
     });
-
+ 
   } catch (error: unknown) {
     const msg =
       error instanceof Error ? error.message : String(error);
     console.error(msg);
     res.status(500).send(msg);
   }
-});
+ }); 
 
 
 // PUT

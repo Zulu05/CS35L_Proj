@@ -13,7 +13,7 @@ function AdminLogin({setIsAdmin}:{setIsAdmin:any}){
         setUsernameInput("");
         setPasswordInput("");
         const passwordMatch = await checkPassword(usernameInput, passwordInput);
-        if (!!passwordMatch)
+        if (!!passwordMatch) //!! because passwordMatch returns a json obj or null, so !! converts correctly
         {
             //tells parent to rerender page
           setIsAdmin(true);

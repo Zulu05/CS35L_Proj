@@ -8,9 +8,8 @@ How to run and install project: <br />
     &emsp;Run "git clone https://github.com/Zulu05/CS35L_Proj"<br />
     &emsp;Run "npm install"<br />
     &emsp;Create .env from the .env.example file and change "username" and "password" in "DB_CONN_STRING" to your username and password<br />
-    &emsp;Run "npm run dev" to test out the application
-
+    &emsp;Run "npm run dev" to test out the application<br />
     
-Note: end to end testing implemeneted with cucumber and playwright, run via "npm test"<br />
-Note: more tests can be run with the command "npm run test:unit"<br />
+Note: end-to-end testing implemented with cucumber and playwright, run via "npm test"<br />
+Note: More unit tests can be run with the command "npm run test:unit"<br />
 Note: UML Diagrams are in the Diagrams folder 

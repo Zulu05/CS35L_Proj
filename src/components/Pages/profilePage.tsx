@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 // Internal Dependencies
 // Models
 import User from "../../models/users";
-import { fetchUsers } from "../../services/user.service";
+import { fetchUsers } from "../../services/users.service";
 
 // Frontend
 import "../css/profilePage.css";

@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 
 // Internal Dependencies
 // Services
-import { fetchUsers, createUser, userIdFrom } from "../../services/user.service"
+import { fetchUsers, createUser, userIdFrom } from "../../services/users.service"
 import {validatePassword, validateUsername, validateEmail} from "../../services/regex.service"
 
 // Frontend

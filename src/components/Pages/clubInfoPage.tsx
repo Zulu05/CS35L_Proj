@@ -8,7 +8,7 @@ import Club from "../../models/clubs";
 import { TRAITS } from "../../models/traits";
 
 // Services
-import { fetchSingleUser } from "../../services/user.service";
+import { fetchSingleUser } from "../../services/users.service";
 import { fetchClubs } from "../../services/club.service";
 
 // Frontend

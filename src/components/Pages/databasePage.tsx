@@ -8,7 +8,7 @@ import User from "../../models/users";
 import Club from "../../models/clubs";
 
 // Services
-import { fetchUsers } from "../../services/user.service";
+import { fetchUsers } from "../../services/users.service";
 import { fetchClubs } from "../../services/club.service";
 
 //login page

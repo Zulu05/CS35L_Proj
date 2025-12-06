@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 
 // Internal Dependencies
 // Services
-import { fetchUsers, checkPassword, userIdFrom } from "../../services/user.service"
+import { fetchUsers, checkPassword, userIdFrom } from "../../services/users.service"
 
 // Frontend
 import '../css/loginPage.css';

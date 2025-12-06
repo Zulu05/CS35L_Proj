@@ -8,7 +8,7 @@ import Club, { TraitScore } from '../../models/clubs';
 import { TraitDefinition } from '../../models/traits';
 
 // Services
-import { fetchUsers, createUser } from '../../services/user.service';
+import { fetchUsers, createUser } from '../../services/users.service';
 import { fetchClubs, createClub, changeScores as updateClubScore } from '../../services/club.service';
 import { fetchTraits } from '../../services/traits.service';
 import { validateEmail, validateUsername, validatePassword } from '../../services/regex.service';
